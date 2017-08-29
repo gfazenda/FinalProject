@@ -1,0 +1,12 @@
+Assets:
+https://www.assetstore.unity3d.com/en/#!/content/82234
+https://www.assetstore.unity3d.com/en/#!/content/52064
+https://www.assetstore.unity3d.com/en/#!/content/49131
+https://www.assetstore.unity3d.com/en/#!/content/33469
+
+Tutorials:
+https://www.youtube.com/watch?v=q7BL-lboRXo
+https://www.youtube.com/watch?v=nhiFx28e7JY&t=50s
+https://unity3d.com/pt/learn/tutorials/projects/2d-roguelike-tutorial/adding-mobile-controls
+https://unity3d.com/pt/learn/tutorials/topics/mobile-touch/pinch-zoom
+https://unity3d.com/pt/learn/tutorials/topics/mobile-touch/mobile-development
