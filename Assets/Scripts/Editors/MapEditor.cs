@@ -15,7 +15,6 @@ public class MapEditor : Editor {
 
         if (GUILayout.Button("Regenerate"))
         {
-            map.seed = System.DateTime.UtcNow.Millisecond;
             map.GenerateMap();
         }
     }

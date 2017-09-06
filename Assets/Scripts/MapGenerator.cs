@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour {
-    public Transform tilePrefab, obstaclePrefab, player, exitPrefab;
+    public Transform tilePrefab, obstaclePrefab, player, exitPrefab, enemyPrefab;
     public Vector2 mapSize;
 
     [Range(0,1)]
@@ -13,8 +13,8 @@ public class MapGenerator : MonoBehaviour {
 
     List<Coord> allTileCoords, obstacleCoords, enemyCoords;
     Queue<Coord> shuffledTileCoords;
-    public int seed = 10, obstacleCount = 10;
-    public Vector2 playerPosition;
+    public int obstacleCount = 10, enemyCount = 1;
+    public Coord playerCoord;
     public Coord exitCoord;
     //public void Start()
     //{
@@ -30,10 +30,8 @@ public class MapGenerator : MonoBehaviour {
     {
         allTileCoords = new List<Coord>();
         obstacleCoords = new List<Coord>();
-        Coord playerCoord = new Coord();
+        enemyCoords = new List<Coord>();
         exitCoord = new Coord((int)Random.Range(0,mapSize.x),(int)(mapSize.y-1));
-        playerCoord.x = (int)playerPosition.x;
-        playerCoord.x = (int)playerPosition.y;
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
@@ -42,8 +40,7 @@ public class MapGenerator : MonoBehaviour {
             }
         }
         //seed = System.DateTime.UtcNow.Millisecond;
-        shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), seed));
-
+        shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), (int)System.DateTime.Now.Ticks));
         if (transform.Find(mapObjName))
         {
             DestroyImmediate(transform.Find(mapObjName).gameObject);
@@ -77,12 +74,28 @@ public class MapGenerator : MonoBehaviour {
             newObstacle.parent = mapHolder;
         }
 
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Coord randomCoord = GetRandomCoord();
+            while (randomCoord == playerCoord || randomCoord == exitCoord)
+            {
+                randomCoord = GetRandomCoord();
+            }
+            enemyCoords.Add(randomCoord);
+            Vector3 enemyPosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
+            Transform newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity) as Transform;
+            newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
+            newEnemy.parent = mapHolder;
+        }
+
+
+
         Vector3 exitPosition = CoordToPosition(exitCoord.x, exitCoord.y, false);
         Transform newExit = Instantiate(exitPrefab, exitPosition, Quaternion.identity) as Transform;
         newExit.parent = mapHolder;
 
-        player.GetComponent<Player>().SetPosition(playerCoord);
-        player.transform.position = CoordToPosition(4, 0, false);
+        player.GetComponent<Player>().position  = (playerCoord);
+        player.transform.position = CoordToPosition(playerCoord.x, playerCoord.y, false);
 
     }
 
@@ -104,6 +117,11 @@ public class MapGenerator : MonoBehaviour {
     public List<Coord> GetObstacles()
     {
         return obstacleCoords;
+    }
+
+    public List<Coord> GetEnemies()
+    {
+        return enemyCoords;
     }
 
     //public struct Coord

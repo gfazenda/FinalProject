@@ -6,9 +6,9 @@ public class BoardManager : MonoBehaviour {
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
-
+    public enum tileType { ground, player, wall, enemy, exit }
     MapGenerator _mapGenerator;
-    GameObject _player;
+    public GameObject _player;
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -20,11 +20,12 @@ public class BoardManager : MonoBehaviour {
             _instance = this;
         }
     }
-
-    List<int> gameBoard = new List<int>();
-    int width = 10, height = 10;
+    tileType[,] gameBoard;
+    //List<int> gameBoard = new List<int>();
+    int mapWidth = 10, mapHeight = 10, markerCount = 0;
     public List<Transform> markers = new List<Transform>();
     bool showingMarkers = false;
+    Player _playerScript;
     //0 = ground
     //1 = player
     //2 = obs
@@ -35,55 +36,68 @@ public class BoardManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        gameBoard = new tileType[mapWidth, mapHeight];
         _mapGenerator = this.GetComponent<MapGenerator>();
         _mapGenerator.GenerateMap();
         _player = _mapGenerator.GetPlayer();
-        InitializeBoard();     
+        _playerScript = _player.GetComponent<Player>();
+        InitializeBoard();
     }
 
     void InitializeBoard()
     {
-        for (int i = 0; i < (width * height); i++)
+
+        for (int x = 0; x < mapWidth; x++)
         {
-            gameBoard.Add(0);
+            for (int y = 0; y < mapHeight; y++)
+            {
+                gameBoard[x, y] = tileType.ground;
+            }
         }
+
         List<Coord> obstacles = _mapGenerator.GetObstacles();
         for (int i = 0; i < obstacles.Count; i++)
         {
-            gameBoard[PosToIndex(obstacles[i])] = 2;
+            gameBoard[obstacles[i].x, obstacles[i].y] = tileType.wall;
         }
-        gameBoard[PosToIndex(_mapGenerator.exitCoord)] = 4;
-        gameBoard[PosToIndex(_player.GetComponent<Player>().GetPosition())] = 1;
+
+        List<Coord> enemies = _mapGenerator.GetEnemies();
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            gameBoard[enemies[i].x, enemies[i].y] = tileType.enemy;
+        }
+        gameBoard[_mapGenerator.exitCoord.x, _mapGenerator.exitCoord.y] = tileType.exit;
+        gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.player;
     }
 
     public void SetEmptyPosition(Coord position)
     {
-        gameBoard[PosToIndex(position)] = 0;
+        gameBoard[position.x, position.y] = tileType.ground;
     }
 
-    int PosToIndex(Coord pos)
-    {
-        return ((int)pos.x + (int)pos.y * height);
-    }
+    //int PosToIndex(Coord pos)
+    //{
+    //    return ((int)pos.x + (int)pos.y * height);
+    //}
 
     public Vector3 CoordToPosition(Coord pos, bool ground = true)
     {
         int yPos = 1;
         if (!ground) yPos = 1;
-        return new Vector3(-width / 2 + 0.5f + pos.x, yPos, -height / 2 + 0.5f + pos.y);
+        return new Vector3(-mapWidth / 2 + 0.5f + pos.x, yPos, -mapHeight / 2 + 0.5f + pos.y);
     }
 
-   public bool IsValid(Coord pos, bool isPlayer = true)
+    public bool IsValid(Coord pos, bool isPlayer = true)
     {
-        if (pos.x >= 0 && pos.x < width
-                && pos.y >= 0 && pos.y < height)
+        if (pos.x >= 0 && pos.x < mapWidth
+                && pos.y >= 0 && pos.y < mapHeight)
         {
-            if (gameBoard[PosToIndex(pos)] == 4 && isPlayer)
+            if (gameBoard[pos.x, pos.y] == tileType.exit && isPlayer)
             {
                 return true;
             }
             else
-                return (gameBoard[PosToIndex(pos)] == 0);
+                return (gameBoard[pos.x, pos.y] == tileType.ground);
         }
         return false;
     }
@@ -91,21 +105,45 @@ public class BoardManager : MonoBehaviour {
     public void SetPlayerPosition(Coord pos)
     {
         DisableMarkers();
-        showingMarkers = !showingMarkers;
-        gameBoard[PosToIndex(_player.GetComponent<Player>().GetPosition())] = 0;
-        gameBoard[PosToIndex(pos)] = 1;
-        _player.GetComponent<Player>().SetPosition(pos);
+        gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.ground;
+        gameBoard[pos.x, pos.y] = tileType.player;
+        _player.GetComponent<Player>().PerformAction(Player.Actions.Move, pos);
     }
-    
-    void DisableMarkers()
+
+    public void DisableMarkers()
     {
-        for (int i = 0; i < markers.Count; i++)
+        for (int i = 0; i < markerCount; i++)
         {
             markers[i].gameObject.SetActive(false);
         }
+        markerCount = 0;
+        showingMarkers = false;
     }
 
-    public void ShowMarkers(Coord pos)
+
+    public List<Coord> GetNeighbours(Coord pos, int radius, bool diagonal = false)
+    {
+        Coord newPosition = new Coord();
+        List<Coord> neighbours = new List<Coord>();
+        for (int x = pos.x - radius; x <= pos.x + radius; x++)
+        {
+            for (int y = pos.y - radius; y <= pos.y + radius; y++)
+            {
+                newPosition.x = x;
+                newPosition.y = y;
+                if (newPosition.Equals(pos)) continue;
+
+                if (!diagonal && newPosition.x != pos.x && newPosition.y != pos.y) continue;
+
+                neighbours.Add(newPosition);
+            }
+        }
+
+        return neighbours;
+    }
+
+
+    public void DisplayMarkers(Coord pos, int radius, bool diagonal = false)
     {
         showingMarkers = !showingMarkers;
         if (!showingMarkers)
@@ -113,32 +151,42 @@ public class BoardManager : MonoBehaviour {
             DisableMarkers();
             return;
         }
-        Coord newPosition;        
-        for (int i = 0; i < markers.Count; i++)
+       // Coord newPosition = new Coord();
+        markerCount = 0;
+        List<Coord> pos_neighbours = GetNeighbours(pos, radius, diagonal);
+        for (int i = 0; i < pos_neighbours.Count; i++)
         {
-            newPosition = pos;
-            switch (i)
+            if (IsValid(pos_neighbours[i]))
             {
-                case 0:
-                    newPosition.y += 1;
-                    break;
-                case 1:
-                    newPosition.x += 1;
-                    break;
-                case 2:
-                    newPosition.y -= 1;
-                    break;
-                case 3:
-                    newPosition.x -= 1;
-                    break;
-
-            }
-            if (IsValid(newPosition))
-            {
-                markers[i].transform.position = CoordToPosition(newPosition);
-                markers[i].gameObject.GetComponent<Marker>().SetPosition(newPosition);
-                markers[i].gameObject.SetActive(true);
+                markers[markerCount].transform.position = CoordToPosition(pos_neighbours[i]);
+                markers[markerCount].gameObject.GetComponent<Marker>().SetPosition(pos_neighbours[i]);
+                markers[markerCount].gameObject.SetActive(true);
+                markerCount++;
             }
         }
+        //for (int x = pos.x - radius; x <= pos.x + radius; x++)
+        //{
+        //    for (int y = pos.y - radius; y <= pos.y + radius; y++)
+        //    {
+        //        newPosition.x = x;
+        //        newPosition.y = y;
+        //        if (newPosition.Equals(pos)) continue;
+
+        //        if (!diagonal && newPosition.x != pos.x && newPosition.y != pos.y) continue;
+
+        //        if (IsValid(newPosition))
+        //        {
+        //            markers[markerCount].transform.position = CoordToPosition(newPosition);
+        //            markers[markerCount].gameObject.GetComponent<Marker>().SetPosition(newPosition);
+        //            markers[markerCount].gameObject.SetActive(true);
+        //            markerCount++;
+        //        }
+        //    }
+        //}
+        if (markerCount == 0)
+        {
+            showingMarkers = false;
+        }
     }
+
 }

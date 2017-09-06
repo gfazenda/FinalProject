@@ -2,38 +2,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
-    float speed  = 3 ;
-    bool moving = false;
-    Vector3 targetPos;
-    Coord position;
+public class Player : Character {
+    //float speed  = 3 ;
+    //bool moving = false;
+    //Vector3 targetPos;
+    //Coord position;
     private Vector2 touchOrigin = -Vector2.one;
-    // Use this for initialization
-    void Start () {
-        position = new Coord(4, 0);
-        targetPos = BoardManager.Instance.CoordToPosition(position, false);
+    bool playerTurn = true;
+    public enum Actions {Move, Skill1, Skill2, Skill3 };
+    Actions currentAction;
+
+    private void Awake()
+    {
+        EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
     }
+
+    void PlayerTurn()
+    {
+        playerTurn = true;
+    }
+    // Use this for initialization
+    //void Start () {
+    //    base.Start();
+    //}
 
     private void OnMouseDown()
     {
-        if(!moving)
-            BoardManager.Instance.ShowMarkers(position);
+        if(!moving && playerTurn)
+            BoardManager.Instance.DisplayMarkers(position,1);
     }
 
-    public void SetPosition(Coord pos)
-    {
-        position = pos;
-        targetPos = BoardManager.Instance.CoordToPosition(position, false);
-        SetMoving();
-    }
+    //public void SetPosition(Coord pos)
+    //{
+    //    position = pos;
+    //    targetPos = BoardManager.Instance.CoordToPosition(position, false);
+    //    SetMoving();
+    //}
 
-    public Coord GetPosition()
-    {
-        return position;
-    }
+    //public Coord GetPosition()
+    //{
+    //    return position;
+    //}
 
     // Update is called once per frame
     void Update () {
+        if (!playerTurn)
+            return;
        // if (!GameManager.instance.playersTurn) return;
 
         int horizontal = 0;     //Used to store the horizontal move direction.
@@ -108,32 +122,62 @@ public class Player : MonoBehaviour {
                 //Debug.Log("p " + position.x + " " + position.y);
                 targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
                 BoardManager.Instance.SetEmptyPosition(position);
+                BoardManager.Instance.DisableMarkers();
                 position = tentativePos;
-                SetMoving();
+                PerformAction(Actions.Move, position);
             }
         }
 
-        if (moving && transform.position != targetPos)
-        {
-            Move();
-        }
-        else
-        {
-            moving = false;
-        }
+        //if (moving && transform.position != targetPos)
+        //{
+        //    Move();
+        //}
+        //else
+        //{
+        //    moving = false;
+        //}
 
     }
 
-    void SetMoving()
+
+    public void PerformAction(Actions _action, Coord target)
     {
-        moving = true;
-        transform.LookAt(targetPos);
+        switch (_action)
+        {
+            case Actions.Move:
+                SetPosition(target);
+                break;
+            case Actions.Skill1:
+                break;
+            case Actions.Skill2:
+                break;
+            case Actions.Skill3:
+                break;
+            default:
+                break;
+        }
+        playerTurn = false;
+        BoardManager.Instance.DisableMarkers();
+        EventManager.TriggerEvent(Events.EnemiesTurn);
     }
 
 
-    void Move()
-    {
-        float step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    }
+    //public override void SetPosition(Coord pos)
+    //{
+    //    base.SetPosition(pos);
+    //    playerTurn = false;
+    //}
+
+    //void SetMoving()
+    //{
+    //    moving = true;
+    //    transform.LookAt(targetPos);
+    //}
+
+
+    //void Move()
+    //{
+    //    float step = speed * Time.deltaTime;
+    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+    //}
 }

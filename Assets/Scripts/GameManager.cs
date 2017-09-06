@@ -20,5 +20,14 @@ public class GameManager : MonoBehaviour {
     }
     public GameObject player;
     // Use this for initialization
-  
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            EventManager.TriggerEvent(Events.PlayerTurn);
+        }
+    }
+
 }
