@@ -9,7 +9,7 @@ public class Character : MonoBehaviour {
     protected bool moving = false;
     protected Vector3 targetPos;
     public Coord position = new Coord();
-
+    public BoardManager.tileType characterType;
 
     protected void Start()
     {
@@ -19,6 +19,7 @@ public class Character : MonoBehaviour {
 
     public virtual void SetPosition(Coord pos)
     {
+        BoardManager.Instance.UpdatePosition(position, pos, characterType);
         position = pos;
         targetPos = BoardManager.Instance.CoordToPosition(position, false);
         SetMoving();

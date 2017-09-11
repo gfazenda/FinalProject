@@ -48,7 +48,8 @@ public class MapGenerator : MonoBehaviour {
 
         Transform mapHolder = new GameObject(mapObjName).transform;
         mapHolder.parent = this.transform;
-
+        Transform groundHolder = new GameObject("GroundObjs").transform;
+        groundHolder.parent = mapHolder.transform;
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
@@ -56,7 +57,7 @@ public class MapGenerator : MonoBehaviour {
                 Vector3 tilePosition = CoordToPosition(x, y);
                 Transform newTile = (Transform) Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
                 newTile.localScale = Vector3.one * (1 - outlinePercent);
-                newTile.parent = mapHolder.transform;
+                newTile.parent = groundHolder.transform;
             }
         }
 
@@ -64,7 +65,7 @@ public class MapGenerator : MonoBehaviour {
         for (int i = 0; i < obstacleCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
-            while (randomCoord == playerCoord || randomCoord == exitCoord)
+            while (randomCoord.CompareTo(playerCoord) || randomCoord.CompareTo(exitCoord) || BoardManager.Instance.Distance(randomCoord, playerCoord) < 2)
             {
                 randomCoord = GetRandomCoord();
             }
@@ -77,7 +78,7 @@ public class MapGenerator : MonoBehaviour {
         for (int i = 0; i < enemyCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
-            while (randomCoord == playerCoord || randomCoord == exitCoord)
+            while (randomCoord.CompareTo(playerCoord) || randomCoord.CompareTo(exitCoord) || BoardManager.Instance.Distance(randomCoord, playerCoord) < 3)
             {
                 randomCoord = GetRandomCoord();
             }
@@ -87,7 +88,7 @@ public class MapGenerator : MonoBehaviour {
             newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
             newEnemy.parent = mapHolder;
         }
-
+        EventManager.TriggerEvent(Events.EnemiesCreated);
 
 
         Vector3 exitPosition = CoordToPosition(exitCoord.x, exitCoord.y, false);

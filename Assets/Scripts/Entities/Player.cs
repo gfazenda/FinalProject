@@ -11,7 +11,7 @@ public class Player : Character {
     bool playerTurn = true;
     public enum Actions {Move, Skill1, Skill2, Skill3 };
     Actions currentAction;
-
+    Coord tentativePos = new Coord();
     private void Awake()
     {
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
@@ -114,17 +114,24 @@ public class Player : Character {
 
         if (!moving && horizontal != 0 || vertical != 0)
         {
-            Coord tentativePos = position;
+            // playerTurn = false;
+            //Debug.Log("h " + horizontal);
+            // Debug.Log("v " + vertical);
+            tentativePos = new Coord(position);
+           // tentativePos.Copy(position);
             tentativePos.x += horizontal;
             tentativePos.y += vertical;
-            if (!moving && BoardManager.Instance.IsValid(tentativePos)){
-                //Debug.Log("t " +tentativePos.x + " " + tentativePos.y);
+            //Debug.Log("t " + tentativePos.y);
+            //Debug.Log("p " + position.y);
+            //Debug.Log("22 " + position.x);
+            if (BoardManager.Instance.IsValid(tentativePos)){
+                Debug.Log("clicking");
                 //Debug.Log("p " + position.x + " " + position.y);
-                targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
-                BoardManager.Instance.SetEmptyPosition(position);
-                BoardManager.Instance.DisableMarkers();
-                position = tentativePos;
-                PerformAction(Actions.Move, position);
+              //  targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
+              //  BoardManager.Instance.SetEmptyPosition(position);
+              //  BoardManager.Instance.DisableMarkers();
+                //position = tentativePos;
+                PerformAction(Actions.Move, tentativePos);
             }
         }
 

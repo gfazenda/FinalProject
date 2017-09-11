@@ -1,16 +1,31 @@
-﻿[System.Serializable]
+﻿using System;
+
+[System.Serializable]
 public class Coord {
 
     public int x;
     public int y;
-    public int gCost;
-    public int hCost;
-    public Coord parent = null;
     
     public Coord()
     {
         x = 0;
         y = 0;
+    }
+    
+    public Coord(Coord original)
+    {
+        x = original.x;
+        y = original.y;
+    }
+
+    public bool CompareTo(Coord other)
+    {
+        return (this.x == other.x && this.y == other.y);
+    }
+
+    public string DebugInfo()
+    {
+        return "x " + x + " y " + y;
     }
 
     public Coord(int _x, int _y)
@@ -19,21 +34,10 @@ public class Coord {
         y = _y;
     }
 
-    //public static bool operator ==(Coord c1, Coord c2)
-    //{
-    //    return c1.Equals(c2);
-    //}
-
-    //public static bool operator !=(Coord c1, Coord c2)
-    //{
-    //    return !c1.Equals(c2);
-    //}
-
-    public int fCost
+    public void Copy(Coord original)
     {
-        get
-        {
-            return gCost + hCost;
-        }
+        x = original.x;
+        y = original.y;
     }
+
 }

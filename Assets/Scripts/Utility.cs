@@ -12,12 +12,21 @@
         }
         return array;
     }
+
 }
 
 public static class Events
 {
     public const string PlayerTurn = "PlayerTurn";
     public const string EnemiesTurn = "EnemiesTurn";
+    public const string EnemiesCreated = "EnemiesCreated";
+
+}
+
+
+public static class Tags
+{
+    public const string Enemy = "Enemy";
 
 }
 

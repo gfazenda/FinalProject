@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Marker : MonoBehaviour {
-    Coord position;
+    public Coord position = new Coord();
 
 
     public void SetPosition(Coord newPosition)
