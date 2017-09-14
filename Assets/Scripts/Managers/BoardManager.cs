@@ -6,7 +6,7 @@ public class BoardManager : MonoBehaviour {
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
-    public enum tileType { ground, player, wall, enemy, exit }
+    public enum tileType { ground, player, wall, enemy, exit, outOfLimits }
     MapGenerator _mapGenerator;
     public GameObject _player;
     private void Awake()
@@ -149,6 +149,17 @@ public class BoardManager : MonoBehaviour {
         return false;
     }
 
+    public tileType GetPositionType(Coord pos)
+    {
+        if (pos.x >= 0 && pos.x < mapWidth
+                && pos.y >= 0 && pos.y < mapHeight)
+        {
+            return gameBoard[pos.x, pos.y];
+        }
+        else
+            return tileType.outOfLimits;
+    }
+
     public float Distance(Coord a, Coord b)
     {
         Vector2 pointA = new Vector2((float)a.x, (float)a.y);
@@ -156,12 +167,9 @@ public class BoardManager : MonoBehaviour {
         return Vector2.Distance(pointA, pointB);
     }
 
-    public void SetPlayerPosition(Coord pos)
+    public void SetPlayerAction(Player.Actions action,Coord pos)
     {
-        //DisableMarkers();
-        //gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.ground;
-        //gameBoard[pos.x, pos.y] = tileType.player;
-        _player.GetComponent<Player>().PerformAction(Player.Actions.Move, pos);
+        _playerScript.PerformAction(action, pos);
     }
 
     public void DisableMarkers()
@@ -229,22 +237,48 @@ public class BoardManager : MonoBehaviour {
         //}
         //Debug.Log("coord " + pos.x + " " +pos.y);
         Coord newPosition = new Coord();
+        bool enable = false;
+        Marker.MarkerType type = Marker.MarkerType.movement;
         for (int x = pos.x - radius; x <= pos.x + radius; x++)
         {
             for (int y = pos.y - radius; y <= pos.y + radius; y++)
             {
+                enable = false;
                 newPosition = new Coord();
                 newPosition.x = x;
                 newPosition.y = y;
                // Debug.Log("coord2 " + newPosition.x + " " + newPosition.y);
-                if (newPosition.Equals(pos)) continue;
+                if (newPosition.CompareTo(pos)) continue;
 
                 if (!diagonal && newPosition.x != pos.x && newPosition.y != pos.y) continue;
 
-                if (IsValid(newPosition))
+                switch (GetPositionType(newPosition))
+                {
+                    case tileType.enemy:
+                        enable = true;
+                        type = Marker.MarkerType.attack;
+                        break;
+                    case tileType.ground:
+                        enable = true;
+                        type = Marker.MarkerType.movement;
+                        break;
+                }
+
+
+                //if (IsValid(newPosition))
+                //{
+                //    enable = true;
+                //    type = Marker.MarkerType.movement;
+                //}else if(gameBoard[newPosition.x, newPosition.y] == tileType.enemy)
+                //{
+                //    enable = true;
+                //    type = Marker.MarkerType.attack;
+                //}
+
+                if (enable)
                 {
                     markers[markerCount].transform.position = CoordToPosition(newPosition);
-                    markers[markerCount].gameObject.GetComponent<Marker>().SetPosition(newPosition);
+                    markers[markerCount].gameObject.GetComponent<Marker>().EnableMarker(type, newPosition);
                     markers[markerCount].gameObject.SetActive(true);
                     markerCount++;
                 }

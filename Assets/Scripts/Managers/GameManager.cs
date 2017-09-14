@@ -34,20 +34,52 @@ public class GameManager : MonoBehaviour {
         delay = (0.3f / enemies.Count);
     }
 
+    public void EnemyDamaged(int damage, Coord position)
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.GetComponent<Enemy>().position.CompareTo(position))
+            {
+                enemy.GetComponent<Enemy>().TakeDamage(damage);
+                return;
+            }
+        }
+    }
+
     void CallEnemyactions()
     {
         StartCoroutine(DoEnemiesAction());
         Debug.Log("enemies doing");
     }
 
+
+    void UpdateDelayTime()
+    {
+        delay = (0.3f / enemies.Count);
+    }
     // Use this for initialization
     IEnumerator DoEnemiesAction()
     {
-        foreach(GameObject enemy in enemies)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            enemy.GetComponent<Enemy>().DoAction();
+            if (!enemies[i].activeInHierarchy)
+            {
+                enemies.RemoveAt(i);
+                UpdateDelayTime();
+                continue;
+            }
+            enemies[i].GetComponent<Enemy>().DoAction();
             yield return new WaitForSeconds(delay);
+
         }
+
+
+        //foreach (GameObject enemy in enemies)
+        //{
+
+        //    enemy.GetComponent<Enemy>().DoAction();
+        //    yield return new WaitForSeconds(delay);
+        //}
         EventManager.TriggerEvent(Events.PlayerTurn);
         Debug.Log("player doing");
     }

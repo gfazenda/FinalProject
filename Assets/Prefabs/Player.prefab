@@ -177,7 +177,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  HP: 0
+  HP: 10
+  damage: 5
   position:
     x: 0
     y: 0

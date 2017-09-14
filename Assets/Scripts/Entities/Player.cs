@@ -9,7 +9,7 @@ public class Player : Character {
     //Coord position;
     private Vector2 touchOrigin = -Vector2.one;
     bool playerTurn = true;
-    public enum Actions {Move, Skill1, Skill2, Skill3 };
+    public enum Actions {Move, Skill1, Skill2, Skill3, BasicAtk };
     Actions currentAction;
     Coord tentativePos = new Coord();
     private void Awake()
@@ -46,7 +46,7 @@ public class Player : Character {
 
     // Update is called once per frame
     void Update () {
-        if (!playerTurn)
+        if (!playerTurn || moving)
             return;
        // if (!GameManager.instance.playersTurn) return;
 
@@ -54,12 +54,12 @@ public class Player : Character {
         int vertical = 0;       //Used to store the vertical move direction.
 
         //Check if we are running either in the Unity editor or in a standalone build.
-        #if UNITY_STANDALONE || UNITY_WEBPLAYER
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
 
         //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
 
-        //Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
+        ////Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
         vertical = (int)(Input.GetAxisRaw("Vertical"));
 
         //Check if moving horizontally, if so set vertical to zero.
@@ -124,15 +124,22 @@ public class Player : Character {
             //Debug.Log("t " + tentativePos.y);
             //Debug.Log("p " + position.y);
             //Debug.Log("22 " + position.x);
-            if (BoardManager.Instance.IsValid(tentativePos)){
-                Debug.Log("clicking");
+            if(BoardManager.Instance.GetPositionType(tentativePos) == BoardManager.tileType.enemy)
+            {
+                PerformAction(Actions.BasicAtk, tentativePos);
+            }
+            else if (BoardManager.Instance.GetPositionType(tentativePos) == BoardManager.tileType.ground)
+            {
+                PerformAction(Actions.Move, tentativePos);
+            }
+            Debug.Log("clicking");
                 //Debug.Log("p " + position.x + " " + position.y);
               //  targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
               //  BoardManager.Instance.SetEmptyPosition(position);
               //  BoardManager.Instance.DisableMarkers();
                 //position = tentativePos;
-                PerformAction(Actions.Move, tentativePos);
-            }
+                
+            
         }
 
         //if (moving && transform.position != targetPos)
@@ -152,13 +159,16 @@ public class Player : Character {
         switch (_action)
         {
             case Actions.Move:
-                SetPosition(target);
+                base.SetPosition(target);
                 break;
             case Actions.Skill1:
                 break;
             case Actions.Skill2:
                 break;
             case Actions.Skill3:
+                break;
+            case Actions.BasicAtk:
+                GameManager.Instance.EnemyDamaged(damage, target);
                 break;
             default:
                 break;

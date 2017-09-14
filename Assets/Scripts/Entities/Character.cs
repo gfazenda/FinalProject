@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Character : MonoBehaviour {
     public float speed = 3;
-    public int HP;
-
+    public int HP, damage;
+    float step;
     protected bool moving = false;
     protected Vector3 targetPos;
     public Coord position = new Coord();
@@ -17,10 +17,10 @@ public class Character : MonoBehaviour {
         targetPos = BoardManager.Instance.CoordToPosition(position, false);
     }
 
-    public virtual void SetPosition(Coord pos)
+    public virtual void SetPosition(Coord newPos)
     {
-        BoardManager.Instance.UpdatePosition(position, pos, characterType);
-        position = pos;
+        BoardManager.Instance.UpdatePosition(position, newPos, characterType);
+        position = newPos;
         targetPos = BoardManager.Instance.CoordToPosition(position, false);
         SetMoving();
     }
@@ -33,7 +33,18 @@ public class Character : MonoBehaviour {
     protected void SetMoving()
     {
         moving = true;
+        StartCoroutine(Move2());
         transform.LookAt(targetPos);
+    }
+
+
+    public void TakeDamage(int damage) {
+        this.HP -= damage;
+        if(HP <= 0)
+        {
+            this.gameObject.SetActive(false);
+            BoardManager.Instance.SetEmptyPosition(position);
+        }
     }
 
 
@@ -53,5 +64,17 @@ public class Character : MonoBehaviour {
     {
         float step = speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+    }
+
+    IEnumerator Move2()
+    {
+        while(transform.position != targetPos)
+        {
+            step = speed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+            yield return new WaitForSeconds(0.3f);
+        }
+      
+        moving = false;
     }
 }
