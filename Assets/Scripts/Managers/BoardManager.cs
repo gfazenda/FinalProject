@@ -6,7 +6,8 @@ public class BoardManager : MonoBehaviour {
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
-    public enum tileType { ground, player, wall, enemy, exit, outOfLimits }
+    public enum tileType { ground, player, wall, enemy, exit, outOfLimits };
+
     MapGenerator _mapGenerator;
     public GameObject _player;
     private void Awake()
@@ -34,15 +35,15 @@ public class BoardManager : MonoBehaviour {
     //3 = enemy
     //4 = exit
 
+    #region Initialization
 
-    // Use this for initialization
     void Start()
     {
-        
+
         _mapGenerator = this.GetComponent<MapGenerator>();
 
         mapWidth = (int)_mapGenerator.mapSize.x;
-        mapHeight= (int)_mapGenerator.mapSize.y;
+        mapHeight = (int)_mapGenerator.mapSize.y;
 
         gameBoard = new tileType[mapWidth, mapHeight];
         gameGrid = new Node[mapWidth, mapHeight];
@@ -54,18 +55,6 @@ public class BoardManager : MonoBehaviour {
 
         InitializeGrid();
         InitializeBoard();
-    }
-
-
-    public int BoardSize()
-    {
-        return mapHeight * mapWidth;
-    }
-    
-    public void UpdatePosition(Coord oldPos, Coord newPos, tileType type)
-    {
-        gameBoard[oldPos.x, oldPos.y] = tileType.ground;
-        gameBoard[newPos.x, newPos.y] = type;
     }
 
     void InitializeBoard()
@@ -104,85 +93,21 @@ public class BoardManager : MonoBehaviour {
             }
         }
     }
+#endregion
 
-
-    public void SetEmptyPosition(Coord position)
+    public int BoardSize()
     {
-        gameBoard[position.x, position.y] = tileType.ground;
+        return mapHeight * mapWidth;
     }
 
-    //int PosToIndex(Coord pos)
-    //{
-    //    return ((int)pos.x + (int)pos.y * height);
-    //}
+  
 
-
+    #region AStar methods
     public Node GetNode(Coord pos)
     {
         return gameGrid[pos.x, pos.y];
     }
-
-    public Vector3 CoordToPosition(Coord pos, bool ground = true)
-    {
-        int yPos = 1;
-        if (!ground) yPos = 1;
-        return new Vector3(-mapWidth / 2 + 0.5f + pos.x, yPos, -mapHeight / 2 + 0.5f + pos.y);
-    }
-
-    public bool IsValid(Coord pos, bool isPlayer = true)
-    {
-        bool isExit = pos.CompareTo(exitCoord);
-        if (pos.x >= 0 && pos.x < mapWidth
-                && pos.y >= 0 && pos.y < mapHeight)
-        {
-            if (isExit && isPlayer)
-            {
-                return true;
-            }
-            else if (gameBoard[pos.x, pos.y] == tileType.player && !isPlayer)
-            {
-                return true;
-            }
-            else
-                return (!isExit && gameBoard[pos.x, pos.y] == tileType.ground);
-        }
-        return false;
-    }
-
-    public tileType GetPositionType(Coord pos)
-    {
-        if (pos.x >= 0 && pos.x < mapWidth
-                && pos.y >= 0 && pos.y < mapHeight)
-        {
-            return gameBoard[pos.x, pos.y];
-        }
-        else
-            return tileType.outOfLimits;
-    }
-
-    public float Distance(Coord a, Coord b)
-    {
-        Vector2 pointA = new Vector2((float)a.x, (float)a.y);
-        Vector2 pointB = new Vector2((float)b.x, (float)b.y);
-        return Vector2.Distance(pointA, pointB);
-    }
-
-    public void SetPlayerAction(Player.Actions action,Coord pos)
-    {
-        _playerScript.PerformAction(action, pos);
-    }
-
-    public void DisableMarkers()
-    {
-        for (int i = 0; i < markerCount; i++)
-        {
-            markers[i].gameObject.SetActive(false);
-        }
-        markerCount = 0;
-        showingMarkers = false;
-    }
-
-
+    
     public List<Node> GetNeighbours(Node node, int radius, bool diagonal = false)
     {
         List<Node> neighbours = new List<Node>();
@@ -203,7 +128,7 @@ public class BoardManager : MonoBehaviour {
                 newPosition.x = checkX;
                 newPosition.y = checkY;
 
-                if (IsValid(newPosition,false))
+                if (GetPositionType(newPosition) == tileType.ground || GetPositionType(newPosition) == tileType.player)
                 {
                     neighbours.Add(gameGrid[checkX, checkY]);
                 }
@@ -213,6 +138,88 @@ public class BoardManager : MonoBehaviour {
         return neighbours;
     }
 
+
+    #endregion
+
+    #region Positioning
+    public void UpdatePosition(Coord oldPos, Coord newPos, tileType type)
+    {
+        gameBoard[oldPos.x, oldPos.y] = tileType.ground;
+        gameBoard[newPos.x, newPos.y] = type;
+    }
+
+    public void SetEmptyPosition(Coord pos)
+    {
+        gameBoard[pos.x, pos.y] = tileType.ground;
+    }
+
+    public Vector3 CoordToPosition(Coord pos, bool ground = true)
+    {
+        int yPos = 1;
+        if (!ground) yPos = 1;
+        return new Vector3(-mapWidth / 2 + 0.5f + pos.x, yPos, -mapHeight / 2 + 0.5f + pos.y);
+    }
+
+    //public bool IsValid(Coord pos, bool isPlayer = true)
+    //{
+    //    bool isExit = pos.CompareTo(exitCoord);
+    //    if (pos.x >= 0 && pos.x < mapWidth
+    //            && pos.y >= 0 && pos.y < mapHeight)
+    //    {
+    //        if (isExit && isPlayer)
+    //        {
+    //            return true;
+    //        }
+    //        else if (gameBoard[pos.x, pos.y] == tileType.player && !isPlayer)
+    //        {
+    //            return true;
+    //        }
+    //        else
+    //            return (!isExit && gameBoard[pos.x, pos.y] == tileType.ground);
+    //    }
+    //    return false;
+    //}
+
+    public tileType GetPositionType(Coord pos)
+    {
+        if (pos.x >= 0 && pos.x < mapWidth
+                && pos.y >= 0 && pos.y < mapHeight)
+        {
+            if (exitCoord.CompareTo(pos))
+            {
+                return tileType.exit;
+            }
+            return gameBoard[pos.x, pos.y];
+        }
+        else
+            return tileType.outOfLimits;
+    }
+
+    #endregion
+
+    public float Distance(Coord a, Coord b)
+    {
+        Vector2 pointA = new Vector2((float)a.x, (float)a.y);
+        Vector2 pointB = new Vector2((float)b.x, (float)b.y);
+        return Vector2.Distance(pointA, pointB);
+    }
+
+    public void SetPlayerAction(Player.Actions action,Coord pos)
+    {
+        _playerScript.PerformAction(action, pos);
+    }
+
+    #region Markers
+
+    public void DisableMarkers()
+    {
+        for (int i = 0; i < markerCount; i++)
+        {
+            markers[i].gameObject.SetActive(false);
+        }
+        markerCount = 0;
+        showingMarkers = false;
+    }
 
     public void DisplayMarkers(Coord pos, int radius, bool diagonal = false)
     {
@@ -289,5 +296,5 @@ public class BoardManager : MonoBehaviour {
             showingMarkers = false;
         }
     }
-
+    #endregion
 }

@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//[RequireComponent(typeof(HealthBar))]
 public class Character : MonoBehaviour {
     public float speed = 3;
     public int HP, damage;
+    int maxHP;
     float step;
     protected bool moving = false;
     protected Vector3 targetPos;
     public Coord position = new Coord();
     public BoardManager.tileType characterType;
-
+    HealthBar hpScript;
     protected void Start()
     {
-      //  position = new Coord((int)initPosition.x, (int)initPosition.y);
+        maxHP = HP;
+        hpScript = this.GetComponentInChildren<HealthBar>();
+        //  position = new Coord((int)initPosition.x, (int)initPosition.y);
         targetPos = BoardManager.Instance.CoordToPosition(position, false);
     }
 
@@ -30,6 +34,11 @@ public class Character : MonoBehaviour {
         return position;
     }
 
+    protected void LookAtCoord(Coord pos)
+    {
+        transform.LookAt(BoardManager.Instance.CoordToPosition(pos, false));
+    }
+
     protected void SetMoving()
     {
         moving = true;
@@ -37,10 +46,16 @@ public class Character : MonoBehaviour {
         transform.LookAt(targetPos);
     }
 
+    void UpdateHealthBar()
+    {
+        float healthAmount = (float)HP / (float)maxHP;
+        hpScript.UpdateBar(healthAmount);
+    }
 
     public void TakeDamage(int damage) {
         this.HP -= damage;
-        if(HP <= 0)
+        UpdateHealthBar();
+        if (HP <= 0)
         {
             this.gameObject.SetActive(false);
             BoardManager.Instance.SetEmptyPosition(position);

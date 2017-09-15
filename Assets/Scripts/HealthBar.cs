@@ -4,13 +4,13 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
     float HP = 1;
-    //Image _image;
+    public Image _image;
     public Text _text;
     public bool lerp = false, scaleImage = true;
 
     void Start ()
     {
-        //_image = this.GetComponent<Image>();
+       // _image = this.GetComponent<Image>();
     }
 	
 	void Update ()
@@ -18,12 +18,12 @@ public class HealthBar : MonoBehaviour
 
     }
 
-    public void updateBar(float value)
+    public void UpdateBar(float value)
     {
         HP = value;
-        Vector3 scale = this.transform.localScale;
+        Vector3 scale = _image.transform.localScale;
         scale.x = value < 0 ? 0 : value;
-        this.transform.localScale = scale;
+        _image.transform.localScale = scale;
         if (lerp) setColor();
     }
 
@@ -35,13 +35,13 @@ public class HealthBar : MonoBehaviour
         scale.x = HP < 0 ? 0 : HP;
         _text.text = (int)(scale.x * 100f) + "%";
         if (scaleImage)
-            this.transform.localScale = scale;
+            _image.transform.localScale = scale;
         if (lerp)
             setColor();
     }
 
     void setColor()
     {
-        this.GetComponent<Image>().color = Color.Lerp(Color.red, Color.green, HP);
+        _image.GetComponent<Image>().color = Color.Lerp(Color.red, Color.green, HP);
     }
 }

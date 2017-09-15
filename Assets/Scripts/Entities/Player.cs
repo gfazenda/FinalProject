@@ -32,18 +32,6 @@ public class Player : Character {
             BoardManager.Instance.DisplayMarkers(position,1);
     }
 
-    //public void SetPosition(Coord pos)
-    //{
-    //    position = pos;
-    //    targetPos = BoardManager.Instance.CoordToPosition(position, false);
-    //    SetMoving();
-    //}
-
-    //public Coord GetPosition()
-    //{
-    //    return position;
-    //}
-
     // Update is called once per frame
     void Update () {
         if (!playerTurn || moving)
@@ -168,6 +156,7 @@ public class Player : Character {
             case Actions.Skill3:
                 break;
             case Actions.BasicAtk:
+                LookAtCoord(target);
                 GameManager.Instance.EnemyDamaged(damage, target);
                 break;
             default:
