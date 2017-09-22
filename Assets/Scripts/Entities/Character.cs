@@ -13,6 +13,9 @@ public class Character : MonoBehaviour {
     public Coord position = new Coord();
     public BoardManager.tileType characterType;
     HealthBar hpScript;
+
+    protected int rechargingTurns = 0;
+
     protected void Start()
     {
         maxHP = HP;
@@ -52,7 +55,7 @@ public class Character : MonoBehaviour {
         hpScript.UpdateBar(healthAmount);
     }
 
-    public void TakeDamage(int damage) {
+    public virtual void TakeDamage(int damage) {
         this.HP -= damage;
         UpdateHealthBar();
         if (HP <= 0)

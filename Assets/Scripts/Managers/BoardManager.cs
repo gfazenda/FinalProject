@@ -108,7 +108,7 @@ public class BoardManager : MonoBehaviour {
         return gameGrid[pos.x, pos.y];
     }
     
-    public List<Node> GetNeighbours(Node node, int radius, bool diagonal = false)
+    public List<Node> GetNodeNeighbours(Node node, int radius, bool diagonal = false)
     {
         List<Node> neighbours = new List<Node>();
         Coord newPosition = new Coord();
@@ -153,10 +153,10 @@ public class BoardManager : MonoBehaviour {
         gameBoard[pos.x, pos.y] = tileType.ground;
     }
 
-    public Vector3 CoordToPosition(Coord pos, bool ground = true)
+    public Vector3 CoordToPosition(Coord pos, bool marker = true)
     {
-        int yPos = 1;
-        if (!ground) yPos = 1;
+        int yPos = 2;
+        if (!marker) yPos = 1;
         return new Vector3(-mapWidth / 2 + 0.5f + pos.x, yPos, -mapHeight / 2 + 0.5f + pos.y);
     }
 
@@ -197,11 +197,54 @@ public class BoardManager : MonoBehaviour {
 
     #endregion
 
-    public float Distance(Coord a, Coord b)
+    public static float Distance(Coord a, Coord b)
     {
         Vector2 pointA = new Vector2((float)a.x, (float)a.y);
         Vector2 pointB = new Vector2((float)b.x, (float)b.y);
         return Vector2.Distance(pointA, pointB);
+    }
+
+    public List<KeyValuePair<tileType,Coord>> GetNeighbours(Coord pos, int radius, List<tileType> types, bool diagonal = false)
+    {
+        List<KeyValuePair<tileType, Coord>> neighbours = new List<KeyValuePair<tileType, Coord>>();
+        Coord newPosition = new Coord();
+        tileType currentType;
+        for (int x = pos.x - radius; x <= pos.x + radius; x++)
+        {
+            for (int y = pos.y - radius; y <= pos.y + radius; y++)
+            {
+                newPosition = new Coord();
+                if (x == 0 && y == 0)
+                    continue;
+
+
+                if (!diagonal && newPosition.x != pos.x && newPosition.y != pos.y) continue;
+
+                newPosition.x = x;
+                newPosition.y = y;
+                currentType = GetPositionType(newPosition);
+                if (types.Contains(currentType))
+                {
+                    neighbours.Add(new KeyValuePair<tileType, Coord>(currentType,newPosition));
+                }
+            }
+        }
+        foreach (KeyValuePair<tileType, Coord> t in neighbours)
+        {
+            if(t.Key == tileType.enemy)
+            {
+
+            }
+        }
+
+        //for (int i = 0; i < neighbours.Count; i++)
+        //{
+        //    //List<Coord> a;
+        //    //a.AddRange(neighbours.Values);
+        //    neighbours.
+        //}
+
+        return neighbours;
     }
 
     public void SetPlayerAction(Player.Actions action,Coord pos)
@@ -265,7 +308,7 @@ public class BoardManager : MonoBehaviour {
                         enable = true;
                         type = Marker.MarkerType.attack;
                         break;
-                    case tileType.ground:
+                    case tileType.ground: case tileType.exit:
                         enable = true;
                         type = Marker.MarkerType.movement;
                         break;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Marker : MonoBehaviour {
     public Coord position = new Coord();
+    public float transparency = 0.5f;
     public enum MarkerType {movement, attack, information};
     MarkerType _type;
     Material _material;
@@ -34,7 +35,7 @@ public class Marker : MonoBehaviour {
                 currentColor = Color.red;
                 break;
         }
-        currentColor.a = 0.6f;
+        currentColor.a = transparency;
         _material.color = currentColor;
     }
 

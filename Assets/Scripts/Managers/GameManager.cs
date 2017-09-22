@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
     private static GameManager _instance;
 
     public static GameManager Instance { get { return _instance; } }
     float delay;
-    List<GameObject> enemies;
+    List<GameObject> enemies = new List<GameObject>();
+
+    public int currentLevel = 1;
+    bool initialized = false;
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -19,9 +23,61 @@ public class GameManager : MonoBehaviour {
             _instance = this;
         }
 
-        EventManager.StartListening(Events.EnemiesTurn, CallEnemyactions);
-        EventManager.StartListening(Events.EnemiesCreated, PopulateEnemies);
+        DontDestroyOnLoad(this);
+
+        //EventManager.StartListening(Events.EnemiesTurn, CallEnemyActions);
+        //EventManager.StartListening(Events.EnemiesCreated, PopulateEnemies);
+
+        //EventManager.StartListening(Events.LevelWon, NextLevel);
+        //EventManager.StartListening(Events.LevelLost, ReloadLevel);
+
+        if (!initialized)
+            Initialize();
+
+
     }
+
+
+    private void Initialize()
+    {
+        EventManager.StartListening(Events.EnemiesTurn, CallEnemyActions);
+        EventManager.StartListening(Events.EnemiesCreated, PopulateEnemies);
+
+        EventManager.StartListening(Events.LevelWon, NextLevel);
+        EventManager.StartListening(Events.LevelLost, ReloadLevel);
+
+        initialized = true;
+    }
+
+    void Unsubscribe()
+    {
+        EventManager.StopListening(Events.EnemiesTurn, CallEnemyActions);
+        EventManager.StopListening(Events.EnemiesCreated, PopulateEnemies);
+
+        EventManager.StopListening(Events.LevelWon, NextLevel);
+        EventManager.StopListening(Events.LevelLost, ReloadLevel);
+    }
+
+
+    void NextLevel()
+    {
+        currentLevel++;
+        enemies = new List<GameObject>();
+      //  Unsubscribe();
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
+
+    void ReloadLevel()
+    {
+        enemies = new List<GameObject>();
+     //   Unsubscribe();
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
+    }
+
+
+
 
     private void PopulateEnemies()
     {
@@ -32,6 +88,7 @@ public class GameManager : MonoBehaviour {
             enemies[i].GetComponent<Enemy>().Initialize();
         }
         delay = (0.3f / enemies.Count);
+        Debug.Log("got enemies " + enemies.Count);
     }
 
     public void EnemyDamaged(int damage, Coord position)
@@ -46,7 +103,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    void CallEnemyactions()
+    void CallEnemyActions()
     {
         StartCoroutine(DoEnemiesAction());
         Debug.Log("enemies doing");

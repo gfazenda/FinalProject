@@ -61,13 +61,24 @@ public class MapGenerator : MonoBehaviour {
             }
         }
 
+        bool[,] obstacleMap = new bool[(int)mapSize.x, (int)mapSize.y];
+        int currentObstacleCount = 0;
 
         for (int i = 0; i < obstacleCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
-            while (randomCoord.CompareTo(playerCoord) || randomCoord.CompareTo(exitCoord) || BoardManager.Instance.Distance(randomCoord, playerCoord) < 2)
+            obstacleMap[randomCoord.x, randomCoord.y] = true;
+            currentObstacleCount++;
+
+            while (randomCoord.CompareTo(playerCoord) 
+                  || randomCoord.CompareTo(exitCoord)
+                  || BoardManager.Distance(randomCoord, playerCoord) < 2
+                  || !MapIsFullyAccessible(obstacleMap,currentObstacleCount))
             {
+                obstacleMap[randomCoord.x, randomCoord.y] = false;
                 randomCoord = GetRandomCoord();
+                obstacleMap[randomCoord.x, randomCoord.y] = true;
+                //currentObstacleCount--;
             }
             obstacleCoords.Add(randomCoord);
             Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
@@ -78,7 +89,7 @@ public class MapGenerator : MonoBehaviour {
         for (int i = 0; i < enemyCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
-            while (randomCoord.CompareTo(playerCoord) || randomCoord.CompareTo(exitCoord) || BoardManager.Instance.Distance(randomCoord, playerCoord) < 3)
+            while (randomCoord.CompareTo(playerCoord) || randomCoord.CompareTo(exitCoord) || BoardManager.Distance(randomCoord, playerCoord) < 3)
             {
                 randomCoord = GetRandomCoord();
             }
@@ -99,6 +110,54 @@ public class MapGenerator : MonoBehaviour {
         player.transform.position = CoordToPosition(playerCoord.x, playerCoord.y, false);
 
     }
+
+
+    bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount)
+    {
+        bool[,] mapFlags = new bool[obstacleMap.GetLength(0), obstacleMap.GetLength(1)];
+        Queue<Coord> queue = new Queue<Coord>();
+        queue.Enqueue(playerCoord);
+        mapFlags[playerCoord.x, playerCoord.y] = true;
+        queue.Enqueue(exitCoord);
+        mapFlags[exitCoord.x, exitCoord.y] = true;
+
+        int accessibleTileCount = 2;
+
+        while (queue.Count > 0)
+        {
+            Coord tile = queue.Dequeue();
+
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
+                {
+                    int neighbourX = tile.x + x;
+                    int neighbourY = tile.y + y;
+                    if (x == 0 || y == 0)
+                    {
+                        if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
+                        {
+                            if (!mapFlags[neighbourX, neighbourY] && !obstacleMap[neighbourX, neighbourY])
+                            {
+                                mapFlags[neighbourX, neighbourY] = true;
+                                queue.Enqueue(new Coord(neighbourX, neighbourY));
+                                accessibleTileCount++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        int targetAccessibleTileCount = (int)(mapSize.x * mapSize.y - currentObstacleCount);
+        return targetAccessibleTileCount == accessibleTileCount;
+    }
+
+    Vector3 CoordToPosition(int x, int y)
+    {
+        return new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y);
+    }
+
 
     Vector3 CoordToPosition(int x, int y, bool ground = true)
     {

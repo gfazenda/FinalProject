@@ -46,7 +46,7 @@ public class AStar : MonoBehaviour {
                 RetracePath(startNode, targetNode);
                 return path;
             }
-            foreach (Node neighbour in BoardManager.Instance.GetNeighbours(currentNode, 1))
+            foreach (Node neighbour in BoardManager.Instance.GetNodeNeighbours(currentNode, 1))
             {
 
                 if (closedSet.Contains(neighbour))

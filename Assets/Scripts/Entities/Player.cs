@@ -9,8 +9,10 @@ public class Player : Character {
     //Coord position;
     private Vector2 touchOrigin = -Vector2.one;
     bool playerTurn = true;
-    public enum Actions {Move, Skill1, Skill2, Skill3, BasicAtk };
+    public enum Actions {Move, Overcharge, Skill2, Skill3, BasicAtk };
+
     Actions currentAction;
+    BoardManager.tileType targetType;
     Coord tentativePos = new Coord();
     private void Awake()
     {
@@ -32,10 +34,22 @@ public class Player : Character {
             BoardManager.Instance.DisplayMarkers(position,1);
     }
 
+    public override void TakeDamage(int damage)
+    {
+        base.TakeDamage(damage);
+        if(HP <= 0)
+            EventManager.TriggerEvent(Events.LevelLost);
+    }
+
     // Update is called once per frame
     void Update () {
         if (!playerTurn || moving)
             return;
+        else if (rechargingTurns > 0)
+        {
+            EventManager.TriggerEvent(Events.EnemiesTurn);
+            rechargingTurns -= 1;
+        }
        // if (!GameManager.instance.playersTurn) return;
 
         int horizontal = 0;     //Used to store the horizontal move direction.
@@ -112,15 +126,22 @@ public class Player : Character {
             //Debug.Log("t " + tentativePos.y);
             //Debug.Log("p " + position.y);
             //Debug.Log("22 " + position.x);
-            if(BoardManager.Instance.GetPositionType(tentativePos) == BoardManager.tileType.enemy)
+            targetType = BoardManager.Instance.GetPositionType(tentativePos);
+            if (targetType == BoardManager.tileType.enemy)
             {
                 PerformAction(Actions.BasicAtk, tentativePos);
             }
-            else if (BoardManager.Instance.GetPositionType(tentativePos) == BoardManager.tileType.ground)
+            else if ((targetType == BoardManager.tileType.ground)) 
             {
                 PerformAction(Actions.Move, tentativePos);
             }
-            Debug.Log("clicking");
+            else if (targetType == BoardManager.tileType.exit)
+            {
+                PerformAction(Actions.Move, tentativePos);
+                EventManager.TriggerEvent(Events.LevelWon);
+            }
+
+            
                 //Debug.Log("p " + position.x + " " + position.y);
               //  targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
               //  BoardManager.Instance.SetEmptyPosition(position);
@@ -142,14 +163,16 @@ public class Player : Character {
     }
 
 
-    public void PerformAction(Actions _action, Coord target)
+    public void PerformAction(Actions _action, Coord target = null)
     {
         switch (_action)
         {
             case Actions.Move:
                 base.SetPosition(target);
                 break;
-            case Actions.Skill1:
+            case Actions.Overcharge:
+                Overcharge();
+                rechargingTurns = 3;
                 break;
             case Actions.Skill2:
                 break;
@@ -167,6 +190,21 @@ public class Player : Character {
         EventManager.TriggerEvent(Events.EnemiesTurn);
     }
 
+    void Overcharge()
+    {
+        List<BoardManager.tileType> types = new List<BoardManager.tileType>();
+        types.Add(BoardManager.tileType.enemy);
+        List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2, types, true);
+        foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
+        {
+            GameManager.Instance.EnemyDamaged((damage*3), t.Value);
+        }
+    }
+
+    public void DoOvercharge()
+    {
+        PerformAction(Actions.Overcharge);
+    }
 
     //public override void SetPosition(Coord pos)
     //{
