@@ -7,7 +7,11 @@ public class GameManager : MonoBehaviour {
     private static GameManager _instance;
 
     public static GameManager Instance { get { return _instance; } }
+    
+    public float delayPerEnemy;
+
     float delay;
+    
     List<GameObject> enemies = new List<GameObject>();
 
     public int currentLevel = 1;
@@ -34,7 +38,7 @@ public class GameManager : MonoBehaviour {
         if (!initialized)
             Initialize();
 
-
+        SceneManager.sceneLoaded += InitializeLevel;
     }
 
 
@@ -61,6 +65,7 @@ public class GameManager : MonoBehaviour {
 
     void NextLevel()
     {
+        Debug.Log("load");
         currentLevel++;
         enemies = new List<GameObject>();
       //  Unsubscribe();
@@ -70,10 +75,17 @@ public class GameManager : MonoBehaviour {
 
     void ReloadLevel()
     {
+        Debug.Log("reload");
         enemies = new List<GameObject>();
      //   Unsubscribe();
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
+    }
+
+    void InitializeLevel(Scene scene, LoadSceneMode mode)
+    {
+        //BoardManager.Instance.DoInitialize();
+        EventManager.TriggerEvent(Events.LevelLoaded);
     }
 
 
@@ -81,13 +93,14 @@ public class GameManager : MonoBehaviour {
 
     private void PopulateEnemies()
     {
-        enemies = new List<GameObject>();
-        enemies.AddRange(GameObject.FindGameObjectsWithTag(Tags.Enemy));
+        enemies.Clear();// = new List<GameObject>();
+        //enemies.AddRange(GameObject.FindGameObjectsWithTag(Tags.Enemy));
+        enemies = BoardManager.Instance.listOfEnemies;
         for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].GetComponent<Enemy>().Initialize();
         }
-        delay = (0.3f / enemies.Count);
+        delay = (delayPerEnemy / enemies.Count);
         Debug.Log("got enemies " + enemies.Count);
     }
 
@@ -101,6 +114,11 @@ public class GameManager : MonoBehaviour {
                 return;
             }
         }
+    }
+
+    public float GetEnemyTurnDuration()
+    {
+        return (delayPerEnemy * enemies.Count);
     }
 
     void CallEnemyActions()

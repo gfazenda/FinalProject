@@ -9,6 +9,7 @@ public class Enemy : Character {
     List<Coord> myPath = new List<Coord>();
     Player player = null;
     int failedAttempts = 0;
+
     void CreatePath()
     {        
         playerPosition = player.GetPosition();
@@ -25,6 +26,11 @@ public class Enemy : Character {
         player.TakeDamage(damage);
         LookAtCoord(player.GetPosition());
     }
+
+    //private void OnLevelWasLoaded(int level)
+    //{
+    //    this.gameObject.SetActive(true);
+    //}
 
     protected virtual void PerformMove()
     {

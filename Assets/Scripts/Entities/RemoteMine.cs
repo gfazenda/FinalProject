@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangeEnemy : MonoBehaviour {
+public class RemoteMine : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

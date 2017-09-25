@@ -20,6 +20,7 @@ public class BoardManager : MonoBehaviour {
         {
             _instance = this;
         }
+        EventManager.StartListening(Events.LevelLoaded, DoInitialize);
     }
     tileType[,] gameBoard;
     public Node[,] gameGrid;
@@ -28,6 +29,8 @@ public class BoardManager : MonoBehaviour {
     public List<Transform> markers = new List<Transform>();
     bool showingMarkers = false;
     public Player _playerScript;
+    public List<GameObject> listOfEnemies = new List<GameObject>();
+    public bool generateAtRuntime = false;
     Coord exitCoord;
     //0 = ground
     //1 = player
@@ -39,7 +42,14 @@ public class BoardManager : MonoBehaviour {
 
     void Start()
     {
+        Debug.Log("start");
+       // DoInitialize();
 
+    }
+
+    public void DoInitialize()
+    {
+        Debug.Log("initializing");
         _mapGenerator = this.GetComponent<MapGenerator>();
 
         mapWidth = (int)_mapGenerator.mapSize.x;
@@ -48,9 +58,14 @@ public class BoardManager : MonoBehaviour {
         gameBoard = new tileType[mapWidth, mapHeight];
         gameGrid = new Node[mapWidth, mapHeight];
 
+        _mapGenerator.GenerateMap();
+
         _player = _mapGenerator.GetPlayer();
         _playerScript = _player.GetComponent<Player>();
-        _mapGenerator.GenerateMap();
+
+        //  if(generateAtRuntime)
+       
+
         exitCoord = _mapGenerator.exitCoord;
 
         InitializeGrid();
@@ -74,11 +89,15 @@ public class BoardManager : MonoBehaviour {
             gameBoard[obstacles[i].x, obstacles[i].y] = tileType.wall;
         }
 
-        List<Coord> enemies = _mapGenerator.GetEnemies();
-        for (int i = 0; i < enemies.Count; i++)
+        /* List<Coord> */
+        listOfEnemies = _mapGenerator.GetEnemies();
+        for (int i = 0; i < listOfEnemies.Count; i++)
         {
-            gameBoard[enemies[i].x, enemies[i].y] = tileType.enemy;
+            Coord position = listOfEnemies[i].GetComponent<Enemy>().GetPosition();
+            gameBoard[position.x, position.y] = tileType.enemy;
         }
+        EventManager.TriggerEvent(Events.EnemiesCreated);
+
         gameBoard[_mapGenerator.exitCoord.x, _mapGenerator.exitCoord.y] = tileType.exit;
         gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.player;
     }

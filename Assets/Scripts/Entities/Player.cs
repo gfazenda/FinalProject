@@ -8,7 +8,7 @@ public class Player : Character {
     //Vector3 targetPos;
     //Coord position;
     private Vector2 touchOrigin = -Vector2.one;
-    bool playerTurn = true;
+    bool playerTurn = true, turnInvoked = false;
     public enum Actions {Move, Overcharge, Skill2, Skill3, BasicAtk };
 
     Actions currentAction;
@@ -37,9 +37,17 @@ public class Player : Character {
     public override void TakeDamage(int damage)
     {
         base.TakeDamage(damage);
-        if(HP <= 0)
+        if (HP <= 0)
             EventManager.TriggerEvent(Events.LevelLost);
     }
+
+    void SetEnemiesTurn()
+    {
+        EventManager.TriggerEvent(Events.EnemiesTurn);
+        turnInvoked = false;
+        rechargingTurns -= 1;
+    }
+
 
     // Update is called once per frame
     void Update () {
@@ -47,8 +55,16 @@ public class Player : Character {
             return;
         else if (rechargingTurns > 0)
         {
-            EventManager.TriggerEvent(Events.EnemiesTurn);
-            rechargingTurns -= 1;
+            
+            if (!turnInvoked)
+            {
+                float timer = GameManager.Instance.GetEnemyTurnDuration();
+                UXManager.instance.DisplayMessage("Recharging for " + rechargingTurns + " turn(s)", timer);
+                turnInvoked = true;
+                Invoke("SetEnemiesTurn", (timer+0.1f));
+            }
+           
+            return;
         }
        // if (!GameManager.instance.playersTurn) return;
 

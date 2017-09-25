@@ -22,12 +22,14 @@ public static class Events
     public const string EnemiesCreated = "EnemiesCreated";
     public const string LevelWon = "LevelWon";
     public const string LevelLost = "LevelLost";
+    public const string LevelLoaded = "LevelLoaded";
 }
 
 
 public static class Tags
 {
     public const string Enemy = "Enemy";
+    public const string Player = "Player";
 
 }
 

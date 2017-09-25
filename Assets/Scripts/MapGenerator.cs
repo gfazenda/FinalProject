@@ -11,11 +11,13 @@ public class MapGenerator : MonoBehaviour {
 
     public string mapObjName = "Map";
 
-    List<Coord> allTileCoords, obstacleCoords, enemyCoords;
+    List<Coord> allTileCoords, obstacleCoords;
+    List<GameObject> enemyCoords;
     Queue<Coord> shuffledTileCoords;
     public int obstacleCount = 10, enemyCount = 1;
     public Coord playerCoord;
     public Coord exitCoord;
+    Transform playerObj = null;
     //public void Start()
     //{
     //    GenerateMap();
@@ -23,14 +25,16 @@ public class MapGenerator : MonoBehaviour {
 
     public GameObject GetPlayer()
     {
-        return player.gameObject;
+        if (!playerObj)
+            CreatePlayer();
+        return playerObj.gameObject;
     }
 
     public void GenerateMap()
     {
         allTileCoords = new List<Coord>();
         obstacleCoords = new List<Coord>();
-        enemyCoords = new List<Coord>();
+        enemyCoords = new List<GameObject>();
         exitCoord = new Coord((int)Random.Range(0,mapSize.x),(int)(mapSize.y-1));
         for (int x = 0; x < mapSize.x; x++)
         {
@@ -41,6 +45,7 @@ public class MapGenerator : MonoBehaviour {
         }
         //seed = System.DateTime.UtcNow.Millisecond;
         shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), (int)System.DateTime.Now.Ticks));
+
         if (transform.Find(mapObjName))
         {
             DestroyImmediate(transform.Find(mapObjName).gameObject);
@@ -48,8 +53,17 @@ public class MapGenerator : MonoBehaviour {
 
         Transform mapHolder = new GameObject(mapObjName).transform;
         mapHolder.parent = this.transform;
+
         Transform groundHolder = new GameObject("GroundObjs").transform;
         groundHolder.parent = mapHolder.transform;
+
+        Transform enemiesHolder = new GameObject("Enemies").transform;
+        enemiesHolder.parent = mapHolder.transform;
+
+        Transform blocksHolder = new GameObject("Blocks").transform;
+        blocksHolder.parent = mapHolder.transform;
+
+
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
@@ -83,7 +97,7 @@ public class MapGenerator : MonoBehaviour {
             obstacleCoords.Add(randomCoord);
             Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
             Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition, Quaternion.identity) as Transform;
-            newObstacle.parent = mapHolder;
+            newObstacle.parent = blocksHolder;
         }
 
         for (int i = 0; i < enemyCount; i++)
@@ -93,22 +107,30 @@ public class MapGenerator : MonoBehaviour {
             {
                 randomCoord = GetRandomCoord();
             }
-            enemyCoords.Add(randomCoord);
+            
             Vector3 enemyPosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
             Transform newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity) as Transform;
+            enemyCoords.Add(newEnemy.gameObject);
             newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
-            newEnemy.parent = mapHolder;
+            newEnemy.parent = enemiesHolder;
         }
-        EventManager.TriggerEvent(Events.EnemiesCreated);
+
 
 
         Vector3 exitPosition = CoordToPosition(exitCoord.x, exitCoord.y, false);
         Transform newExit = Instantiate(exitPrefab, exitPosition, Quaternion.identity) as Transform;
         newExit.parent = mapHolder;
 
-        player.GetComponent<Player>().position  = (playerCoord);
-        player.transform.position = CoordToPosition(playerCoord.x, playerCoord.y, false);
+        
 
+    }
+
+    void CreatePlayer()
+    {
+      //  playerObj = GameObject.FindWithTag(Tags.Player).transform;
+        playerObj = Instantiate(player, CoordToPosition(playerCoord.x, playerCoord.y, false), Quaternion.identity) as Transform;
+        playerObj.GetComponent<Player>().position = (playerCoord);
+        playerObj.parent = transform.Find(mapObjName);
     }
 
 
@@ -153,10 +175,10 @@ public class MapGenerator : MonoBehaviour {
         return targetAccessibleTileCount == accessibleTileCount;
     }
 
-    Vector3 CoordToPosition(int x, int y)
-    {
-        return new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y);
-    }
+    //Vector3 CoordToPosition(int x, int y)
+    //{
+    //    return new Vector3(-mapSize.x / 2 + 0.5f + x, 0, -mapSize.y / 2 + 0.5f + y);
+    //}
 
 
     Vector3 CoordToPosition(int x, int y, bool ground = true)
@@ -179,7 +201,7 @@ public class MapGenerator : MonoBehaviour {
         return obstacleCoords;
     }
 
-    public List<Coord> GetEnemies()
+    public List<GameObject> GetEnemies()
     {
         return enemyCoords;
     }
