@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 23515398993965560}
   - component: {fileID: 114213946907963882}
   - component: {fileID: 114752086632357666}
+  - component: {fileID: 114373715926148422}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -290,12 +291,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  HP: 30
-  damage: 5
+  HP: 80
+  damage: 10
   position:
     x: 0
     y: 0
   characterType: 1
+--- !u!114 &114373715926148422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1880381455124804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aae4efd84df6fb48a45be895062e74b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minePrefab: {fileID: 1540396450956052, guid: d38b9c9edbb57174fb932d667fc5bc9d, type: 2}
 --- !u!114 &114652119320368524
 MonoBehaviour:
   m_ObjectHideFlags: 1

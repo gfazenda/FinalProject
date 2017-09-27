@@ -15,7 +15,7 @@ public class UXManager : MonoBehaviour {
     public GameObject middleObj, topObj, bottomObj;
     TextMeshProUGUI middleText, topText, bottomText;
 
-    public Button overcharge;
+    public Button overcharge, mine;
 
     private void Awake()
     {
@@ -33,13 +33,31 @@ public class UXManager : MonoBehaviour {
         ConfigureTexts();
         ConfigureButtons();
         
-        DontDestroyOnLoad(this);
+       // DontDestroyOnLoad(this);
         EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
+        EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
+        EventManager.StartListening(Events.PlayerTurn, EnableButtons);
     }
+
+    void DisableButtons()
+    {
+        Debug.Log("disable");
+        overcharge.interactable = false;
+        mine.interactable = false;
+    }
+
+    void EnableButtons()
+    {
+        Debug.Log("enable");
+        overcharge.interactable = true;
+        mine.interactable = true;
+    }
+
 
     void ConfigureButtons()
     {
         overcharge.onClick.AddListener(CallOvercharge);
+        mine.onClick.AddListener(CallPlaceMines);
     }
 
     void ConfigureTexts()
@@ -59,6 +77,11 @@ public class UXManager : MonoBehaviour {
     void CallOvercharge()
     {
         BoardManager.Instance._playerScript.DoOvercharge();
+    }
+
+    void CallPlaceMines()
+    {
+        BoardManager.Instance._playerScript.ShowMineMarkers();
     }
 
     // Update is called once per frame

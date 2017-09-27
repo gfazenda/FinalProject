@@ -9,13 +9,14 @@ public class Player : Character {
     //Coord position;
     private Vector2 touchOrigin = -Vector2.one;
     bool playerTurn = true, turnInvoked = false;
-    public enum Actions {Move, Overcharge, Skill2, Skill3, BasicAtk };
-
+    public enum Actions {Move, Overcharge, Skill2, Mine, BasicAtk };
+    MineController _mineScript;
     Actions currentAction;
     BoardManager.tileType targetType;
     Coord tentativePos = new Coord();
     private void Awake()
     {
+        _mineScript = this.GetComponent<MineController>();
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
     }
 
@@ -34,7 +35,12 @@ public class Player : Character {
             BoardManager.Instance.DisplayMarkers(position,1);
     }
 
-    public override void TakeDamage(int damage)
+    public void ShowMineMarkers()
+    {
+        BoardManager.Instance.DisplayMarkers(position, 3,true,true);
+    }
+
+    public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
         if (HP <= 0)
@@ -135,36 +141,16 @@ public class Player : Character {
             // playerTurn = false;
             //Debug.Log("h " + horizontal);
             // Debug.Log("v " + vertical);
-            tentativePos = new Coord(position);
-           // tentativePos.Copy(position);
-            tentativePos.x += horizontal;
-            tentativePos.y += vertical;
-            //Debug.Log("t " + tentativePos.y);
-            //Debug.Log("p " + position.y);
-            //Debug.Log("22 " + position.x);
-            targetType = BoardManager.Instance.GetPositionType(tentativePos);
-            if (targetType == BoardManager.tileType.enemy)
-            {
-                PerformAction(Actions.BasicAtk, tentativePos);
-            }
-            else if ((targetType == BoardManager.tileType.ground)) 
-            {
-                PerformAction(Actions.Move, tentativePos);
-            }
-            else if (targetType == BoardManager.tileType.exit)
-            {
-                PerformAction(Actions.Move, tentativePos);
-                EventManager.TriggerEvent(Events.LevelWon);
-            }
+            TentativeMove(horizontal, vertical);
 
-            
-                //Debug.Log("p " + position.x + " " + position.y);
-              //  targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
-              //  BoardManager.Instance.SetEmptyPosition(position);
-              //  BoardManager.Instance.DisableMarkers();
-                //position = tentativePos;
-                
-            
+
+            //Debug.Log("p " + position.x + " " + position.y);
+            //  targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
+            //  BoardManager.Instance.SetEmptyPosition(position);
+            //  BoardManager.Instance.DisableMarkers();
+            //position = tentativePos;
+
+
         }
 
         //if (moving && transform.position != targetPos)
@@ -178,6 +164,26 @@ public class Player : Character {
 
     }
 
+    private void TentativeMove(int horizontal, int vertical)
+    {
+        tentativePos = new Coord(position);
+        tentativePos.x += horizontal;
+        tentativePos.y += vertical;
+        targetType = BoardManager.Instance.GetPositionType(tentativePos);
+        if (targetType == BoardManager.tileType.enemy)
+        {
+            PerformAction(Actions.BasicAtk, tentativePos);
+        }
+        else if ((targetType == BoardManager.tileType.ground))
+        {
+            PerformAction(Actions.Move, tentativePos);
+        }
+        else if (targetType == BoardManager.tileType.exit)
+        {
+            PerformAction(Actions.Move, tentativePos);
+            EventManager.TriggerEvent(Events.LevelWon);
+        }
+    }
 
     public void PerformAction(Actions _action, Coord target = null)
     {
@@ -192,7 +198,8 @@ public class Player : Character {
                 break;
             case Actions.Skill2:
                 break;
-            case Actions.Skill3:
+            case Actions.Mine:
+                _mineScript.PlaceMine(target);
                 break;
             case Actions.BasicAtk:
                 LookAtCoord(target);
@@ -208,9 +215,8 @@ public class Player : Character {
 
     void Overcharge()
     {
-        List<BoardManager.tileType> types = new List<BoardManager.tileType>();
-        types.Add(BoardManager.tileType.enemy);
-        List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2, types, true);
+        BoardManager.tileType[] types = { BoardManager.tileType.enemy };
+        List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2,types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
         {
             GameManager.Instance.EnemyDamaged((damage*3), t.Value);

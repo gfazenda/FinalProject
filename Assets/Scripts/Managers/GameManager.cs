@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour {
         Debug.Log("got enemies " + enemies.Count);
     }
 
-    public void EnemyDamaged(int damage, Coord position)
+    public void EnemyDamaged(float damage, Coord position)
     {
         foreach (GameObject enemy in enemies)
         {
@@ -123,8 +123,15 @@ public class GameManager : MonoBehaviour {
 
     void CallEnemyActions()
     {
-        StartCoroutine(DoEnemiesAction());
         Debug.Log("enemies doing");
+        if (enemies.Count > 0)
+            StartCoroutine(DoEnemiesAction());
+        else
+        {
+            Debug.Log("player doing");
+            EventManager.TriggerEvent(Events.PlayerTurn);
+        }
+
     }
 
 
@@ -147,16 +154,8 @@ public class GameManager : MonoBehaviour {
             yield return new WaitForSeconds(delay);
 
         }
-
-
-        //foreach (GameObject enemy in enemies)
-        //{
-
-        //    enemy.GetComponent<Enemy>().DoAction();
-        //    yield return new WaitForSeconds(delay);
-        //}
-        EventManager.TriggerEvent(Events.PlayerTurn);
         Debug.Log("player doing");
+        EventManager.TriggerEvent(Events.PlayerTurn);
     }
 
     private void Update()

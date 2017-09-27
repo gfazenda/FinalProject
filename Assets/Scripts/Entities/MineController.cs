@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MineController : MonoBehaviour {
+    public GameObject minePrefab;
+    GameObject newMine;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        if (Input.GetMouseButtonUp(0))
-        {
-
-        }
-	}
+    public void PlaceMine(Coord position){
+        newMine = Instantiate(minePrefab);
+        newMine.transform.position = BoardManager.Instance.CoordToPosition(position,false);
+        newMine.GetComponent<RemoteMine>().SetPosition(position);
+    }
 }

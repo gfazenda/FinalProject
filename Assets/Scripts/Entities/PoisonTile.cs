@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PoisonTile : MonoBehaviour {
     int turnsAlive = 0;
-    public int turnsToLive = 10;
+    public int turnsToLive = 2;
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +24,9 @@ public class PoisonTile : MonoBehaviour {
 
     void DecreaseTurn()
     {
+        if (!this.gameObject.activeInHierarchy)
+            return;
+
         turnsAlive--;
         if (turnsAlive <= 0)
             this.gameObject.SetActive(false);

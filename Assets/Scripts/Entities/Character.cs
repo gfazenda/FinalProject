@@ -4,14 +4,19 @@ using UnityEngine;
 
 //[RequireComponent(typeof(HealthBar))]
 public class Character : MonoBehaviour {
-    public float speed = 3;
-    public int HP, damage;
-    int maxHP;
+
+    public float speed = 3;// { get; set; }
+    public float HP = 10;// { get; set; }
+    public float damage = 5;// { get; set; }
+    float maxHP;
+
     float step;
     protected bool moving = false;
     protected Vector3 targetPos;
     public Coord position = new Coord();
+
     public BoardManager.tileType characterType;
+
     HealthBar hpScript;
 
     protected int rechargingTurns = 0;
@@ -55,7 +60,7 @@ public class Character : MonoBehaviour {
         hpScript.UpdateBar(healthAmount);
     }
 
-    public virtual void TakeDamage(int damage) {
+    public virtual void TakeDamage(float damage) {
         this.HP -= damage;
         UpdateHealthBar();
         if (HP <= 0)

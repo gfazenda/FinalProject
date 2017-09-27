@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(AStar))]
 public class Enemy : Character {
     public float atkRange = 1;
-    Coord playerPosition = null;
+    Coord playerPosition = new Coord();
     List<Coord> myPath = new List<Coord>();
     Player player = null;
     int failedAttempts = 0;

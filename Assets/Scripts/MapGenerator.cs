@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour {
-    public Transform tilePrefab, obstaclePrefab, player, exitPrefab, enemyPrefab;
+    public Transform tilePrefab, obstaclePrefab, blockPrefab, player, exitPrefab, enemyPrefab;
     public Vector2 mapSize;
-
+    public int maxNumberOfObstacles = 3;
     [Range(0,1)]
     public float outlinePercent;
 
@@ -17,7 +17,8 @@ public class MapGenerator : MonoBehaviour {
     public int obstacleCount = 10, enemyCount = 1;
     public Coord playerCoord;
     public Coord exitCoord;
-    Transform playerObj = null;
+    Transform playerObj = null, currentObstacle = null;
+    int obstaclesPlaced = 0;
     //public void Start()
     //{
     //    GenerateMap();
@@ -36,6 +37,7 @@ public class MapGenerator : MonoBehaviour {
         obstacleCoords = new List<Coord>();
         enemyCoords = new List<GameObject>();
         exitCoord = new Coord((int)Random.Range(0,mapSize.x),(int)(mapSize.y-1));
+        obstaclesPlaced = 0;
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
@@ -94,9 +96,20 @@ public class MapGenerator : MonoBehaviour {
                 obstacleMap[randomCoord.x, randomCoord.y] = true;
                 //currentObstacleCount--;
             }
+            currentObstacle = blockPrefab;
+            if (obstaclesPlaced < maxNumberOfObstacles)
+            {               
+                bool placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
+                if (placeObstacle)
+                {
+                    currentObstacle = obstaclePrefab;
+                    obstaclesPlaced++;
+                }
+            }
             obstacleCoords.Add(randomCoord);
             Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
-            Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition, Quaternion.identity) as Transform;
+            Transform newObstacle = Instantiate(currentObstacle, obstaclePosition, Quaternion.identity) as Transform;
+            newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
             newObstacle.parent = blocksHolder;
         }
 
@@ -130,7 +143,7 @@ public class MapGenerator : MonoBehaviour {
       //  playerObj = GameObject.FindWithTag(Tags.Player).transform;
         playerObj = Instantiate(player, CoordToPosition(playerCoord.x, playerCoord.y, false), Quaternion.identity) as Transform;
         playerObj.GetComponent<Player>().position = (playerCoord);
-        playerObj.parent = transform.Find(mapObjName);
+        //playerObj.parent = transform.Find(mapObjName);
     }
 
 
