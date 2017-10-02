@@ -11,14 +11,16 @@ public class MapGenerator : MonoBehaviour {
 
     public string mapObjName = "Map";
 
-    List<Coord> allTileCoords, obstacleCoords;
+    List<Coord> allTileCoords, wallCoords;
     List<GameObject> enemyCoords;
+    List<GameObject> obstacleCoords;
     Queue<Coord> shuffledTileCoords;
     public int obstacleCount = 10, enemyCount = 1;
     public Coord playerCoord;
     public Coord exitCoord;
     Transform playerObj = null, currentObstacle = null;
     int obstaclesPlaced = 0;
+    bool placeObstacle = false;
     //public void Start()
     //{
     //    GenerateMap();
@@ -34,7 +36,8 @@ public class MapGenerator : MonoBehaviour {
     public void GenerateMap()
     {
         allTileCoords = new List<Coord>();
-        obstacleCoords = new List<Coord>();
+        wallCoords = new List<Coord>();
+        obstacleCoords = new List<GameObject>();
         enemyCoords = new List<GameObject>();
         exitCoord = new Coord((int)Random.Range(0,mapSize.x),(int)(mapSize.y-1));
         obstaclesPlaced = 0;
@@ -97,19 +100,26 @@ public class MapGenerator : MonoBehaviour {
                 //currentObstacleCount--;
             }
             currentObstacle = blockPrefab;
+           
             if (obstaclesPlaced < maxNumberOfObstacles)
-            {               
-                bool placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
+            {
+                placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
                 if (placeObstacle)
                 {
                     currentObstacle = obstaclePrefab;
                     obstaclesPlaced++;
                 }
             }
-            obstacleCoords.Add(randomCoord);
+            
             Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
             Transform newObstacle = Instantiate(currentObstacle, obstaclePosition, Quaternion.identity) as Transform;
-            newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
+            if (placeObstacle)
+            {
+                obstacleCoords.Add(newObstacle.gameObject);
+                newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
+            }else {
+                wallCoords.Add(randomCoord);
+            }
             newObstacle.parent = blocksHolder;
         }
 
@@ -209,7 +219,12 @@ public class MapGenerator : MonoBehaviour {
     }
 
 
-    public List<Coord> GetObstacles()
+    public List<Coord> GetWalls()
+    {
+        return wallCoords;
+    }
+
+    public List<GameObject> GetObstacles()
     {
         return obstacleCoords;
     }

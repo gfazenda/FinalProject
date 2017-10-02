@@ -84,10 +84,17 @@ public class BoardManager : MonoBehaviour {
             }
         }
 
-        List<Coord> obstacles = _mapGenerator.GetObstacles();
+        List<Coord> walls = _mapGenerator.GetWalls();
+        for (int i = 0; i < walls.Count; i++)
+        {
+            gameBoard[walls[i].x, walls[i].y] = tileType.wall;
+        }
+
+        List<GameObject> obstacles = _mapGenerator.GetObstacles();
         for (int i = 0; i < obstacles.Count; i++)
         {
-            gameBoard[obstacles[i].x, obstacles[i].y] = tileType.wall;
+            Coord position = obstacles[i].GetComponent<SpecialTile>().GetPosition();
+            gameBoard[position.x, position.y] = tileType.obstacle;
         }
 
         /* List<Coord> */
@@ -292,6 +299,7 @@ public class BoardManager : MonoBehaviour {
                 type = Marker.MarkerType.movement;
                 switch (GetPositionType(newPosition)){
                         case tileType.enemy:
+                        case tileType.obstacle:
                             enable = true;
                             type = Marker.MarkerType.attack;
                             break;

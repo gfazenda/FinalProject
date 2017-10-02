@@ -190,4 +190,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 30
   drainPercent: 0.25
-  maxEffectRange: 2.5
+  effectRadius: 1

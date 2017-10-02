@@ -21,28 +21,29 @@ public class DamageDrain : SpecialTile {
     void DrainDamage()
     {
         currentDistance = BoardManager.Distance(position, player.GetPosition());
-        Debug.Log("the distance is " + currentDistance);
         if (currentDistance <= maxEffectRange)
         {
             if (!affectedPlayer)
                 affectedPlayer = true;
 
+            if(instances < 3)
+                CalculateDrain();
             instances++;
-            Debug.Log("draining");
-            CalculateDrain();
-            //damagePenalty = player.damage * (1 - drainPercent);
-            //damageRemoved += player.damage - damagePenalty;
-            //player.damage -= damagePenalty;
+
         }
         else if (affectedPlayer)
         {
-            player.damage += damageRemoved;
-            damageRemoved = 0;
-            affectedPlayer = false;
-            instances = 0;
+            ReturnDamage();
         }
     }
 
+    private void ReturnDamage()
+    {
+        player.damage += damageRemoved;
+        damageRemoved = 0;
+        affectedPlayer = false;
+        instances = 0;
+    }
 
     void CalculateDrain()
     {

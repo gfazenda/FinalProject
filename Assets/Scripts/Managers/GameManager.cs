@@ -7,8 +7,9 @@ public class GameManager : MonoBehaviour {
     private static GameManager _instance;
 
     public static GameManager Instance { get { return _instance; } }
-    
+
     public float delayPerEnemy;
+    public int maxFrameRate = 60;
 
     float delay;
     
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour {
     bool initialized = false;
     private void Awake()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = maxFrameRate;
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
