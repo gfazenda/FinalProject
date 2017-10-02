@@ -1,17 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RemoteMine : SpecialTile {
 
     public int damage = 20;
     int turnsAlive = 0;
     public int turnsToLive = 2;
-
+    public Text turnsInfo;
     // Use this for initialization
     void Start()
     {
         EventManager.StartListening(Events.PlayerTurn, DecreaseTurn);
+        turnsInfo.text = turnsAlive.ToString();
     }
 
     private void OnEnable()
@@ -31,6 +33,7 @@ public class RemoteMine : SpecialTile {
             return;
 
         turnsAlive--;
+        turnsInfo.text = turnsAlive.ToString();
         if (turnsAlive <= 0)
         {
             Explode();

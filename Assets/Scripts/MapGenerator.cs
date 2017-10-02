@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour {
+public class MapGenerator : MonoBehaviour
+{
     public Transform tilePrefab, obstaclePrefab, blockPrefab, player, exitPrefab, enemyPrefab;
     public Vector2 mapSize;
     public int maxNumberOfObstacles = 3;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float outlinePercent;
 
     public string mapObjName = "Map";
@@ -39,15 +40,10 @@ public class MapGenerator : MonoBehaviour {
         wallCoords = new List<Coord>();
         obstacleCoords = new List<GameObject>();
         enemyCoords = new List<GameObject>();
-        exitCoord = new Coord((int)Random.Range(0,mapSize.x),(int)(mapSize.y-1));
+        exitCoord = new Coord((int)Random.Range(0, mapSize.x), (int)(mapSize.y - 1));
         obstaclesPlaced = 0;
-        for (int x = 0; x < mapSize.x; x++)
-        {
-            for (int y = 0; y < mapSize.y; y++)
-            {
-                allTileCoords.Add(new Coord(x, y));
-            }
-        }
+
+        InitializeMap();
         //seed = System.DateTime.UtcNow.Millisecond;
         shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), (int)System.DateTime.Now.Ticks));
 
@@ -68,18 +64,47 @@ public class MapGenerator : MonoBehaviour {
         Transform blocksHolder = new GameObject("Blocks").transform;
         blocksHolder.parent = mapHolder.transform;
 
+        PlaceGround(groundHolder);
 
+        GenerateObstacles(blocksHolder);
+
+        GenerateEnemies(enemiesHolder);
+
+        Vector3 exitPosition = CoordToPosition(exitCoord.x, exitCoord.y, false);
+        Transform newExit = Instantiate(exitPrefab, exitPosition, Quaternion.identity) as Transform;
+        newExit.parent = mapHolder;
+
+
+
+    }
+
+    private void InitializeMap()
+    {
+        for (int x = 0; x < mapSize.x; x++)
+        {
+            for (int y = 0; y < mapSize.y; y++)
+            {
+                allTileCoords.Add(new Coord(x, y));
+            }
+        }
+    }
+
+    private void PlaceGround(Transform groundHolder)
+    {
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
             {
                 Vector3 tilePosition = CoordToPosition(x, y);
-                Transform newTile = (Transform) Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
+                Transform newTile = (Transform)Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
                 newTile.localScale = Vector3.one * (1 - outlinePercent);
                 newTile.parent = groundHolder.transform;
             }
         }
+    }
 
+    private void GenerateObstacles(Transform blocksHolder)
+    {
         bool[,] obstacleMap = new bool[(int)mapSize.x, (int)mapSize.y];
         int currentObstacleCount = 0;
 
@@ -89,10 +114,10 @@ public class MapGenerator : MonoBehaviour {
             obstacleMap[randomCoord.x, randomCoord.y] = true;
             currentObstacleCount++;
 
-            while (randomCoord.CompareTo(playerCoord) 
+            while (randomCoord.CompareTo(playerCoord)
                   || randomCoord.CompareTo(exitCoord)
                   || BoardManager.Distance(randomCoord, playerCoord) < 2
-                  || !MapIsFullyAccessible(obstacleMap,currentObstacleCount))
+                  || !MapIsFullyAccessible(obstacleMap, currentObstacleCount))
             {
                 obstacleMap[randomCoord.x, randomCoord.y] = false;
                 randomCoord = GetRandomCoord();
@@ -100,7 +125,7 @@ public class MapGenerator : MonoBehaviour {
                 //currentObstacleCount--;
             }
             currentObstacle = blockPrefab;
-           
+
             if (obstaclesPlaced < maxNumberOfObstacles)
             {
                 placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
@@ -110,19 +135,24 @@ public class MapGenerator : MonoBehaviour {
                     obstaclesPlaced++;
                 }
             }
-            
+
             Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
             Transform newObstacle = Instantiate(currentObstacle, obstaclePosition, Quaternion.identity) as Transform;
             if (placeObstacle)
             {
                 obstacleCoords.Add(newObstacle.gameObject);
                 newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
-            }else {
+            }
+            else
+            {
                 wallCoords.Add(randomCoord);
             }
             newObstacle.parent = blocksHolder;
         }
+    }
 
+    private void GenerateEnemies(Transform enemiesHolder)
+    {
         for (int i = 0; i < enemyCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
@@ -130,27 +160,18 @@ public class MapGenerator : MonoBehaviour {
             {
                 randomCoord = GetRandomCoord();
             }
-            
+
             Vector3 enemyPosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
             Transform newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity) as Transform;
             enemyCoords.Add(newEnemy.gameObject);
             newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
             newEnemy.parent = enemiesHolder;
         }
-
-
-
-        Vector3 exitPosition = CoordToPosition(exitCoord.x, exitCoord.y, false);
-        Transform newExit = Instantiate(exitPrefab, exitPosition, Quaternion.identity) as Transform;
-        newExit.parent = mapHolder;
-
-        
-
     }
 
     void CreatePlayer()
     {
-      //  playerObj = GameObject.FindWithTag(Tags.Player).transform;
+        //  playerObj = GameObject.FindWithTag(Tags.Player).transform;
         playerObj = Instantiate(player, CoordToPosition(playerCoord.x, playerCoord.y, false), Quaternion.identity) as Transform;
         playerObj.GetComponent<Player>().position = (playerCoord);
         //playerObj.parent = transform.Find(mapObjName);
@@ -234,14 +255,4 @@ public class MapGenerator : MonoBehaviour {
         return enemyCoords;
     }
 
-    //public struct Coord
-    //{
-    //    public int x;
-    //    public int y;
-    //    public Coord(int _x, int _y)
-    //    {
-    //        x = _x;
-    //        y = _y;
-    //    }
-    //}
 }

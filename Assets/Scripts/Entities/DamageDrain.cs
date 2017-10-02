@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DamageDrain : SpecialTile {
-    public int HP = 30;
     public float drainPercent = 0.25f;
     public int effectRadius = 2;
     float maxEffectRange;
@@ -39,17 +38,21 @@ public class DamageDrain : SpecialTile {
 
     private void ReturnDamage()
     {
+       
         player.damage += damageRemoved;
         damageRemoved = 0;
         affectedPlayer = false;
         instances = 0;
+        EventManager.TriggerEvent(Events.DamageUpdate);
     }
 
     void CalculateDrain()
     {
+      
         endingDamage = player.damage * (1 - drainPercent);
         currentDrain = player.damage - endingDamage;
         damageRemoved += currentDrain;
         player.damage -= currentDrain;
+        EventManager.TriggerEvent(Events.DamageUpdate);
     }
 }

@@ -11,9 +11,8 @@ public class UXManager : MonoBehaviour {
 
     public enum textOption {middle,top,bottom};
 
-
-    public GameObject middleObj, topObj, bottomObj;
-    TextMeshProUGUI middleText, topText, bottomText;
+    public GameObject middleObj, topObj, bottomObj, dmgObj;
+    TextMeshProUGUI middleText, topText, bottomText, dmgText;
 
     public Button overcharge, mine;
 
@@ -35,8 +34,15 @@ public class UXManager : MonoBehaviour {
         
        // DontDestroyOnLoad(this);
         EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
+        EventManager.StartListening(Events.DamageUpdate, UpdatePlayerDamage);
         EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
         EventManager.StartListening(Events.PlayerTurn, EnableButtons);
+    }
+
+
+    void UpdatePlayerDamage()
+    {
+        dmgText.text = "Damage: " + System.Math.Round(BoardManager.Instance._playerScript.damage, 1);
     }
 
     void DisableButtons()
@@ -64,7 +70,7 @@ public class UXManager : MonoBehaviour {
     {
         middleText = middleObj.GetComponent<TextMeshProUGUI>();
         topText = topObj.GetComponent<TextMeshProUGUI>();
-
+        dmgText = dmgObj.GetComponent<TextMeshProUGUI>();
         middleText.text = "";
         topText.text = "";
     }

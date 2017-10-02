@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour {
+public class BoardManager : MonoBehaviour
+{
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
@@ -26,13 +27,16 @@ public class BoardManager : MonoBehaviour {
     public Node[,] gameGrid;
     //List<int> gameBoard = new List<int>();
     int mapWidth, mapHeight, markerCount = 0;
-    public List<GameObject> markers = new List<GameObject>();
+    List<GameObject> mapObstacles = new List<GameObject>();
     bool showingMarkers = false;
+
     public Player _playerScript;
+    public List<GameObject> markers = new List<GameObject>();
     public List<GameObject> listOfEnemies = new List<GameObject>();
     public bool generateAtRuntime = false;
+
     Coord exitCoord;
-    GameObject currentMarker;
+    GameObject currentMarker, obsAttacked = null;
     //0 = ground
     //1 = player
     //2 = obs
@@ -44,7 +48,7 @@ public class BoardManager : MonoBehaviour {
     void Start()
     {
         Debug.Log("start");
-       // DoInitialize();
+        // DoInitialize();
 
     }
 
@@ -65,7 +69,7 @@ public class BoardManager : MonoBehaviour {
         _playerScript = _player.GetComponent<Player>();
 
         //  if(generateAtRuntime)
-       
+
 
         exitCoord = _mapGenerator.exitCoord;
 
@@ -90,10 +94,10 @@ public class BoardManager : MonoBehaviour {
             gameBoard[walls[i].x, walls[i].y] = tileType.wall;
         }
 
-        List<GameObject> obstacles = _mapGenerator.GetObstacles();
-        for (int i = 0; i < obstacles.Count; i++)
+        mapObstacles = _mapGenerator.GetObstacles();
+        for (int i = 0; i < mapObstacles.Count; i++)
         {
-            Coord position = obstacles[i].GetComponent<SpecialTile>().GetPosition();
+            Coord position = mapObstacles[i].GetComponent<SpecialTile>().GetPosition();
             gameBoard[position.x, position.y] = tileType.obstacle;
         }
 
@@ -120,21 +124,21 @@ public class BoardManager : MonoBehaviour {
             }
         }
     }
-#endregion
+    #endregion
 
     public int BoardSize()
     {
         return mapHeight * mapWidth;
     }
 
-  
+
 
     #region AStar methods
     public Node GetNode(Coord pos)
     {
         return gameGrid[pos.x, pos.y];
     }
-    
+
     public List<Node> GetNodeNeighbours(Node node, int radius, bool diagonal = false)
     {
         List<Node> neighbours = new List<Node>();
@@ -204,6 +208,44 @@ public class BoardManager : MonoBehaviour {
 
     #endregion
 
+
+    GameObject ObstacleAt(Coord _pos)
+    {
+        Coord position;
+        for (int i = 0; i < mapObstacles.Count; i++)
+        {
+            position = mapObstacles[i].GetComponent<SpecialTile>().GetPosition();
+            if (!mapObstacles[i].activeInHierarchy)
+            {
+                mapObstacles.RemoveAt(i);
+                SetEmptyPosition(position);
+                continue;
+            }
+            Debug.Log(_pos.DebugInfo() + " " + position.DebugInfo());
+            if (_pos.CompareTo(position))
+            {
+                Debug.Log("found it");
+                return mapObstacles[i];
+            }
+        }
+        return null;
+    }
+
+    public void TileAttacked(Coord position, float damage)
+    {
+        switch (GetPositionType(position))
+        {
+            case tileType.enemy:
+                GameManager.Instance.EnemyDamaged(damage, position);
+                break;
+            case tileType.obstacle:
+                obsAttacked = ObstacleAt(position);
+                 if(obsAttacked!=null)
+                    obsAttacked.GetComponent<Entity>().UpdateHealthBar(damage); 
+                break;
+        }
+    }
+
     public static float Distance(Coord a, Coord b)
     {
         Vector2 pointA = new Vector2((float)a.x, (float)a.y);
@@ -211,7 +253,7 @@ public class BoardManager : MonoBehaviour {
         return Vector2.Distance(pointA, pointB);
     }
 
-    public List<KeyValuePair<tileType,Coord>> GetNeighbours(Coord pos, int radius, tileType[] types, bool diagonal = false)
+    public List<KeyValuePair<tileType, Coord>> GetNeighbours(Coord pos, int radius, tileType[] types, bool diagonal = false)
     {
         List<KeyValuePair<tileType, Coord>> neighbours = new List<KeyValuePair<tileType, Coord>>();
         Coord newPosition = new Coord();
@@ -232,12 +274,12 @@ public class BoardManager : MonoBehaviour {
                 currentType = GetPositionType(newPosition);
                 for (int i = 0; i < types.Length; i++)
                 {
-                    if(types[i] == currentType)
-                        neighbours.Add(new KeyValuePair<tileType, Coord>(currentType, newPosition)); 
+                    if (types[i] == currentType)
+                        neighbours.Add(new KeyValuePair<tileType, Coord>(currentType, newPosition));
                 }
                 //if (types.Contains(currentType))
                 //{
-                    
+
                 //}
             }
         }
@@ -251,7 +293,7 @@ public class BoardManager : MonoBehaviour {
         return neighbours;
     }
 
-    public void SetPlayerAction(Player.Actions action,Coord pos)
+    public void SetPlayerAction(Player.Actions action, Coord pos)
     {
         _playerScript.PerformAction(action, pos);
     }
@@ -276,7 +318,7 @@ public class BoardManager : MonoBehaviour {
             DisableMarkers();
             return;
         }
-       
+
         markerCount = 0;
         markers.Clear();
         Coord newPosition = new Coord();
@@ -291,29 +333,37 @@ public class BoardManager : MonoBehaviour {
                 newPosition = new Coord();
                 newPosition.x = x;
                 newPosition.y = y;
-               // Debug.Log("coord2 " + newPosition.x + " " + newPosition.y);
+                // Debug.Log("coord2 " + newPosition.x + " " + newPosition.y);
                 if (newPosition.CompareTo(pos)) continue;
 
                 if (!diagonal && newPosition.x != pos.x && newPosition.y != pos.y) continue;
 
                 type = Marker.MarkerType.movement;
-                switch (GetPositionType(newPosition)){
-                        case tileType.enemy:
-                        case tileType.obstacle:
+                switch (GetPositionType(newPosition))
+                {
+                    case tileType.enemy:
+                        enable = true;
+                        type = Marker.MarkerType.attack;
+                        break;
+                    case tileType.obstacle:
+                        if (!placeMines)
+                        {
                             enable = true;
                             type = Marker.MarkerType.attack;
-                            break;
-                        case tileType.ground:
+
+                        }
+                        break;
+                    case tileType.ground:
+                        enable = true;
+                        break;
+                    case tileType.exit:
+                        if (!placeMines)
+                        {
                             enable = true;
-                            break;
-                        case tileType.exit:                            
-                            if (!placeMines)
-                            {
-                                enable = true;
-                            }
-                            break;
-                    }
-                
+                        }
+                        break;
+                }
+
 
                 if (placeMines)
                     type = Marker.MarkerType.placemine;
@@ -344,7 +394,7 @@ public class BoardManager : MonoBehaviour {
                         //markers[markerCount].gameObject.SetActive(true);
                         markerCount++;
                     }
-                   
+
                 }
             }
         }

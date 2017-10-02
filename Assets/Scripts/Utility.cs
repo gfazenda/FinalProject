@@ -23,6 +23,8 @@ public static class Events
     public const string LevelWon = "LevelWon";
     public const string LevelLost = "LevelLost";
     public const string LevelLoaded = "LevelLoaded";
+    public const string DamageUpdate = "DamageUpdate";
+    public const string PlayerConfigured = "PlayerConfigured";
 }
 
 

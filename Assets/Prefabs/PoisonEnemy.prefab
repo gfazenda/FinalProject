@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 114316040784626638}
   - component: {fileID: 114282874856948210}
   - component: {fileID: 114224189209137796}
+  - component: {fileID: 114971917525057832}
   m_Layer: 0
   m_Name: PoisonEnemy
   m_TagString: Enemy
@@ -290,14 +291,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  HP: 15
-  damage: 2
+  damage: 4
   position:
     x: 0
     y: 0
   characterType: 3
-  poisonPrefab: {fileID: 1250218441975480, guid: 9fdd30e235b34e0458a094739d5cc995,
-    type: 2}
+  atkRange: 1
 --- !u!114 &114282874856948210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -311,8 +310,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _image: {fileID: 114128245741475568}
   _text: {fileID: 0}
+  showDuration: 1.2
   lerp: 1
   scaleImage: 1
+  hideBar: 1
+  hpBar: {fileID: 1916801840942814}
 --- !u!114 &114316040784626638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -347,6 +349,18 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114971917525057832
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1870280751103708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd51d9b143f995b40aafd26dbd141ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 35
 --- !u!135 &135385497587449518
 SphereCollider:
   m_ObjectHideFlags: 1

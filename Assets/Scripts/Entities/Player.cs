@@ -43,7 +43,7 @@ public class Player : Character {
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
-        if (HP <= 0)
+        if (_entityScript.Dead())
             EventManager.TriggerEvent(Events.LevelLost);
     }
 
@@ -170,7 +170,7 @@ public class Player : Character {
         tentativePos.x += horizontal;
         tentativePos.y += vertical;
         targetType = BoardManager.Instance.GetPositionType(tentativePos);
-        if (targetType == BoardManager.tileType.enemy)
+        if (targetType == BoardManager.tileType.enemy || targetType == BoardManager.tileType.obstacle)
         {
             PerformAction(Actions.BasicAtk, tentativePos);
         }
@@ -203,7 +203,7 @@ public class Player : Character {
                 break;
             case Actions.BasicAtk:
                 LookAtCoord(target);
-                GameManager.Instance.EnemyDamaged(damage, target);
+                BoardManager.Instance.TileAttacked(target, damage);
                 break;
             default:
                 break;
