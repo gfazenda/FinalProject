@@ -7,8 +7,9 @@ public class MineController : MonoBehaviour {
     GameObject newMine;
 
     public void PlaceMine(Coord position){
-        newMine = Instantiate(minePrefab);
+        newMine = ObjectPooler.SharedInstance.GetPooledObject(Tags.Mine);
         newMine.transform.position = BoardManager.Instance.CoordToPosition(position,false);
         newMine.GetComponent<RemoteMine>().SetPosition(position);
+        newMine.gameObject.SetActive(true);
     }
 }

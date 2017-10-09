@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d63197c9d4a1324087e7f80c3dd726f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drainPercent: 0.25
+  drainPercent: 0.1
   effectRadius: 1
 --- !u!114 &114191758208677302
 MonoBehaviour:
@@ -366,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 100
+  healthAmount: 0
 --- !u!222 &222568419516137726
 CanvasRenderer:
   m_ObjectHideFlags: 1

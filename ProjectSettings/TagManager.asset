@@ -7,6 +7,9 @@ TagManager:
   - Enemy
   - Marker
   - Poison
+  - Mine
+  - Explosion
+  - ElectricExplosion
   layers:
   - Default
   - TransparentFX

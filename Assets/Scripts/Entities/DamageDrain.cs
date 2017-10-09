@@ -16,9 +16,25 @@ public class DamageDrain : SpecialTile {
         player = BoardManager.Instance._playerScript;
         maxEffectRange = ((float)effectRadius * 1.42f);
     }
-	
+
+    private void OnEnable()
+    {
+        EventManager.StartListening(Events.EnemiesTurn, DrainDamage);
+    }
+
+    private void OnDisable()
+    {
+        if (damageRemoved > 0)
+            ReturnDamage();
+        EventManager.StopListening(Events.EnemiesTurn, DrainDamage);
+    }
+
+
     void DrainDamage()
     {
+        if (!gameObject.activeInHierarchy)
+            return;
+
         currentDistance = BoardManager.Distance(position, player.GetPosition());
         if (currentDistance <= maxEffectRange)
         {
@@ -35,6 +51,8 @@ public class DamageDrain : SpecialTile {
             ReturnDamage();
         }
     }
+
+
 
     private void ReturnDamage()
     {

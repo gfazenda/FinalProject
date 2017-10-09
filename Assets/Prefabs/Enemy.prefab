@@ -295,8 +295,8 @@ MonoBehaviour:
   showDuration: 1.2
   lerp: 1
   scaleImage: 1
-  hideBar: 0
-  hpBar: {fileID: 0}
+  hideBar: 1
+  hpBar: {fileID: 1916801840942814}
 --- !u!114 &114316040784626638
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -360,7 +360,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd51d9b143f995b40aafd26dbd141ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 25
+  HP: 30
+  healthAmount: 0
 --- !u!135 &135385497587449518
 SphereCollider:
   m_ObjectHideFlags: 1

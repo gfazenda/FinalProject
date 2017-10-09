@@ -240,8 +240,11 @@ public class BoardManager : MonoBehaviour
                 break;
             case tileType.obstacle:
                 obsAttacked = ObstacleAt(position);
-                 if(obsAttacked!=null)
-                    obsAttacked.GetComponent<Entity>().UpdateHealthBar(damage); 
+                if (obsAttacked != null)
+                {
+                    obsAttacked.GetComponent<Entity>().UpdateHealthAmount(damage);
+                    obsAttacked.GetComponent<Entity>().DoHPBardUpdate();
+                }
                 break;
         }
     }

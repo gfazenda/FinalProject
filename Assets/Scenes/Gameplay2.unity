@@ -1022,8 +1022,9 @@ GameObject:
   - component: {fileID: 103603839}
   - component: {fileID: 103603841}
   - component: {fileID: 103603840}
+  - component: {fileID: 103603842}
   m_Layer: 5
-  m_Name: RawImage (1)
+  m_Name: HP_BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1038,7 +1039,8 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.95, y: 0.8, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 780629136}
   m_Father: {fileID: 234629095}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1059,7 +1061,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 1, b: 0.08965516, a: 1}
+  m_Color: {r: 0.5441177, g: 0.5441177, b: 0.5441177, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1079,6 +1081,24 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 103603838}
+--- !u!114 &103603842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 103603838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d6ad21e8edeb764383bdf21baa96517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _image: {fileID: 780629137}
+  _text: {fileID: 0}
+  showDuration: 0.5
+  lerp: 1
+  scaleImage: 1
+  hideBar: 0
+  hpBar: {fileID: 103603838}
 --- !u!1 &105077234
 GameObject:
   m_ObjectHideFlags: 0
@@ -2342,7 +2362,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 48.4
+  m_fontSize: 48.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2609,6 +2629,7 @@ MonoBehaviour:
   topObj: {fileID: 200284714}
   bottomObj: {fileID: 0}
   dmgObj: {fileID: 582702892}
+  hp_Obj: {fileID: 103603838}
   overcharge: {fileID: 342832858}
   mine: {fileID: 2011533006}
 --- !u!4 &223992973
@@ -2718,7 +2739,7 @@ GameObject:
   - component: {fileID: 234629097}
   - component: {fileID: 234629096}
   m_Layer: 5
-  m_Name: RawImage
+  m_Name: PlayerHP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3384,6 +3405,18 @@ MonoBehaviour:
   - objectToPool: {fileID: 1934932985058964, guid: e895befca7762994db16e5debb20b761,
       type: 2}
     amountToPool: 20
+    shouldExpand: 1
+  - objectToPool: {fileID: 1042430178194326, guid: 32c0cf23c512faa429279f612397b3e9,
+      type: 2}
+    amountToPool: 5
+    shouldExpand: 1
+  - objectToPool: {fileID: 1000013063239222, guid: 843695ef5e6d39f458b99e399ccc09b1,
+      type: 2}
+    amountToPool: 5
+    shouldExpand: 1
+  - objectToPool: {fileID: 1000013285955420, guid: f2746ecdf91f3ef4ea1bd22d8e19f9e8,
+      type: 2}
+    amountToPool: 5
     shouldExpand: 1
   pooledObjects: []
 --- !u!4 &267292603
@@ -6511,7 +6544,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 19.35
+  m_fontSize: 19.3
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8538,6 +8571,74 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 769578441}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &780629135
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 780629136}
+  - component: {fileID: 780629138}
+  - component: {fileID: 780629137}
+  m_Layer: 5
+  m_Name: HP_Value
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &780629136
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780629135}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 103603839}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &780629137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780629135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 1, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+--- !u!222 &780629138
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 780629135}
 --- !u!1 &796746678
 GameObject:
   m_ObjectHideFlags: 0
@@ -15990,8 +16091,9 @@ MonoBehaviour:
     type: 2}
   player: {fileID: 4003265995800018, guid: 90c45a9181c10a04c966083ce84b370a, type: 2}
   exitPrefab: {fileID: 4124568801272336, guid: ac5c685cc5311e549a1125a22c5fc8f2, type: 2}
-  enemyPrefab: {fileID: 4764742151844584, guid: d4579ae7cfb3eb149befa6dca6d00c78,
-    type: 2}
+  enemyPrefab:
+  - {fileID: 4764742151844584, guid: 361d2ca570cb27344b41e4d488a361b1, type: 2}
+  - {fileID: 4764742151844584, guid: d4579ae7cfb3eb149befa6dca6d00c78, type: 2}
   mapSize: {x: 10, y: 20}
   maxNumberOfObstacles: 3
   outlinePercent: 0
@@ -15999,7 +16101,7 @@ MonoBehaviour:
   obstacleCount: 10
   enemyCount: 4
   playerCoord:
-    x: 0
+    x: 1
     y: 0
   exitCoord:
     x: 6
@@ -17141,7 +17243,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 47.7
+  m_fontSize: 47.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

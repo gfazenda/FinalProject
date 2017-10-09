@@ -5,7 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(HealthBar))]
 public class Entity : MonoBehaviour {
     public float HP = 10;// { get; set; }
+
     float maxHP;
+
+    [HideInInspector]
+    public float healthAmount;
+
     HealthBar hpScript;
     // Use this for initialization
     void Start () {
@@ -13,13 +18,22 @@ public class Entity : MonoBehaviour {
         hpScript = this.GetComponentInChildren<HealthBar>();
     }
 
-    public void UpdateHealthBar(float  damage)
+    public void UpdateHealthAmount(float  damage)
     {
         HP -= damage;
-        float healthAmount = (float)HP / (float)maxHP;
-        hpScript.UpdateBar(healthAmount);
+        healthAmount = (float)HP / (float)maxHP;
         if (HP <= 0)
-            this.gameObject.SetActive(false);
+            DoDeath();     
+    }
+
+    virtual public void DoHPBardUpdate()
+    {
+        hpScript.UpdateBar(healthAmount);
+    }
+
+    virtual protected void DoDeath()
+    {
+        this.gameObject.SetActive(false);
     }
 
     public bool Dead()

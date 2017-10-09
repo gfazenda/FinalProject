@@ -9,6 +9,8 @@ public class RemoteMine : SpecialTile {
     int turnsAlive = 0;
     public int turnsToLive = 2;
     public Text turnsInfo;
+    GameObject explosion = null;
+    List<GameObject> explosions = new List<GameObject>();
     // Use this for initialization
     void Start()
     {
@@ -19,12 +21,12 @@ public class RemoteMine : SpecialTile {
     private void OnEnable()
     {
         turnsAlive = turnsToLive;
-        this.GetComponent<Collider>().enabled = true;
+        turnsInfo.text = turnsAlive.ToString();
     }
 
     private void OnDisable()
     {
-        this.GetComponent<Collider>().enabled = false;
+
     }
 
     void DecreaseTurn()
@@ -41,14 +43,37 @@ public class RemoteMine : SpecialTile {
         }
     }
 
+
+
     void Explode()
     {
-        BoardManager.tileType[] types = { BoardManager.tileType.enemy };
+        InstantiateExplosion(this.transform.position);
+        BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground};
         List<KeyValuePair<BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 1, types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
         {
-            GameManager.Instance.EnemyDamaged(damage, t.Value);
+            InstantiateExplosion(BoardManager.Instance.CoordToPosition(t.Value));
+            if (t.Key == BoardManager.tileType.enemy)
+                GameManager.Instance.EnemyDamaged(damage, t.Value);
         }
+        Invoke("DisableExplosions", 1f);
+    }
+
+    private void InstantiateExplosion(Vector3 position)
+    {
+        explosion = ObjectPooler.SharedInstance.GetPooledObject(Tags.Explosion);
+        explosion.transform.position = position;
+        explosion.SetActive(true);
+        explosions.Add(explosion);
+    }
+
+    void DisableExplosions()
+    {
+        for (int i = 0; i < explosions.Count; i++)
+        {
+            explosions[i].SetActive(false);
+        }
+        explosions.Clear();
     }
 
 }

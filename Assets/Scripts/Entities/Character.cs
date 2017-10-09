@@ -57,12 +57,18 @@ public class Character : MonoBehaviour {
 
 
     public virtual void TakeDamage(float damage) {
-        _entityScript.UpdateHealthBar(damage);
+        _entityScript.UpdateHealthAmount(damage);
+
         if (_entityScript.Dead())
         {
             this.gameObject.SetActive(false);
             BoardManager.Instance.SetEmptyPosition(position);
         }
+    }
+
+    public virtual void UpdateHPBar()
+    {
+        _entityScript.DoHPBardUpdate();
     }
 
 

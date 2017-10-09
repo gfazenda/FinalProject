@@ -43,6 +43,11 @@ public class Enemy : Character {
         DamagePlayer();
     }
 
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+        base.UpdateHPBar();
+    }
 
 
     public virtual void DoAction()

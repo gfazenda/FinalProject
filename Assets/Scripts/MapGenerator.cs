@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public Transform tilePrefab, obstaclePrefab, blockPrefab, player, exitPrefab, enemyPrefab;
+    public Transform tilePrefab, obstaclePrefab, blockPrefab, player, exitPrefab;
+    public List<Transform> enemyPrefab = new List<Transform>();
     public Vector2 mapSize;
     public int maxNumberOfObstacles = 3;
     [Range(0, 1)]
@@ -16,16 +17,14 @@ public class MapGenerator : MonoBehaviour
     List<GameObject> enemyCoords;
     List<GameObject> obstacleCoords;
     Queue<Coord> shuffledTileCoords;
-    public int obstacleCount = 10, enemyCount = 1;
+    public int baseObstacleNumber = 10, baseEnemyNumber = 1;
+    int enemyCount = 0, obstacleCount = 0;
     public Coord playerCoord;
     public Coord exitCoord;
     Transform playerObj = null, currentObstacle = null;
     int obstaclesPlaced = 0;
     bool placeObstacle = false;
-    //public void Start()
-    //{
-    //    GenerateMap();
-    //}
+
 
     public GameObject GetPlayer()
     {
@@ -36,6 +35,8 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
+        enemyCount = (GameManager.Instance.currentLevel) + baseEnemyNumber;
+        obstacleCount = Random.Range(0,(GameManager.Instance.currentLevel+2)) + baseObstacleNumber;
         allTileCoords = new List<Coord>();
         wallCoords = new List<Coord>();
         obstacleCoords = new List<GameObject>();
@@ -162,7 +163,7 @@ public class MapGenerator : MonoBehaviour
             }
 
             Vector3 enemyPosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
-            Transform newEnemy = Instantiate(enemyPrefab, enemyPosition, Quaternion.identity) as Transform;
+            Transform newEnemy = Instantiate(enemyPrefab[Random.Range(0,enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
             enemyCoords.Add(newEnemy.gameObject);
             newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
             newEnemy.parent = enemiesHolder;
