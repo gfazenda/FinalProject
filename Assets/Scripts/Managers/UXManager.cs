@@ -11,10 +11,10 @@ public class UXManager : MonoBehaviour {
 
     public enum textOption {middle,top,bottom};
 
-    public GameObject middleObj, topObj, bottomObj, dmgObj, hp_Obj;
+    public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj;
     TextMeshProUGUI middleText, topText, bottomText, dmgText;
 
-    HealthBar hpScript;
+    HealthBar hpScript, manaScript;
 
     public Button overcharge, mine;
 
@@ -33,8 +33,9 @@ public class UXManager : MonoBehaviour {
         
         ConfigureTexts();
         ConfigureButtons();
-        hpScript = hp_Obj.GetComponent<HealthBar>();
-       // DontDestroyOnLoad(this);
+        hpScript = hpObj.GetComponent<HealthBar>();
+        manaScript = manaObj.GetComponent<HealthBar>();
+        // DontDestroyOnLoad(this);
         EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
         EventManager.StartListening(Events.DamageUpdate, UpdatePlayerDamage);
         EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
@@ -45,6 +46,12 @@ public class UXManager : MonoBehaviour {
     public void UpdatePlayerHP(float value)
     {
         hpScript.UpdateBar(value);
+    }
+
+
+    public void UpdatePlayerMana(float value)
+    {
+        manaScript.UpdateBar(value);
     }
 
     void UpdatePlayerDamage()

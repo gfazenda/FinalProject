@@ -7,6 +7,9 @@ public class Player : Character {
     //bool moving = false;
     //Vector3 targetPos;
     //Coord position;
+    public int manaPool = 100;
+    public int overchargeManacost = 10, mineManacost = 4;
+    int maxMana;
     private Vector2 touchOrigin = -Vector2.one;
     bool playerTurn = true, turnInvoked = false;
     public enum Actions {Move, Overcharge, Skill2, Mine, BasicAtk };
@@ -14,7 +17,7 @@ public class Player : Character {
     Actions currentAction;
     BoardManager.tileType targetType;
     Coord tentativePos = new Coord();
-
+    public GameObject damagePrefab;
     GameObject explosion = null;
     List<GameObject> explosions = new List<GameObject>();
 
@@ -29,9 +32,11 @@ public class Player : Character {
         playerTurn = true;
     }
     // Use this for initialization
-    //void Start () {
-    //    base.Start();
-    //}
+    void Start()
+    {
+        base.Start();
+        maxMana = manaPool;
+    }
 
     private void OnMouseDown()
     {
@@ -48,8 +53,21 @@ public class Player : Character {
     {
         base.TakeDamage(damage);
         UXManager.instance.UpdatePlayerHP(_entityScript.healthAmount);
+        ShowDamagePrefab();
         if (_entityScript.Dead())
             EventManager.TriggerEvent(Events.LevelLost);
+    }
+
+    void ShowDamagePrefab()
+    {
+        damagePrefab.SetActive(true);
+        CancelInvoke();
+        Invoke("DisableDamagePrefab", 1f);
+    }
+
+    void DisableDamagePrefab()
+    {
+        damagePrefab.SetActive(false);
     }
 
     void SetEnemiesTurn()
@@ -143,30 +161,8 @@ public class Player : Character {
 
         if (!moving && horizontal != 0 || vertical != 0)
         {
-            // playerTurn = false;
-            //Debug.Log("h " + horizontal);
-            // Debug.Log("v " + vertical);
             TentativeMove(horizontal, vertical);
-
-
-            //Debug.Log("p " + position.x + " " + position.y);
-            //  targetPos = BoardManager.Instance.CoordToPosition(tentativePos, false);
-            //  BoardManager.Instance.SetEmptyPosition(position);
-            //  BoardManager.Instance.DisableMarkers();
-            //position = tentativePos;
-
-
         }
-
-        //if (moving && transform.position != targetPos)
-        //{
-        //    Move();
-        //}
-        //else
-        //{
-        //    moving = false;
-        //}
-
     }
 
     private void TentativeMove(int horizontal, int vertical)
@@ -190,22 +186,43 @@ public class Player : Character {
         }
     }
 
+    bool CanUseSpell(int cost)
+    {
+        if( manaPool >= cost)
+        {
+            manaPool -= cost;
+            UpdateMana();
+            return true;
+        }
+        return false;
+    }
+
+    void UpdateMana()
+    {
+        UXManager.instance.UpdatePlayerMana(((float)manaPool/(float)maxMana));
+    }
+
     public void PerformAction(Actions _action, Coord target = null)
     {
         switch (_action)
         {
             case Actions.Move:
                 base.SetPosition(target);
-                
                 break;
             case Actions.Overcharge:
-                Overcharge();
-                rechargingTurns = 3;
+                if (CanUseSpell(overchargeManacost))
+                {
+                    Overcharge();
+                    rechargingTurns = 3;
+                }
                 break;
             case Actions.Skill2:
                 break;
             case Actions.Mine:
-                _mineScript.PlaceMine(target);
+                if (CanUseSpell(mineManacost))
+                {
+                    _mineScript.PlaceMine(target);
+                }
                 break;
             case Actions.BasicAtk:
                 LookAtCoord(target);
@@ -214,6 +231,7 @@ public class Player : Character {
             default:
                 break;
         }
+
         playerTurn = false;
         BoardManager.Instance.DisableMarkers();
         EventManager.TriggerEvent(Events.EnemiesTurn);
@@ -225,20 +243,21 @@ public class Player : Character {
         List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2,types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
         {
-            InstantiateExplosion(BoardManager.Instance.CoordToPosition(t.Value));
+            //InstantiateExplosion(BoardManager.Instance.CoordToPosition(t.Value));
+            explosions.Add(BoardManager.Instance.InstantiateEffect(Tags.ElectricExplosion, t.Value));
             if (t.Key == BoardManager.tileType.enemy)
                 GameManager.Instance.EnemyDamaged((damage*3), t.Value);
         }
         Invoke("DisableExplosions", 1f);
     }
 
-    private void InstantiateExplosion(Vector3 position)
-    {
-        explosion = ObjectPooler.SharedInstance.GetPooledObject(Tags.ElectricExplosion);
-        explosion.transform.position = position;
-        explosion.SetActive(true);
-        explosions.Add(explosion);
-    }
+    //private void InstantiateExplosion(Vector3 position)
+    //{
+    //    explosion = ObjectPooler.SharedInstance.GetPooledObject(Tags.ElectricExplosion);
+    //    explosion.transform.position = position;
+    //    explosion.SetActive(true);
+    //    explosions.Add(explosion);
+    //}
 
     void DisableExplosions()
     {

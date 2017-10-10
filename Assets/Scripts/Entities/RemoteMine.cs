@@ -47,12 +47,12 @@ public class RemoteMine : SpecialTile {
 
     void Explode()
     {
-        InstantiateExplosion(this.transform.position);
+        explosions.Add(BoardManager.Instance.InstantiateEffect(Tags.Explosion, position));
         BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground};
         List<KeyValuePair<BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 1, types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
         {
-            InstantiateExplosion(BoardManager.Instance.CoordToPosition(t.Value));
+            explosions.Add(BoardManager.Instance.InstantiateEffect(Tags.Explosion, t.Value));
             if (t.Key == BoardManager.tileType.enemy)
                 GameManager.Instance.EnemyDamaged(damage, t.Value);
         }

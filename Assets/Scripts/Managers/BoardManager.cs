@@ -36,7 +36,7 @@ public class BoardManager : MonoBehaviour
     public bool generateAtRuntime = false;
 
     Coord exitCoord;
-    GameObject currentMarker, obsAttacked = null;
+    GameObject currentMarker, obsAttacked = null, currentEffect;
     //0 = ground
     //1 = player
     //2 = obs
@@ -204,6 +204,14 @@ public class BoardManager : MonoBehaviour
         }
         else
             return tileType.outOfLimits;
+    }
+
+    public GameObject InstantiateEffect(string tag, Coord pos)
+    {
+        currentEffect = ObjectPooler.SharedInstance.GetPooledObject(tag);
+        currentEffect.transform.position = CoordToPosition(pos);
+        currentEffect.SetActive(true);
+        return currentEffect;
     }
 
     #endregion

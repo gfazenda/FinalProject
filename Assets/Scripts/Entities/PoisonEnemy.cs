@@ -27,6 +27,7 @@ public class PoisonEnemy : Enemy {
         if(poisonPrefab != null)
         {
             poisonPrefab.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+            poisonPrefab.GetComponent<SpecialTile>().SetPosition(position);
             poisonPrefab.SetActive(true);
         }
         //   poisonTiles[currentIndex].transform.position = new Vector3(transform.position.x,0.5f,transform.position.z);

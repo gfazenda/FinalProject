@@ -11,8 +11,7 @@ public class DamageDrain : SpecialTile {
     int instances = 0;
     float currentDistance = 10f, damageRemoved = 0, endingDamage = 0, currentDrain = 0;
     // Use this for initialization
-    void Start () {
-        EventManager.StartListening(Events.EnemiesTurn, DrainDamage);
+    void Start () {       
         player = BoardManager.Instance._playerScript;
         maxEffectRange = ((float)effectRadius * 1.42f);
     }
@@ -45,8 +44,7 @@ public class DamageDrain : SpecialTile {
                 CalculateDrain();
             instances++;
 
-        }
-        else if (affectedPlayer)
+        }else if (affectedPlayer)
         {
             ReturnDamage();
         }

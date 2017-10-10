@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoisonTile : MonoBehaviour {
+public class PoisonTile : SpecialTile {
     int turnsAlive = 0;
     public int turnsToLive = 2;
 
@@ -28,12 +28,14 @@ public class PoisonTile : MonoBehaviour {
             return;
 
         turnsAlive--;
+
+        if (BoardManager.Instance._playerScript.position.CompareTo(position))
+        {
+            turnsAlive = 0;
+        }
+
         if (turnsAlive <= 0)
             this.gameObject.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }
