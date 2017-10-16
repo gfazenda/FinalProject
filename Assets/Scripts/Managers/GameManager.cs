@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour {
             enemies[i].GetComponent<Enemy>().Initialize();
         }
         delay = (delayPerEnemy / enemies.Count);
-        Debug.Log("got enemies " + enemies.Count);
+        //Debug.Log("got enemies " + enemies.Count);
     }
 
     public void EnemyDamaged(float damage, Coord position)
@@ -126,12 +126,12 @@ public class GameManager : MonoBehaviour {
 
     void CallEnemyActions()
     {
-        Debug.Log("enemies doing");
+     //   Debug.Log("enemies doing");
         if (enemies.Count > 0)
             StartCoroutine(DoEnemiesAction());
         else
         {
-            Debug.Log("player doing");
+       //     Debug.Log("player doing");
             EventManager.TriggerEvent(Events.PlayerTurn);
         }
 

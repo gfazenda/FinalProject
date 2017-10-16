@@ -139,10 +139,11 @@ public class MapGenerator : MonoBehaviour
 
             Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
             Transform newObstacle = Instantiate(currentObstacle, obstaclePosition, Quaternion.identity) as Transform;
+            newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
             if (placeObstacle)
             {
                 obstacleCoords.Add(newObstacle.gameObject);
-                newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
+                
             }
             else
             {

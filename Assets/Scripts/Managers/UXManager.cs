@@ -10,12 +10,13 @@ public class UXManager : MonoBehaviour {
 
 
     public enum textOption {middle,top,bottom};
+    public enum msgType { info, warning };
 
     public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj;
     TextMeshProUGUI middleText, topText, bottomText, dmgText;
 
     HealthBar hpScript, manaScript;
-
+    bool skillsEnabled = true;
     public Button overcharge, mine;
 
     private void Awake()
@@ -39,7 +40,7 @@ public class UXManager : MonoBehaviour {
         EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
         EventManager.StartListening(Events.DamageUpdate, UpdatePlayerDamage);
         EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
-        EventManager.StartListening(Events.PlayerTurn, EnableButtons);
+       // EventManager.StartListening(Events.PlayerTurn, EnableButtons);
     }
 
 
@@ -66,9 +67,10 @@ public class UXManager : MonoBehaviour {
         mine.interactable = false;
     }
 
-    void EnableButtons()
+    public void EnableButtons()
     {
         Debug.Log("enable");
+      //  skillsEnabled = BoardManager.Instance._playerScript.CanAct();
         overcharge.interactable = true;
         mine.interactable = true;
     }

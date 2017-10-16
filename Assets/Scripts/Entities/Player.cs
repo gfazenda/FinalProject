@@ -12,7 +12,7 @@ public class Player : Character {
     int maxMana;
     private Vector2 touchOrigin = -Vector2.one;
     bool playerTurn = true, turnInvoked = false;
-    public enum Actions {Move, Overcharge, Skill2, Mine, BasicAtk };
+    public enum Actions { Move, Overcharge, Skill2, Mine, BasicAtk };
     MineController _mineScript;
     Actions currentAction;
     BoardManager.tileType targetType;
@@ -20,7 +20,7 @@ public class Player : Character {
     public GameObject damagePrefab;
     GameObject explosion = null;
     List<GameObject> explosions = new List<GameObject>();
-
+    float timer;
     private void Awake()
     {
         _mineScript = this.GetComponent<MineController>();
@@ -29,7 +29,9 @@ public class Player : Character {
 
     void PlayerTurn()
     {
-        playerTurn = true;
+        playerTurn = CanAct();
+        if (playerTurn)
+            UXManager.instance.EnableButtons();
     }
     // Use this for initialization
     void Start()
@@ -40,13 +42,19 @@ public class Player : Character {
 
     private void OnMouseDown()
     {
-        if(!moving && playerTurn)
-            BoardManager.Instance.DisplayMarkers(position,1);
+        if (!moving && playerTurn)
+            BoardManager.Instance.DisplayMarkers(position, 1);
     }
 
     public void ShowMineMarkers()
     {
-        BoardManager.Instance.DisplayMarkers(position, 3,true,true);
+        if (CanUseSpell(mineManacost))
+        {
+            BoardManager.Instance.DisplayMarkers(position, 3, true, true);
+        } else
+        {
+            UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
+        }
     }
 
     public override void TakeDamage(float damage)
@@ -72,29 +80,38 @@ public class Player : Character {
 
     void SetEnemiesTurn()
     {
-        EventManager.TriggerEvent(Events.EnemiesTurn);
-        turnInvoked = false;
+        
         rechargingTurns -= 1;
+        turnInvoked = false;
+        EventManager.TriggerEvent(Events.EnemiesTurn);      
     }
+
+
+    public bool CanAct()
+    {
+        if (rechargingTurns > 0)
+        {
+
+            if (!turnInvoked)
+            {
+                timer = GameManager.Instance.GetEnemyTurnDuration();
+                UXManager.instance.DisplayMessage("Recharging for " + rechargingTurns + " turn(s)", timer);
+                turnInvoked = true;
+                Invoke("SetEnemiesTurn", (timer + 0.1f));
+            }
+           // Debug.Log("s1");
+            return false;
+        }
+        return true;
+       
+    }
+
 
 
     // Update is called once per frame
     void Update () {
         if (!playerTurn || moving)
             return;
-        else if (rechargingTurns > 0)
-        {
-            
-            if (!turnInvoked)
-            {
-                float timer = GameManager.Instance.GetEnemyTurnDuration();
-                UXManager.instance.DisplayMessage("Recharging for " + rechargingTurns + " turn(s)", timer);
-                turnInvoked = true;
-                Invoke("SetEnemiesTurn", (timer+0.1f));
-            }
-           
-            return;
-        }
        // if (!GameManager.instance.playersTurn) return;
 
         int horizontal = 0;     //Used to store the horizontal move direction.
@@ -191,14 +208,14 @@ public class Player : Character {
         if( manaPool >= cost)
         {
             manaPool -= cost;
-            UpdateMana();
             return true;
         }
         return false;
     }
 
-    void UpdateMana()
+    void UpdateMana(int cost)
     {
+        manaPool -= cost;
         UXManager.instance.UpdatePlayerMana(((float)manaPool/(float)maxMana));
     }
 
@@ -213,16 +230,18 @@ public class Player : Character {
                 if (CanUseSpell(overchargeManacost))
                 {
                     Overcharge();
+                    UpdateMana(overchargeManacost);
                     rechargingTurns = 3;
+                }else
+                {
+                    UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
                 }
                 break;
             case Actions.Skill2:
                 break;
             case Actions.Mine:
-                if (CanUseSpell(mineManacost))
-                {
+                    UpdateMana(mineManacost);
                     _mineScript.PlaceMine(target);
-                }
                 break;
             case Actions.BasicAtk:
                 LookAtCoord(target);
@@ -248,7 +267,7 @@ public class Player : Character {
             if (t.Key == BoardManager.tileType.enemy)
                 GameManager.Instance.EnemyDamaged((damage*3), t.Value);
         }
-        Invoke("DisableExplosions", 1f);
+        Invoke("DisableExplosions", GameManager.Instance.GetEnemyTurnDuration());
     }
 
     //private void InstantiateExplosion(Vector3 position)
@@ -261,6 +280,7 @@ public class Player : Character {
 
     void DisableExplosions()
     {
+        Debug.Log("EWROWERJKWERHKWEHRKJEHRJKHW");
         for (int i = 0; i < explosions.Count; i++)
         {
             explosions[i].SetActive(false);
@@ -270,7 +290,7 @@ public class Player : Character {
 
     public void DoOvercharge()
     {
-        PerformAction(Actions.Overcharge);
+            PerformAction(Actions.Overcharge);
     }
 
     //public override void SetPosition(Coord pos)

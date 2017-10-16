@@ -10,10 +10,10 @@ public class Character : MonoBehaviour {
   
     public float damage = 5;// { get; set; }
 
-
+    public float yHeight = 1f;
     float step;
     protected bool moving = false;
-    protected Vector3 targetPos;
+    protected Vector3 targetPos, lookPos;
     public Coord position = new Coord();
 
     public BoardManager.tileType characterType;
@@ -34,6 +34,8 @@ public class Character : MonoBehaviour {
         BoardManager.Instance.UpdatePosition(position, newPos, characterType);
         position = newPos;
         targetPos = BoardManager.Instance.CoordToPosition(position, false);
+        targetPos.y = yHeight;
+        LookAtCoord(newPos);
         SetMoving();
     }
 
@@ -44,14 +46,16 @@ public class Character : MonoBehaviour {
 
     protected void LookAtCoord(Coord pos)
     {
-        transform.LookAt(BoardManager.Instance.CoordToPosition(pos, false));
+        lookPos = BoardManager.Instance.CoordToPosition(pos, false);
+        lookPos.y = transform.position.y;
+        transform.LookAt(lookPos);
     }
 
     protected void SetMoving()
     {
         moving = true;
         StartCoroutine(Move2());
-        transform.LookAt(targetPos);
+       // transform.LookAt(lookPos);
     }
 
 
