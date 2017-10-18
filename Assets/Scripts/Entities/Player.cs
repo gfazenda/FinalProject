@@ -8,7 +8,7 @@ public class Player : Character {
     //Vector3 targetPos;
     //Coord position;
     public int manaPool = 100;
-    public int overchargeManacost = 10, mineManacost = 4;
+    public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
     private Vector2 touchOrigin = -Vector2.one;
     bool playerTurn = true, turnInvoked = false;
@@ -30,6 +30,10 @@ public class Player : Character {
     void PlayerTurn()
     {
         playerTurn = CanAct();
+
+        //if (explosions.Count > 0)
+        //    DisableExplosions();
+
         if (playerTurn)
             UXManager.instance.EnableButtons();
     }
@@ -97,7 +101,11 @@ public class Player : Character {
                 timer = GameManager.Instance.GetEnemyTurnDuration();
                 UXManager.instance.DisplayMessage("Recharging for " + rechargingTurns + " turn(s)", timer);
                 turnInvoked = true;
-                Invoke("SetEnemiesTurn", (timer + 0.1f));
+                if(rechargingTurns <= (overchargeTurns - 1))
+                {
+                    DisableExplosions();
+                }
+                Invoke("SetEnemiesTurn", (timer * 2));
             }
            // Debug.Log("s1");
             return false;
@@ -231,7 +239,7 @@ public class Player : Character {
                 {
                     Overcharge();
                     UpdateMana(overchargeManacost);
-                    rechargingTurns = 3;
+                    rechargingTurns = overchargeTurns;
                 }else
                 {
                     UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
@@ -267,7 +275,7 @@ public class Player : Character {
             if (t.Key == BoardManager.tileType.enemy)
                 GameManager.Instance.EnemyDamaged((damage*3), t.Value);
         }
-        Invoke("DisableExplosions", GameManager.Instance.GetEnemyTurnDuration());
+       // Invoke("DisableExplosions", 1f);
     }
 
     //private void InstantiateExplosion(Vector3 position)

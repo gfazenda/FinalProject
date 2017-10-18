@@ -103,7 +103,8 @@ public class GameManager : MonoBehaviour {
         {
             enemies[i].GetComponent<Enemy>().Initialize();
         }
-        delay = (delayPerEnemy / enemies.Count);
+        // delay = (delayPerEnemy / enemies.Count);
+        UpdateDelayTime();
         //Debug.Log("got enemies " + enemies.Count);
     }
 
@@ -131,16 +132,25 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(DoEnemiesAction());
         else
         {
-       //     Debug.Log("player doing");
-            EventManager.TriggerEvent(Events.PlayerTurn);
+            Invoke("CallPlayerTurn", delay);
         }
 
+    }
+
+    void CallPlayerTurn()
+    {
+        EventManager.TriggerEvent(Events.PlayerTurn);
+    }
+
+    IEnumerator ExecuteAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
     }
 
 
     void UpdateDelayTime()
     {
-        delay = (0.3f / enemies.Count);
+        delay = (0.4f / (1 + enemies.Count));
     }
     // Use this for initialization
     IEnumerator DoEnemiesAction()
