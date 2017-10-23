@@ -215,7 +215,6 @@ public class Player : Character {
     {
         if( manaPool >= cost)
         {
-            manaPool -= cost;
             return true;
         }
         return false;

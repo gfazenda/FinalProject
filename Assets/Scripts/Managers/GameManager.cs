@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(DoEnemiesAction());
         else
         {
-            Invoke("CallPlayerTurn", delay);
+            Invoke("CallPlayerTurn", 0.1f);
         }
 
     }
