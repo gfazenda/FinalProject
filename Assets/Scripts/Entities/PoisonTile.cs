@@ -32,6 +32,7 @@ public class PoisonTile : SpecialTile {
         if (BoardManager.Instance._playerScript.position.CompareTo(position))
         {
             turnsAlive = 0;
+            BoardManager.Instance._playerScript.SetStatus(PlayerStatus.statuses.poisoned);
         }
 
         if (turnsAlive <= 0)

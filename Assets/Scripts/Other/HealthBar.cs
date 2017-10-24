@@ -7,7 +7,7 @@ public class HealthBar : MonoBehaviour
     public Image _image;
     public Text _text;
     public float showDuration = 0.5f;
-    public bool lerp = false, scaleImage = true, hideBar = false;
+    public bool lerp = false, scaleImage = true, hideBar = false, healthInPercent = false;
     public GameObject hpBar;
     void Start ()
     {
@@ -41,17 +41,29 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    public void updateBar(int current, int max)
+    public void UpdateBarWithText(float current, float max)
     {
-        Vector3 scale = this.transform.localScale;
-       
-        HP = (float)current / (float)max; 
+        Vector3 scale = _image.transform.localScale;
+
+        HP = current / max; 
         scale.x = HP < 0 ? 0 : HP;
-        _text.text = (int)(scale.x * 100f) + "%";
+
+        SetText(current, max, scale.x);
+
         if (scaleImage)
             _image.transform.localScale = scale;
         if (lerp)
             setColor();
+    }
+
+    void SetText(float current, float max, float scale)
+    {
+        if (healthInPercent)
+            _text.text = (int)(scale * 100f) + "%";
+        else
+        {
+            _text.text = current + " / " + max;
+        }
     }
 
     void setColor()

@@ -44,20 +44,20 @@ public class UXManager : MonoBehaviour {
     }
 
 
-    public void UpdatePlayerHP(float value)
+    public void UpdatePlayerHP(float hp, float maxhp)
     {
-        hpScript.UpdateBar(value);
+        hpScript.UpdateBarWithText(hp,maxhp);
     }
 
 
-    public void UpdatePlayerMana(float value)
+    public void UpdatePlayerMana(int mana, int maxMana)
     {
-        manaScript.UpdateBar(value);
+        manaScript.UpdateBarWithText(mana,maxMana);
     }
 
     void UpdatePlayerDamage()
     {
-        dmgText.text = "Damage: " + System.Math.Round(BoardManager.Instance._playerScript.damage, 1);
+        dmgText.text = System.Math.Round(BoardManager.Instance._playerScript.damage, 1).ToString();
     }
 
     void DisableButtons()

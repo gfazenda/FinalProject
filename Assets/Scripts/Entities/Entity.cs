@@ -4,9 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(HealthBar))]
 public class Entity : MonoBehaviour {
-    public float HP = 10;// { get; set; }
-
-    float maxHP;
+    public float HP = 10, maxHP;
 
     [HideInInspector]
     public float healthAmount;

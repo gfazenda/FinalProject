@@ -20,7 +20,7 @@ public class Character : MonoBehaviour {
 
    protected Entity _entityScript;
 
-    protected int rechargingTurns = 0;
+    protected int waitingTurns = 0;
 
     protected void Start()
     {
@@ -42,6 +42,11 @@ public class Character : MonoBehaviour {
     public Coord GetPosition()
     {
         return position;
+    }
+
+    public void SetTurnPenalty(int turns)
+    {
+        waitingTurns = turns;
     }
 
     protected void LookAtCoord(Coord pos)

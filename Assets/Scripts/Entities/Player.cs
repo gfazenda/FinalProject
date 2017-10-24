@@ -11,7 +11,7 @@ public class Player : Character {
     public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
     private Vector2 touchOrigin = -Vector2.one;
-    bool playerTurn = true, turnInvoked = false;
+    bool playerTurn = true, turnInvoked = false, usedOverCharge = false;
     public enum Actions { Move, Overcharge, Skill2, Mine, BasicAtk };
     MineController _mineScript;
     Actions currentAction;
@@ -21,27 +21,47 @@ public class Player : Character {
     GameObject explosion = null;
     List<GameObject> explosions = new List<GameObject>();
     float timer;
+    PlayerStatus _status;
+    [HideInInspector]
+    public float dmgMultiplier = 1f;
+
     private void Awake()
     {
         _mineScript = this.GetComponent<MineController>();
+        _status = this.GetComponent<PlayerStatus>();
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
+        
+    }
+
+    void Start()
+    {
+        base.Start();
+        maxMana = manaPool;
+        UXManager.instance.UpdatePlayerMana(manaPool, maxMana);
+        UXManager.instance.UpdatePlayerHP(_entityScript.HP, _entityScript.maxHP);
     }
 
     void PlayerTurn()
     {
         playerTurn = CanAct();
 
-        //if (explosions.Count > 0)
-        //    DisableExplosions();
-
         if (playerTurn)
             UXManager.instance.EnableButtons();
     }
-    // Use this for initialization
-    void Start()
+
+    void SetEnemiesTurn()
     {
-        base.Start();
-        maxMana = manaPool;
+
+        waitingTurns -= 1;
+        if (waitingTurns <= 0)
+            usedOverCharge = false;
+        turnInvoked = false;
+        EventManager.TriggerEvent(Events.EnemiesTurn);
+    }
+
+    public void SetStatus(PlayerStatus.statuses status)
+    {
+        _status.SetStatus(status);
     }
 
     private void OnMouseDown()
@@ -63,8 +83,8 @@ public class Player : Character {
 
     public override void TakeDamage(float damage)
     {
-        base.TakeDamage(damage);
-        UXManager.instance.UpdatePlayerHP(_entityScript.healthAmount);
+        base.TakeDamage(damage * dmgMultiplier);
+        UXManager.instance.UpdatePlayerHP(_entityScript.HP,_entityScript.maxHP);
         ShowDamagePrefab();
         if (_entityScript.Dead())
             EventManager.TriggerEvent(Events.LevelLost);
@@ -82,26 +102,22 @@ public class Player : Character {
         damagePrefab.SetActive(false);
     }
 
-    void SetEnemiesTurn()
-    {
-        
-        rechargingTurns -= 1;
-        turnInvoked = false;
-        EventManager.TriggerEvent(Events.EnemiesTurn);      
-    }
-
-
     public bool CanAct()
     {
-        if (rechargingTurns > 0)
+        if (waitingTurns > 0)
         {
 
             if (!turnInvoked)
             {
                 timer = GameManager.Instance.GetEnemyTurnDuration();
-                UXManager.instance.DisplayMessage("Recharging for " + rechargingTurns + " turn(s)", timer);
+                if(usedOverCharge)
+                    UXManager.instance.DisplayMessage("Recharging for " + waitingTurns + " turn(s)", timer);
+                else
+                {
+                    UXManager.instance.DisplayMessage("Actions disabled for " + waitingTurns + " turn(s)", timer);
+                }
                 turnInvoked = true;
-                if(rechargingTurns <= (overchargeTurns - 1))
+                if(waitingTurns <= (overchargeTurns - 1))
                 {
                     DisableExplosions();
                 }
@@ -223,7 +239,7 @@ public class Player : Character {
     void UpdateMana(int cost)
     {
         manaPool -= cost;
-        UXManager.instance.UpdatePlayerMana(((float)manaPool/(float)maxMana));
+        UXManager.instance.UpdatePlayerMana(manaPool,maxMana);
     }
 
     public void PerformAction(Actions _action, Coord target = null)
@@ -238,8 +254,10 @@ public class Player : Character {
                 {
                     Overcharge();
                     UpdateMana(overchargeManacost);
-                    rechargingTurns = overchargeTurns;
-                }else
+                    waitingTurns = overchargeTurns;
+                    usedOverCharge = true;
+                }
+                else
                 {
                     UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
                 }
@@ -269,21 +287,11 @@ public class Player : Character {
         List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2,types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
         {
-            //InstantiateExplosion(BoardManager.Instance.CoordToPosition(t.Value));
             explosions.Add(BoardManager.Instance.InstantiateEffect(Tags.ElectricExplosion, t.Value));
             if (t.Key == BoardManager.tileType.enemy)
                 GameManager.Instance.EnemyDamaged((damage*3), t.Value);
         }
-       // Invoke("DisableExplosions", 1f);
     }
-
-    //private void InstantiateExplosion(Vector3 position)
-    //{
-    //    explosion = ObjectPooler.SharedInstance.GetPooledObject(Tags.ElectricExplosion);
-    //    explosion.transform.position = position;
-    //    explosion.SetActive(true);
-    //    explosions.Add(explosion);
-    //}
 
     void DisableExplosions()
     {
@@ -299,23 +307,4 @@ public class Player : Character {
     {
             PerformAction(Actions.Overcharge);
     }
-
-    //public override void SetPosition(Coord pos)
-    //{
-    //    base.SetPosition(pos);
-    //    playerTurn = false;
-    //}
-
-    //void SetMoving()
-    //{
-    //    moving = true;
-    //    transform.LookAt(targetPos);
-    //}
-
-
-    //void Move()
-    //{
-    //    float step = speed * Time.deltaTime;
-    //    transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-    //}
 }
