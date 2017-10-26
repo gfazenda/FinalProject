@@ -60,7 +60,7 @@ public class UXManager : MonoBehaviour {
         dmgText.text = System.Math.Round(BoardManager.Instance._playerScript.damage, 1).ToString();
     }
 
-    void DisableButtons()
+    public void DisableButtons()
     {
         Debug.Log("disable");
         overcharge.interactable = false;

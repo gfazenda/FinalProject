@@ -60,6 +60,7 @@ GameObject:
   - component: {fileID: 114191758208677302}
   - component: {fileID: 114749783711211760}
   - component: {fileID: 95561823016029210}
+  - component: {fileID: 65877526180979274}
   m_Layer: 0
   m_Name: Drain
   m_TagString: Untagged
@@ -137,6 +138,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1450289791149076}
   m_Mesh: {fileID: 4300000, guid: 431dce0268a232c4aa1dc7c140f7edfb, type: 3}
+--- !u!65 &65877526180979274
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1450289791149076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1999999, y: 1.1999999, z: 1.14}
+  m_Center: {x: 0, y: 0.59999996, z: 0}
 --- !u!95 &95561823016029210
 Animator:
   serializedVersion: 3
@@ -167,7 +180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   yHeight: 0.5
   drainPercent: 0.1
-  effectRadius: 1
+  effectRadius: 2
 --- !u!114 &114191758208677302
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -185,6 +198,7 @@ MonoBehaviour:
   lerp: 1
   scaleImage: 1
   hideBar: 1
+  healthInPercent: 0
   hpBar: {fileID: 1458014279855140}
 --- !u!114 &114212887745927676
 MonoBehaviour:
@@ -289,6 +303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 100
+  maxHP: 0
   healthAmount: 0
 --- !u!222 &222568419516137726
 CanvasRenderer:

@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour {
 
+    public bool drawPath = false;
 
+    [HideInInspector]
     public Transform seeker, target;
+
     List<Coord> path = new List<Coord>();
     //Grid grid;
     int count = 0;
@@ -16,7 +19,7 @@ public class AStar : MonoBehaviour {
 
     void Update()
     {
-       if(path.Count > 0)
+       if(drawPath && path.Count > 0)
         {
             for (int i = 1; i < path.Count; i++)
             {

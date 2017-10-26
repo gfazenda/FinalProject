@@ -7,7 +7,7 @@ public class Enemy : Character {
     public float atkRange = 1;
     Coord playerPosition = new Coord();
     List<Coord> myPath = new List<Coord>();
-    Player player = null;
+    protected Player player = null;
     int failedAttempts = 0;
 
     void CreatePath()
@@ -19,6 +19,7 @@ public class Enemy : Character {
     public void Initialize()
     {
         player = BoardManager.Instance._playerScript;
+        atkRange *= Utility.distanceMultiplier;
     }
 
     protected virtual void DamagePlayer()
@@ -55,7 +56,7 @@ public class Enemy : Character {
         if (BoardManager.Distance(position,player.GetPosition()) <= atkRange)
         {
 
-            // Debug.Log("close enough " + BoardManager.Instance.Distance(position, player.GetPosition()));
+             Debug.Log("close enough " + BoardManager.Distance(position, player.GetPosition()));
             PerformAttack();
             return;
         }

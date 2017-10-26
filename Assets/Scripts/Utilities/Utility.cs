@@ -13,6 +13,7 @@
         return array;
     }
 
+    public static float distanceMultiplier = 1.42f;
 }
 
 public static class Events

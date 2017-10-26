@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4382118876429588}
   - component: {fileID: 23015008913739906}
-  - component: {fileID: 114104704355731432}
+  - component: {fileID: 114908203435559702}
   - component: {fileID: 114477200225761968}
   - component: {fileID: 114240599072192740}
   - component: {fileID: 114973447242484030}
@@ -137,25 +137,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1257545214428874}
   m_Mesh: {fileID: 4300000, guid: f1d8820033b6234479a10ed05cbe1511, type: 3}
---- !u!114 &114104704355731432
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1257545214428874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4653af4bd4723f4ab7cef8d780643d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  damage: 2
-  yHeight: 0.5
-  position:
-    x: 0
-    y: 0
-  characterType: 3
-  atkRange: 1
 --- !u!114 &114240599072192740
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -173,6 +154,7 @@ MonoBehaviour:
   lerp: 1
   scaleImage: 1
   hideBar: 1
+  healthInPercent: 0
   hpBar: {fileID: 1611178651661242}
 --- !u!114 &114323873919570982
 MonoBehaviour:
@@ -278,6 +260,26 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114908203435559702
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1257545214428874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05145a5f2ee736d41a7135e634ade37b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  damage: 5
+  yHeight: 0.5
+  position:
+    x: 0
+    y: 0
+  characterType: 3
+  atkRange: 1
+  stunChance: 0.2
 --- !u!114 &114973447242484030
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -290,6 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 30
+  maxHP: 0
   healthAmount: 0
 --- !u!222 &222201553270105734
 CanvasRenderer:

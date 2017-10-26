@@ -10,13 +10,13 @@ public class Character : MonoBehaviour {
   
     public float damage = 5;// { get; set; }
 
-    public float yHeight = 1f;
+    public float yHeight = 0.5f;
     float step;
     protected bool moving = false;
     protected Vector3 targetPos, lookPos;
     public Coord position = new Coord();
 
-    public BoardManager.tileType characterType;
+   public BoardManager.tileType characterType;
 
    protected Entity _entityScript;
 

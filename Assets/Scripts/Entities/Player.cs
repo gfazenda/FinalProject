@@ -11,7 +11,7 @@ public class Player : Character {
     public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
     private Vector2 touchOrigin = -Vector2.one;
-    bool playerTurn = true, turnInvoked = false, usedOverCharge = false;
+    bool playerTurn = true, turnInvoked = false, usedOverCharge = false, spellsBlocked = false;
     public enum Actions { Move, Overcharge, Skill2, Mine, BasicAtk };
     MineController _mineScript;
     Actions currentAction;
@@ -45,7 +45,7 @@ public class Player : Character {
     {
         playerTurn = CanAct();
 
-        if (playerTurn)
+        if (playerTurn && !spellsBlocked)
             UXManager.instance.EnableButtons();
     }
 
@@ -62,6 +62,11 @@ public class Player : Character {
     public void SetStatus(PlayerStatus.statuses status)
     {
         _status.SetStatus(status);
+    }
+
+    public void BlockSpells(bool block)
+    {
+        spellsBlocked = block;
     }
 
     private void OnMouseDown()
@@ -229,6 +234,9 @@ public class Player : Character {
 
     bool CanUseSpell(int cost)
     {
+        //if (spellsBlocked)
+        //    return false;
+
         if( manaPool >= cost)
         {
             return true;

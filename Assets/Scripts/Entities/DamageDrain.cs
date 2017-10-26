@@ -13,7 +13,7 @@ public class DamageDrain : SpecialTile {
     // Use this for initialization
     void Start () {       
         player = BoardManager.Instance._playerScript;
-        maxEffectRange = ((float)effectRadius * 1.42f);
+        maxEffectRange = ((float)effectRadius * Utility.distanceMultiplier);
     }
 
     private void OnEnable()
