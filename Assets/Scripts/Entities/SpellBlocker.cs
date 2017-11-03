@@ -14,7 +14,6 @@ public class SpellBlocker : SpecialTile {
     {
         player = BoardManager.Instance._playerScript;
         maxEffectRange = ((float)effectRadius * Utility.distanceMultiplier);
-        position = new Coord(0, 0);
     }
 
     private void OnEnable()
@@ -37,12 +36,10 @@ public class SpellBlocker : SpecialTile {
         if (currentDistance <= maxEffectRange)
         {
             if (!affectedPlayer) { 
-                affectedPlayer = true;
                 DoBlock();
             }
 
-        }
-        else if (affectedPlayer)
+        }else if (affectedPlayer)
         {
             UnblockSpells();
         }
@@ -53,14 +50,15 @@ public class SpellBlocker : SpecialTile {
     private void DoBlock()
     {
         print("blocking");
-        player.BlockSpells(true);
+        affectedPlayer = true;
+        player.BlockSpells(affectedPlayer);
     }
 
     void UnblockSpells()
     {
         print("unblocking");
         affectedPlayer = false;
-        player.BlockSpells(false);
+        player.BlockSpells(affectedPlayer);
     }
 
 }

@@ -1,29 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Character {
-    //float speed  = 3 ;
-    //bool moving = false;
-    //Vector3 targetPos;
-    //Coord position;
+
     public int manaPool = 100;
     public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
+    float timer, minimumXswipe = 100f, minimumYswipe = 100f;
+
     private Vector2 touchOrigin = -Vector2.one;
-    bool playerTurn = true, turnInvoked = false, usedOverCharge = false, spellsBlocked = false;
-    public enum Actions { Move, Overcharge, Skill2, Mine, BasicAtk };
-    MineController _mineScript;
+
+    bool playerTurn = true, performedAction = false, usedOverCharge = false, spellsBlocked = false, usedSkill = false;
+    
+    public enum Actions { Move, Overcharge, Missile, Mine, BasicAtk };
     Actions currentAction;
+
+    MineController _mineScript;
+    
     BoardManager.tileType targetType;
     Coord tentativePos = new Coord();
+
     public GameObject damagePrefab;
+
     GameObject explosion = null;
+
     List<GameObject> explosions = new List<GameObject>();
-    float timer;
+
+
+    string feedbackMessage;
     PlayerStatus _status;
-    [HideInInspector]
-    public float dmgMultiplier = 1f;
+
+    public List<Skill> _skillList = new List<Skill>();
+    Dictionary<string, Skill> _skills = new Dictionary<string, Skill>();
+    Skill currentSkill = null;
 
     private void Awake()
     {
@@ -39,6 +48,15 @@ public class Player : Character {
         maxMana = manaPool;
         UXManager.instance.UpdatePlayerMana(manaPool, maxMana);
         UXManager.instance.UpdatePlayerHP(_entityScript.HP, _entityScript.maxHP);
+        InitializeSkills();
+    }
+
+    void InitializeSkills()
+    {
+        for (int i = 0; i < _skillList.Count; i++)
+        {
+            _skills.Add(_skillList[i].name, _skillList[i]);
+        }
     }
 
     void PlayerTurn()
@@ -55,7 +73,7 @@ public class Player : Character {
         waitingTurns -= 1;
         if (waitingTurns <= 0)
             usedOverCharge = false;
-        turnInvoked = false;
+       // turnInvoked = false;
         EventManager.TriggerEvent(Events.EnemiesTurn);
     }
 
@@ -75,22 +93,11 @@ public class Player : Character {
             BoardManager.Instance.DisplayMarkers(position, 1);
     }
 
-    public void ShowMineMarkers()
-    {
-        if (CanUseSpell(mineManacost))
-        {
-            BoardManager.Instance.DisplayMarkers(position, 3, true, true);
-        } else
-        {
-            UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
-        }
-    }
-
     public override void TakeDamage(float damage)
     {
-        base.TakeDamage(damage * dmgMultiplier);
-        UXManager.instance.UpdatePlayerHP(_entityScript.HP,_entityScript.maxHP);
         ShowDamagePrefab();
+        base.TakeDamage(damage);
+        UXManager.instance.UpdatePlayerHP(_entityScript.HP,_entityScript.maxHP);
         if (_entityScript.Dead())
             EventManager.TriggerEvent(Events.LevelLost);
     }
@@ -111,37 +118,45 @@ public class Player : Character {
     {
         if (waitingTurns > 0)
         {
-
-            if (!turnInvoked)
+            timer = GameManager.Instance.GetEnemyTurnDuration();
+            ShowWaiting();
+            if (waitingTurns <= (overchargeTurns - 1))
             {
-                timer = GameManager.Instance.GetEnemyTurnDuration();
-                if(usedOverCharge)
-                    UXManager.instance.DisplayMessage("Recharging for " + waitingTurns + " turn(s)", timer);
-                else
-                {
-                    UXManager.instance.DisplayMessage("Actions disabled for " + waitingTurns + " turn(s)", timer);
-                }
-                turnInvoked = true;
-                if(waitingTurns <= (overchargeTurns - 1))
-                {
-                    DisableExplosions();
-                }
-                Invoke("SetEnemiesTurn", (timer * 2));
+                DisableExplosions();
             }
-           // Debug.Log("s1");
+            Invoke("SetEnemiesTurn", (timer * 2));
+            // Debug.Log("s1");
             return false;
         }
+
+        currentSkill = null;
+        usedSkill = false;
+        finishedMove = false;
+        performedAction = false;
+
         return true;
        
+    }
+
+    private void ShowWaiting()
+    {
+        if (usedOverCharge)
+            feedbackMessage = "Recharging for " + waitingTurns + " turn(s)";
+        else
+        {
+            feedbackMessage = "Actions disabled for " + waitingTurns + " turn(s)";
+        }
+        UXManager.instance.DisplayMessage(feedbackMessage,timer);
     }
 
 
 
     // Update is called once per frame
-    void Update () {
-        if (!playerTurn || moving)
+    void Update ()
+    {
+        if (performedAction || moving)
             return;
-       // if (!GameManager.instance.playersTurn) return;
+        // if (!GameManager.instance.playersTurn) return;
 
         int horizontal = 0;     //Used to store the horizontal move direction.
         int vertical = 0;       //Used to store the vertical move direction.
@@ -162,53 +177,66 @@ public class Player : Character {
         }
         //Check if we are running on iOS, Android, Windows Phone 8 or Unity iPhone
 #elif UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
-            
-            //Check if Input has registered more than zero touches
-            if (Input.touchCount > 0)
-            {
-                //Store the first touch detected.
-                Touch myTouch = Input.touches[0];
-                
-                //Check if the phase of that touch equals Began
-                if (myTouch.phase == TouchPhase.Began)
-                {
-                    //If so, set touchOrigin to the position of that touch
-                    touchOrigin = myTouch.position;
-                }
-                
-                //If the touch phase is not Began, and instead is equal to Ended and the x of touchOrigin is greater or equal to zero:
-                else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
-                {
-                    //Set touchEnd to equal the position of this touch
-                    Vector2 touchEnd = myTouch.position;
-                    
-                    //Calculate the difference between the beginning and end of the touch on the x axis.
-                    float x = touchEnd.x - touchOrigin.x;
-                    
-                    //Calculate the difference between the beginning and end of the touch on the y axis.
-                    float y = touchEnd.y - touchOrigin.y;
-                    
-                    //Set touchOrigin.x to -1 so that our else if statement will evaluate false and not repeat immediately.
-                    touchOrigin.x = -1;
-                    
-                    //Check if the difference along the x axis is greater than the difference along the y axis.
-                    if (Mathf.Abs(x) > Mathf.Abs(y))
-                        //If x is greater than zero, set horizontal to 1, otherwise set it to -1
-                        horizontal = x > 0 ? 1 : -1;
-                    else
-                        //If y is greater than zero, set horizontal to 1, otherwise set it to -1
-                        vertical = y > 0 ? 1 : -1;
-                }
-            }
-            
-#endif //End of mobile platform dependendent compilation section started above with #elif
+        TouchInput(ref horizontal, ref vertical);
+#endif
+        //End of mobile platform dependendent compilation section started above with #elif
         //Check if we have a non-zero value for horizontal or vertical
-       
+
 
         if (!moving && horizontal != 0 || vertical != 0)
         {
+            Debug.Log("here");
             TentativeMove(horizontal, vertical);
         }
+    }
+
+    private void TouchInput(ref int horizontal, ref int vertical)
+    {
+        //Check if Input has registered more than zero touches
+        if (Input.touchCount > 0)
+        {
+            //Store the first touch detected.
+            Touch myTouch = Input.touches[0];
+
+            //Check if the phase of that touch equals Began
+            if (myTouch.phase == TouchPhase.Began)
+            {
+                //If so, set touchOrigin to the position of that touch
+                touchOrigin = myTouch.position;
+            }
+
+            //If the touch phase is not Began, and instead is equal to Ended and the x of touchOrigin is greater or equal to zero:
+            else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
+            {
+                //Set touchEnd to equal the position of this touch
+                Vector2 touchEnd = myTouch.position;
+
+                //Calculate the difference between the beginning and end of the touch on the x axis.
+                float x = touchEnd.x - touchOrigin.x;
+
+                //Calculate the difference between the beginning and end of the touch on the y axis.
+                float y = touchEnd.y - touchOrigin.y;
+
+
+                if (!ValidSwipe(x,y))
+                    return;
+                //Set touchOrigin.x to -1 so that our else if statement will evaluate false and not repeat immediately.
+                touchOrigin.x = -1;
+
+                //Check if the difference along the x axis is greater than the difference along the y axis.
+                if (Mathf.Abs(x) > Mathf.Abs(y))
+                    //If x is greater than zero, set horizontal to 1, otherwise set it to -1
+                    horizontal = x > 0 ? 1 : -1;
+                else
+                    //If y is greater than zero, set horizontal to 1, otherwise set it to -1
+                    vertical = y > 0 ? 1 : -1;
+            }
+        }
+    }
+
+    bool ValidSwipe(float xswipe, float yswipe)
+    {
+        return (Mathf.Abs(xswipe) > minimumXswipe || Mathf.Abs(yswipe) > minimumYswipe);
     }
 
     private void TentativeMove(int horizontal, int vertical)
@@ -217,12 +245,32 @@ public class Player : Character {
         tentativePos.x += horizontal;
         tentativePos.y += vertical;
         targetType = BoardManager.Instance.GetPositionType(tentativePos);
+        //switch (targetType)
+        //{
+        //    case BoardManager.tileType.ground:
+        //        break;
+        //    case BoardManager.tileType.player:
+        //        break;
+        //    case BoardManager.tileType.wall:
+        //        break;
+        //    case BoardManager.tileType.enemy:
+        //        break;
+        //    case BoardManager.tileType.exit:
+        //        break;
+        //    case BoardManager.tileType.obstacle:
+        //        break;
+        //    case BoardManager.tileType.outOfLimits:
+        //        break;
+        //    default:
+        //        break;
+        //}
         if (targetType == BoardManager.tileType.enemy || targetType == BoardManager.tileType.obstacle)
         {
             PerformAction(Actions.BasicAtk, tentativePos);
         }
         else if ((targetType == BoardManager.tileType.ground))
         {
+            Debug.Log("here2");
             PerformAction(Actions.Move, tentativePos);
         }
         else if (targetType == BoardManager.tileType.exit)
@@ -234,14 +282,7 @@ public class Player : Character {
 
     bool CanUseSpell(int cost)
     {
-        //if (spellsBlocked)
-        //    return false;
-
-        if( manaPool >= cost)
-        {
-            return true;
-        }
-        return false;
+        return (manaPool >= cost);
     }
 
     void UpdateMana(int cost)
@@ -252,29 +293,36 @@ public class Player : Character {
 
     public void PerformAction(Actions _action, Coord target = null)
     {
+        
+        finishedMove = true;
         switch (_action)
         {
             case Actions.Move:
                 base.SetPosition(target);
+                BoardManager.Instance.DisableMarkers();
                 break;
             case Actions.Overcharge:
                 if (CanUseSpell(overchargeManacost))
                 {
-                    Overcharge();
-                    UpdateMana(overchargeManacost);
-                    waitingTurns = overchargeTurns;
+                    _skills.TryGetValue("Overcharge", out currentSkill);
+                    usedSkill = true;
+                    waitingTurns = currentSkill.cooldown;
                     usedOverCharge = true;
+                    target = position;
+                    //   Overcharge();
                 }
                 else
                 {
                     UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
                 }
                 break;
-            case Actions.Skill2:
+            case Actions.Missile:
                 break;
             case Actions.Mine:
-                    UpdateMana(mineManacost);
-                    _mineScript.PlaceMine(target);
+                //   UpdateMana(mineManacost);
+                _skills.TryGetValue("RemoteMine", out currentSkill);
+                usedSkill = true;
+                // _mineScript.PlaceMine(target);
                 break;
             case Actions.BasicAtk:
                 LookAtCoord(target);
@@ -283,7 +331,27 @@ public class Player : Character {
             default:
                 break;
         }
+        if (usedSkill)
+        {
+            UpdateMana(currentSkill.manacost);
+            currentSkill.DoEffect(target);
 
+        }
+
+        performedAction = true;
+
+        if (finishedMove)
+            CallNextTurn();
+    }
+
+    private void LateUpdate()
+    {
+        if (playerTurn && performedAction && finishedMove)
+            CallNextTurn();
+    }
+
+    private void CallNextTurn()
+    {
         playerTurn = false;
         BoardManager.Instance.DisableMarkers();
         EventManager.TriggerEvent(Events.EnemiesTurn);
@@ -291,6 +359,10 @@ public class Player : Character {
 
     void Overcharge()
     {
+        UpdateMana(overchargeManacost);
+        waitingTurns = overchargeTurns;
+        usedOverCharge = true;
+
         BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground };
         List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2,types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
@@ -303,7 +375,7 @@ public class Player : Character {
 
     void DisableExplosions()
     {
-        Debug.Log("EWROWERJKWERHKWEHRKJEHRJKHW");
+        //Debug.Log("EWROWERJKWERHKWEHRKJEHRJKHW");
         for (int i = 0; i < explosions.Count; i++)
         {
             explosions[i].SetActive(false);
@@ -313,6 +385,18 @@ public class Player : Character {
 
     public void DoOvercharge()
     {
-            PerformAction(Actions.Overcharge);
+       PerformAction(Actions.Overcharge);
+    }
+
+    public void ShowMineMarkers()
+    {
+        if (CanUseSpell(mineManacost))
+        {
+            BoardManager.Instance.DisplayMarkers(position, 3, true, true);
+        }
+        else
+        {
+            UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
+        }
     }
 }

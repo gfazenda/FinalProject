@@ -4,12 +4,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(AStar))]
 public class Enemy : Character {
-    public float atkRange = 1;
+    public float range = 1;
+    protected float atkRange;
     Coord playerPosition = new Coord();
     List<Coord> myPath = new List<Coord>();
     protected Player player = null;
     int failedAttempts = 0;
-
+    public bool diagonalAtk = false;
     void CreatePath()
     {        
         playerPosition = player.GetPosition();
@@ -19,7 +20,7 @@ public class Enemy : Character {
     public void Initialize()
     {
         player = BoardManager.Instance._playerScript;
-        atkRange *= Utility.distanceMultiplier;
+        atkRange = range * Utility.distanceMultiplier;
     }
 
     protected virtual void DamagePlayer()
@@ -39,9 +40,15 @@ public class Enemy : Character {
         myPath.RemoveAt(0);
     }
 
+    protected bool AttackIsValid()
+    {
+        return (diagonalAtk == BoardManager.IsInDiagonal(position, player.GetPosition()));
+    }
+
     protected virtual void PerformAttack()
     {
-        DamagePlayer();
+        if(AttackIsValid())
+            DamagePlayer();
     }
 
     public override void TakeDamage(float damage)
@@ -53,10 +60,10 @@ public class Enemy : Character {
 
     public virtual void DoAction()
     {
-        if (BoardManager.Distance(position,player.GetPosition()) <= atkRange)
+        if (BoardManager.Distance(position,player.GetPosition()) <= atkRange && AttackIsValid())
         {
-
-             Debug.Log("close enough " + BoardManager.Distance(position, player.GetPosition()));
+            // Debug.Log("close enough " + BoardManager.Distance(position, player.GetPosition()));
+            //Debug.Log(atkRange);
             PerformAttack();
             return;
         }

@@ -9,6 +9,9 @@ public class RockEnemy : Enemy {
     int currentCD = 0;
     protected override void PerformAttack()
     {
+        if (!AttackIsValid())
+            return;
+
         if (currentCD <= 0 && StunPlayer())
         {
             currentCD = stunCD;
@@ -17,7 +20,7 @@ public class RockEnemy : Enemy {
         }else if(currentCD > 0)
             currentCD--;
 
-        base.DamagePlayer();
+        base.PerformAttack();
     }
 
     bool StunPlayer()

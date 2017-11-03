@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public Transform tilePrefab, obstaclePrefab, blockPrefab, player, exitPrefab;
+    public Transform tilePrefab, blockPrefab, player, exitPrefab;
     public List<Transform> enemyPrefab = new List<Transform>();
+    public List<Transform> trapPrefab = new List<Transform>();
     public Vector2 mapSize;
     public int maxNumberOfObstacles = 3;
     [Range(0, 1)]
@@ -99,6 +100,7 @@ public class MapGenerator : MonoBehaviour
                 Vector3 tilePosition = CoordToPosition(x, y);
                 Transform newTile = (Transform)Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
                 newTile.localScale = Vector3.one * (1 - outlinePercent);
+                newTile.GetComponent<SpecialTile>().SetPosition(new Coord(x, y));
                 newTile.parent = groundHolder.transform;
             }
         }
@@ -132,7 +134,7 @@ public class MapGenerator : MonoBehaviour
                 placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
                 if (placeObstacle)
                 {
-                    currentObstacle = obstaclePrefab;
+                    currentObstacle = trapPrefab[Random.Range(0,trapPrefab.Count)];
                     obstaclesPlaced++;
                 }
             }

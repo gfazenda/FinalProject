@@ -188,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0032129e9e949e4695c5592c6c1c750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawPath: 0
   seeker: {fileID: 0}
   target: {fileID: 0}
 --- !u!114 &114596921507774626
@@ -278,8 +279,12 @@ MonoBehaviour:
     x: 0
     y: 0
   characterType: 3
-  atkRange: 1
+  deathParticle: {fileID: 1265611803004274, guid: bd25d9843433b304a916a8e37c20610c,
+    type: 2}
+  range: 1
+  diagonalAtk: 0
   stunChance: 0.2
+  stunCD: 3
 --- !u!114 &114973447242484030
 MonoBehaviour:
   m_ObjectHideFlags: 1

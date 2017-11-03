@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -58,6 +58,11 @@ public class UXManager : MonoBehaviour {
     void UpdatePlayerDamage()
     {
         dmgText.text = System.Math.Round(BoardManager.Instance._playerScript.damage, 1).ToString();
+    }
+
+    public bool TouchOverUI(int id)
+    {
+        return EventSystem.current.IsPointerOverGameObject(id);
     }
 
     public void DisableButtons()

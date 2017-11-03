@@ -296,6 +296,7 @@ MonoBehaviour:
   lerp: 1
   scaleImage: 1
   hideBar: 1
+  healthInPercent: 0
   hpBar: {fileID: 1916801840942814}
 --- !u!114 &114316040784626638
 MonoBehaviour:
@@ -308,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0032129e9e949e4695c5592c6c1c750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawPath: 0
   seeker: {fileID: 0}
   target: {fileID: 0}
 --- !u!114 &114434341578201480
@@ -323,11 +325,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   damage: 2
+  yHeight: 0.5
   position:
     x: 0
     y: 0
   characterType: 3
-  atkRange: 1
+  deathParticle: {fileID: 0}
+  range: 1
+  diagonalAtk: 0
 --- !u!114 &114541144567469872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -361,6 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 30
+  maxHP: 0
   healthAmount: 0
 --- !u!135 &135385497587449518
 SphereCollider:

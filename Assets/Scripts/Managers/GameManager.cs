@@ -39,11 +39,17 @@ public class GameManager : MonoBehaviour {
         //EventManager.StartListening(Events.LevelLost, ReloadLevel);
 
         if (!initialized)
+        {
             Initialize();
-
-        SceneManager.sceneLoaded += InitializeLevel;
+            print("do loaginddfsfdf");
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EventManager.TriggerEvent(Events.LevelLoaded);
+    }
 
     private void Initialize()
     {
@@ -60,7 +66,6 @@ public class GameManager : MonoBehaviour {
     {
         EventManager.StopListening(Events.EnemiesTurn, CallEnemyActions);
         EventManager.StopListening(Events.EnemiesCreated, PopulateEnemies);
-
         EventManager.StopListening(Events.LevelWon, NextLevel);
         EventManager.StopListening(Events.LevelLost, ReloadLevel);
     }
@@ -71,7 +76,6 @@ public class GameManager : MonoBehaviour {
         Debug.Log("load");
         currentLevel++;
         enemies = new List<GameObject>();
-      //  Unsubscribe();
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
     }
@@ -80,19 +84,9 @@ public class GameManager : MonoBehaviour {
     {
         Debug.Log("reload");
         enemies = new List<GameObject>();
-     //   Unsubscribe();
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
     }
-
-    void InitializeLevel(Scene scene, LoadSceneMode mode)
-    {
-        //BoardManager.Instance.DoInitialize();
-        EventManager.TriggerEvent(Events.LevelLoaded);
-    }
-
-
-
 
     private void PopulateEnemies()
     {
@@ -132,7 +126,8 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(DoEnemiesAction());
         else
         {
-            Invoke("CallPlayerTurn", 0.1f);
+            // Invoke("CallPlayerTurn", 0.1f);
+            CallPlayerTurn();
         }
 
     }

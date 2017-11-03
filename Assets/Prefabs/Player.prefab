@@ -161,6 +161,8 @@ GameObject:
   - component: {fileID: 114752086632357666}
   - component: {fileID: 114212167879367126}
   - component: {fileID: 65609793662525780}
+  - component: {fileID: 114984963098165240}
+  - component: {fileID: 114678887679230620}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -359,11 +361,17 @@ MonoBehaviour:
     x: 0
     y: 0
   characterType: 1
+  deathParticle: {fileID: 1265611803004274, guid: bd25d9843433b304a916a8e37c20610c,
+    type: 2}
   manaPool: 100
   overchargeManacost: 5
   mineManacost: 10
   overchargeTurns: 3
   damagePrefab: {fileID: 1589254335494676}
+  _skillList:
+  - {fileID: 114665188727847092, guid: 79a4bafb75dde71438be16a705b91fb3, type: 2}
+  - {fileID: 114605390912112830, guid: 0f15f9a3ccbfa974eaee97d361005e71, type: 2}
+  - {fileID: 114084709402066140, guid: 114ab5283e0f6c84ca01ed3dfeb2422e, type: 2}
 --- !u!114 &114373715926148422
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -375,7 +383,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aae4efd84df6fb48a45be895062e74b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minePrefab: {fileID: 1042430178194326, guid: 32c0cf23c512faa429279f612397b3e9, type: 2}
+  name: 
+  manacost: 0
+  damage: 0
+  cooldown: 0
 --- !u!114 &114652119320368524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -424,6 +435,17 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114678887679230620
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1880381455124804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164353809b1709441b6438e0dd678dad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114752086632357666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -506,6 +528,18 @@ MonoBehaviour:
   HP: 100
   maxHP: 0
   healthAmount: 0
+--- !u!114 &114984963098165240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1880381455124804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5e502349448e794cad1cf6cd49240cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skills: []
 --- !u!198 &198140278404948060
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -38,6 +38,7 @@ public static class Tags
     public const string Mine = "Mine";
     public const string Explosion = "Explosion";
     public const string ElectricExplosion = "ElectricExplosion";
+    public const string Ground = "Ground";
 
 }
 

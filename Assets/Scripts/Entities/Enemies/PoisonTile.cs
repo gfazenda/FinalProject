@@ -8,17 +8,19 @@ public class PoisonTile : SpecialTile {
 
 	// Use this for initialization
 	void Start () {
-        EventManager.StartListening(Events.EnemiesTurn, DecreaseTurn);
+       
     }
 
     private void OnEnable()
     {
         turnsAlive = turnsToLive;
+        EventManager.StartListening(Events.EnemiesTurn, DecreaseTurn);
         this.GetComponent<Collider>().enabled = true;
     }
 
     private void OnDisable()
     {
+        EventManager.StopListening(Events.EnemiesTurn, DecreaseTurn);
         this.GetComponent<Collider>().enabled = false;
     }
 

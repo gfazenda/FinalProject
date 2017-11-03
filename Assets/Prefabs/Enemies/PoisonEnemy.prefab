@@ -226,7 +226,10 @@ MonoBehaviour:
     x: 0
     y: 0
   characterType: 3
-  atkRange: 1
+  deathParticle: {fileID: 1265611803004274, guid: bd25d9843433b304a916a8e37c20610c,
+    type: 2}
+  range: 1
+  diagonalAtk: 0
 --- !u!114 &114282874856948210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -244,6 +247,7 @@ MonoBehaviour:
   lerp: 1
   scaleImage: 1
   hideBar: 1
+  healthInPercent: 0
   hpBar: {fileID: 1916801840942814}
 --- !u!114 &114316040784626638
 MonoBehaviour:
@@ -256,6 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0032129e9e949e4695c5592c6c1c750, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawPath: 0
   seeker: {fileID: 0}
   target: {fileID: 0}
 --- !u!114 &114541144567469872
@@ -291,6 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 35
+  maxHP: 0
   healthAmount: 0
 --- !u!136 &136940034356184878
 CapsuleCollider:

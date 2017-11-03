@@ -28,7 +28,7 @@ public class BoardManager : MonoBehaviour
     //List<int> gameBoard = new List<int>();
     int mapWidth, mapHeight, markerCount = 0;
     List<GameObject> mapObstacles = new List<GameObject>();
-    bool showingMarkers = false;
+    bool showingMarkers = false, boardCreated = false;
 
     public Player _playerScript;
     public List<GameObject> markers = new List<GameObject>();
@@ -45,16 +45,11 @@ public class BoardManager : MonoBehaviour
 
     #region Initialization
 
-    void Start()
-    {
-        Debug.Log("start");
-        // DoInitialize();
-
-    }
-
     public void DoInitialize()
     {
+        if (boardCreated) return;
         Debug.Log("initializing");
+        
         _mapGenerator = this.GetComponent<MapGenerator>();
 
         mapWidth = (int)_mapGenerator.mapSize.x;
@@ -72,7 +67,7 @@ public class BoardManager : MonoBehaviour
 
 
         exitCoord = _mapGenerator.exitCoord;
-
+        boardCreated = true;
         InitializeGrid();
         InitializeBoard();
     }
@@ -186,9 +181,17 @@ public class BoardManager : MonoBehaviour
 
     public Vector3 CoordToPosition(Coord pos, bool marker = true)
     {
-        int yPos = 2;
-        if (!marker) yPos = 1;
+        float yPos = 0.5f;
+        if (!marker) yPos = 1f;
         return new Vector3(-mapWidth / 2 + 0.5f + pos.x, yPos, -mapHeight / 2 + 0.5f + pos.y);
+    }
+
+    public Coord PositionToCoord(Vector3 pos)
+    {
+        int a = (int) (pos.x / ((float)mapWidth)  + 0.5f);
+        int b = (int)(pos.z / ((float)mapHeight) + 0.5f);
+        Debug.Log(a + " " + b);
+        return new Coord(a, b);
     }
 
     public tileType GetPositionType(Coord pos)
@@ -262,6 +265,11 @@ public class BoardManager : MonoBehaviour
         Vector2 pointA = new Vector2((float)a.x, (float)a.y);
         Vector2 pointB = new Vector2((float)b.x, (float)b.y);
         return Vector2.Distance(pointA, pointB);
+    }
+
+    public static bool IsInDiagonal(Coord a, Coord b)
+    {
+        return (a.x != b.x && a.y != b.y);
     }
 
     public List<KeyValuePair<tileType, Coord>> GetNeighbours(Coord pos, int radius, tileType[] types, bool diagonal = false)

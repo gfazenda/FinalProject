@@ -12,15 +12,17 @@ public class Character : MonoBehaviour {
 
     public float yHeight = 0.5f;
     float step;
-    protected bool moving = false;
+    protected bool moving = false, finishedMove = false;
     protected Vector3 targetPos, lookPos;
     public Coord position = new Coord();
 
-   public BoardManager.tileType characterType;
+    public BoardManager.tileType characterType;
 
-   protected Entity _entityScript;
+    protected Entity _entityScript;
 
     protected int waitingTurns = 0;
+
+    public GameObject deathParticle;
 
     protected void Start()
     {
@@ -59,7 +61,9 @@ public class Character : MonoBehaviour {
     protected void SetMoving()
     {
         moving = true;
-        StartCoroutine(Move2());
+        finishedMove = false;
+        //StartCoroutine(Move2());
+        Move();
        // transform.LookAt(lookPos);
     }
 
@@ -71,6 +75,7 @@ public class Character : MonoBehaviour {
         if (_entityScript.Dead())
         {
             this.gameObject.SetActive(false);
+            Instantiate(deathParticle, this.transform.position, this.transform.rotation);
             BoardManager.Instance.SetEmptyPosition(position);
         }
     }
@@ -87,8 +92,9 @@ public class Character : MonoBehaviour {
         {
             Move();
         }
-        else
+        else if (moving && transform.position == targetPos)
         {
+            finishedMove = true;
             moving = false;
         }
     }
