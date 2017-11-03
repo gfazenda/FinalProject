@@ -17,7 +17,7 @@ public class UXManager : MonoBehaviour {
 
     HealthBar hpScript, manaScript;
     bool skillsEnabled = true;
-    public Button overcharge, mine;
+    public Button overcharge, mine, missile;
 
     private void Awake()
     {
@@ -70,6 +70,7 @@ public class UXManager : MonoBehaviour {
         Debug.Log("disable");
         overcharge.interactable = false;
         mine.interactable = false;
+        missile.interactable = false;
     }
 
     public void EnableButtons()
@@ -78,6 +79,7 @@ public class UXManager : MonoBehaviour {
       //  skillsEnabled = BoardManager.Instance._playerScript.CanAct();
         overcharge.interactable = true;
         mine.interactable = true;
+        missile.interactable = true;
     }
 
 
@@ -85,6 +87,7 @@ public class UXManager : MonoBehaviour {
     {
         overcharge.onClick.AddListener(CallOvercharge);
         mine.onClick.AddListener(CallPlaceMines);
+        missile.onClick.AddListener(CallMissile);
     }
 
     void ConfigureTexts()
@@ -99,6 +102,11 @@ public class UXManager : MonoBehaviour {
     void ShowLevelOverlay()
     {
         DisplayMessage("Level " + GameManager.Instance.currentLevel, 2f, textOption.top);
+    }
+
+    void CallMissile()
+    {
+        BoardManager.Instance._playerScript.ShowMissileMarkers();
     }
 
     void CallOvercharge()

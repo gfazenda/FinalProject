@@ -251,7 +251,7 @@ public class BoardManager : MonoBehaviour
                 break;
             case tileType.obstacle:
                 obsAttacked = ObstacleAt(position);
-                if (obsAttacked != null)
+                if (obsAttacked != null && obsAttacked.GetComponent<Entity>())
                 {
                     obsAttacked.GetComponent<Entity>().UpdateHealthAmount(damage);
                     obsAttacked.GetComponent<Entity>().DoHPBardUpdate();
@@ -329,7 +329,7 @@ public class BoardManager : MonoBehaviour
         showingMarkers = false;
     }
 
-    public void DisplayMarkers(Coord pos, int radius, bool diagonal = false, bool placeMines = false)
+    public void DisplayMarkers(Coord pos, int radius, bool diagonal = false, bool placeMines = false, bool missile = false)
     {
         showingMarkers = !showingMarkers;
         if (!showingMarkers)
@@ -386,8 +386,8 @@ public class BoardManager : MonoBehaviour
 
                 if (placeMines)
                     type = Marker.MarkerType.placemine;
-
-
+                else if(missile)
+                    type = Marker.MarkerType.missile;
                 //if (IsValid(newPosition))
                 //{
                 //    enable = true;

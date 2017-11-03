@@ -371,7 +371,7 @@ MonoBehaviour:
   _skillList:
   - {fileID: 114665188727847092, guid: 79a4bafb75dde71438be16a705b91fb3, type: 2}
   - {fileID: 114605390912112830, guid: 0f15f9a3ccbfa974eaee97d361005e71, type: 2}
-  - {fileID: 114084709402066140, guid: 114ab5283e0f6c84ca01ed3dfeb2422e, type: 2}
+  - {fileID: 114926328197458246, guid: 114ab5283e0f6c84ca01ed3dfeb2422e, type: 2}
 --- !u!114 &114373715926148422
 MonoBehaviour:
   m_ObjectHideFlags: 1

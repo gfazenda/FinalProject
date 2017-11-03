@@ -317,6 +317,8 @@ public class Player : Character {
                 }
                 break;
             case Actions.Missile:
+                _skills.TryGetValue("Missile", out currentSkill);
+                usedSkill = true;
                 break;
             case Actions.Mine:
                 //   UpdateMana(mineManacost);
@@ -388,9 +390,23 @@ public class Player : Character {
        PerformAction(Actions.Overcharge);
     }
 
+    public void ShowMissileMarkers()
+    {
+        _skills.TryGetValue("Missile", out currentSkill);
+        if (CanUseSpell(currentSkill.manacost))
+        {
+             BoardManager.Instance.DisplayMarkers(position, 4, false, missile:true);
+        }
+        else
+        {
+            UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
+        }
+    }
+
     public void ShowMineMarkers()
     {
-        if (CanUseSpell(mineManacost))
+        _skills.TryGetValue("RemoteMine", out currentSkill);
+        if (CanUseSpell(currentSkill.manacost))
         {
             BoardManager.Instance.DisplayMarkers(position, 3, true, true);
         }

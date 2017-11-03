@@ -5,7 +5,7 @@ using UnityEngine;
 public class Marker : MonoBehaviour {
     public Coord position = new Coord();
     public float transparency = 0.5f;
-    public enum MarkerType {movement, attack, information, placemine};
+    public enum MarkerType {movement, attack, information, placemine, missile};
     MarkerType _type;
     Material _material;
     Color currentColor;
@@ -29,6 +29,7 @@ public class Marker : MonoBehaviour {
                 currentColor = Color.green;
                 break;
             case MarkerType.attack:
+            case MarkerType.missile:
                 currentColor = Color.red;
                 break;
             case MarkerType.placemine:
@@ -59,6 +60,9 @@ public class Marker : MonoBehaviour {
                 break;
             case MarkerType.attack:
                 BoardManager.Instance.SetPlayerAction(Player.Actions.BasicAtk, position);
+                break;
+            case MarkerType.missile:
+                BoardManager.Instance.SetPlayerAction(Player.Actions.Missile, position);
                 break;
             case MarkerType.information:
                 break;
