@@ -57,7 +57,6 @@ GameObject:
   - component: {fileID: 33931928724880574}
   - component: {fileID: 136940034356184878}
   - component: {fileID: 23187446436229402}
-  - component: {fileID: 114316040784626638}
   - component: {fileID: 114282874856948210}
   - component: {fileID: 114224189209137796}
   - component: {fileID: 114971917525057832}
@@ -220,7 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  damage: 4
+  damage: 5
   yHeight: 0.5
   position:
     x: 0
@@ -249,20 +248,6 @@ MonoBehaviour:
   hideBar: 1
   healthInPercent: 0
   hpBar: {fileID: 1916801840942814}
---- !u!114 &114316040784626638
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1870280751103708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0032129e9e949e4695c5592c6c1c750, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawPath: 0
-  seeker: {fileID: 0}
-  target: {fileID: 0}
 --- !u!114 &114541144567469872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -295,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd51d9b143f995b40aafd26dbd141ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 35
+  HP: 40
   maxHP: 0
   healthAmount: 0
 --- !u!136 &136940034356184878

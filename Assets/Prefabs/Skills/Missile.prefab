@@ -56,3 +56,4 @@ MonoBehaviour:
   damage: 100
   cooldown: 20
   turnsToImpact: 2
+  missile: {fileID: 1823346046616786, guid: afcd9291b6a160e449c5106217707f90, type: 2}

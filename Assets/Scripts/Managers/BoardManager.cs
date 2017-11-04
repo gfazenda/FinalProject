@@ -247,7 +247,7 @@ public class BoardManager : MonoBehaviour
         switch (GetPositionType(position))
         {
             case tileType.enemy:
-                GameManager.Instance.EnemyDamaged(damage, position);
+                EnemyCoordinator.Instance.EnemyDamaged(damage, position);
                 break;
             case tileType.obstacle:
                 obsAttacked = ObstacleAt(position);

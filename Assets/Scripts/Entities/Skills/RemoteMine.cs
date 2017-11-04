@@ -53,7 +53,7 @@ public class RemoteMine : SpecialTile {
         {
             BoardManager.Instance.InstantiateEffect(Tags.Explosion, t.Value);
             if (t.Key == BoardManager.tileType.enemy)
-                GameManager.Instance.EnemyDamaged(damage, t.Value);
+                EnemyCoordinator.Instance.EnemyDamaged(damage, t.Value);
         }
     }
 

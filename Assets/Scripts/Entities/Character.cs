@@ -24,6 +24,9 @@ public class Character : MonoBehaviour {
 
     public GameObject deathParticle;
 
+    float moveTimer = 0;
+    float moveDuration = 0.3f;
+
     protected void Start()
     {
         _entityScript = this.GetComponent<Entity>();
@@ -60,10 +63,18 @@ public class Character : MonoBehaviour {
 
     protected void SetMoving()
     {
-        moving = true;
-        finishedMove = false;
-        //StartCoroutine(Move2());
-        Move();
+       // if (characterType == BoardManager.tileType.player)
+        {
+            moving = true;
+            finishedMove = false;
+            moveTimer = 0;
+            //
+            Move();
+        }
+        //else
+        //{
+        //    StartCoroutine(Move2());
+        //}
        // transform.LookAt(lookPos);
     }
 
@@ -88,6 +99,9 @@ public class Character : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        //if (characterType != BoardManager.tileType.player)
+        //    return;
+
         if (moving && transform.position != targetPos)
         {
             Move();
@@ -101,8 +115,11 @@ public class Character : MonoBehaviour {
 
     protected void Move()
     {
-        float step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+        moveTimer += Time.deltaTime;
+        float step = moveTimer / moveDuration;
+        //transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
+
+        transform.position = Vector3.Lerp(transform.position, targetPos, step);
     }
 
     IEnumerator Move2()
@@ -111,7 +128,7 @@ public class Character : MonoBehaviour {
         {
             step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
         }
       
         moving = false;

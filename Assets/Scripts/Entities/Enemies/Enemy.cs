@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AStar))]
+//[RequireComponent(typeof(AStar))]
 public class Enemy : Character {
     public float range = 1;
     protected float atkRange;
@@ -11,10 +11,11 @@ public class Enemy : Character {
     protected Player player = null;
     int failedAttempts = 0;
     public bool diagonalAtk = false;
+
     void CreatePath()
     {        
         playerPosition = player.GetPosition();
-        myPath = this.GetComponent<AStar>().FindPath(this.position, playerPosition);
+        myPath = EnemyCoordinator.Instance.GetPath(this.position, playerPosition);//this.GetComponent<AStar>().FindPath(this.position, playerPosition);
     }
 
     public void Initialize()
@@ -29,15 +30,13 @@ public class Enemy : Character {
         LookAtCoord(player.GetPosition());
     }
 
-    //private void OnLevelWasLoaded(int level)
-    //{
-    //    this.gameObject.SetActive(true);
-    //}
-
     protected virtual void PerformMove()
     {
-        this.SetPosition(myPath[0]);
-        myPath.RemoveAt(0);
+        if (BoardManager.Distance(myPath[0], position) == 1)
+        {
+            this.SetPosition(myPath[0]);
+            myPath.RemoveAt(0);
+        }
     }
 
     protected bool AttackIsValid()
@@ -67,22 +66,21 @@ public class Enemy : Character {
             PerformAttack();
             return;
         }
+        
 
-
-        if(playerPosition == null || playerPosition != player.GetComponent<Player>().GetPosition() || myPath.Count == 0)
+        if (playerPosition == null || playerPosition != player.GetComponent<Player>().GetPosition() || myPath.Count == 0)
         {           
             CreatePath();
            // Debug.Log("repath");
         }
         if (myPath.Count == 0)
             return;
-       // Debug.Log("count " + myPath.Count);
+        // Debug.Log("count " + myPath.Count);
         //Debug.Log("dist " + BoardManager.Instance.Distance(position, player.GetPosition()));
         if (BoardManager.Instance.GetPositionType(myPath[0]) == BoardManager.tileType.ground)
         {
             PerformMove();
-        }
-        else
+        }else
         {
             failedAttempts++;
             if (failedAttempts >= 3)

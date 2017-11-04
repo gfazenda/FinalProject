@@ -118,13 +118,13 @@ public class Player : Character {
     {
         if (waitingTurns > 0)
         {
-            timer = GameManager.Instance.GetEnemyTurnDuration();
+            timer = EnemyCoordinator.Instance.GetEnemyTurnDuration();
             ShowWaiting();
             if (waitingTurns <= (overchargeTurns - 1))
             {
                 DisableExplosions();
             }
-            Invoke("SetEnemiesTurn", (timer * 2));
+            Invoke("SetEnemiesTurn", (timer));
             // Debug.Log("s1");
             return false;
         }
@@ -371,7 +371,7 @@ public class Player : Character {
         {
             explosions.Add(BoardManager.Instance.InstantiateEffect(Tags.ElectricExplosion, t.Value));
             if (t.Key == BoardManager.tileType.enemy)
-                GameManager.Instance.EnemyDamaged((damage*3), t.Value);
+                EnemyCoordinator.Instance.EnemyDamaged((damage*3), t.Value);
         }
     }
 
@@ -395,7 +395,7 @@ public class Player : Character {
         _skills.TryGetValue("Missile", out currentSkill);
         if (CanUseSpell(currentSkill.manacost))
         {
-             BoardManager.Instance.DisplayMarkers(position, 4, false, missile:true);
+             BoardManager.Instance.DisplayMarkers(position, 4, true, missile:true);
         }
         else
         {

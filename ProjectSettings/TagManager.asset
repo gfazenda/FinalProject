@@ -11,6 +11,7 @@ TagManager:
   - Explosion
   - ElectricExplosion
   - Ground
+  - PoisonExplosion
   layers:
   - Default
   - TransparentFX

@@ -23,7 +23,7 @@ public class Overcharge : Skill {
         {
             BoardManager.Instance.InstantiateEffect(Tags.ElectricExplosion, t.Value);
             if (t.Key == BoardManager.tileType.enemy)
-                GameManager.Instance.EnemyDamaged((damage * 3), t.Value);
+                EnemyCoordinator.Instance.EnemyDamaged((damage * 3), t.Value);
         }
     }
 

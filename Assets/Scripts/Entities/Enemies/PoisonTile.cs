@@ -35,6 +35,7 @@ public class PoisonTile : SpecialTile {
         {
             turnsAlive = 0;
             BoardManager.Instance._playerScript.SetStatus(PlayerStatus.statuses.poisoned);
+            BoardManager.Instance.InstantiateEffect(Tags.PoisonExplosion, position);
         }
 
         if (turnsAlive <= 0)
