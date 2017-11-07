@@ -179,6 +179,11 @@ public class BoardManager : MonoBehaviour
         gameBoard[pos.x, pos.y] = tileType.ground;
     }
 
+    public void SetInvalidPosition(Coord pos)
+    {
+        gameBoard[pos.x, pos.y] = tileType.outOfLimits;
+    }
+
     public Vector3 CoordToPosition(Coord pos, bool marker = true)
     {
         float yPos = 0.5f;

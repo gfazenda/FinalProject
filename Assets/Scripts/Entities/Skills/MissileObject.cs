@@ -44,10 +44,12 @@ public class MissileObject : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (attacking)
+        if (attacking && collision.gameObject.tag == Tags.Ground)
         {
             BoardManager.Instance.InstantiateEffect(Tags.Explosion, whereToHit);
             BoardManager.Instance.TileAttacked(whereToHit, damage);
+            BoardManager.Instance.SetInvalidPosition(whereToHit);
+            Destroy(collision.gameObject);
             Destroy(this.gameObject);
         }
     }

@@ -85,9 +85,9 @@ public class UXManager : MonoBehaviour {
 
     void ConfigureButtons()
     {
-        overcharge.onClick.AddListener(CallOvercharge);
-        mine.onClick.AddListener(CallPlaceMines);
-        missile.onClick.AddListener(CallMissile);
+        overcharge.GetComponent<ButtonPress>().onClick.AddListener(CallOvercharge);
+        mine.GetComponent<ButtonPress>().onClick.AddListener(CallPlaceMines);
+        missile.GetComponent<ButtonPress>().onClick.AddListener(CallMissile);
     }
 
     void ConfigureTexts()

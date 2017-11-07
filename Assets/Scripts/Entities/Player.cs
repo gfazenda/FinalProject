@@ -51,13 +51,13 @@ public class Player : Character {
         InitializeSkills();
     }
 
-    void InitializeSkills()
-    {
-        for (int i = 0; i < _skillList.Count; i++)
+        void InitializeSkills()
         {
-            _skills.Add(_skillList[i].name, _skillList[i]);
+            for (int i = 0; i < _skillList.Count; i++)
+            {
+                _skills.Add(_skillList[i].name, _skillList[i]);
+            }
         }
-    }
 
     void PlayerTurn()
     {

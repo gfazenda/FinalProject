@@ -6,7 +6,7 @@ public class lerpColor : MonoBehaviour {
     public Color targetColor;
     float duration, currentTime;
     bool startLerp;
-    public bool changeSize = false, _colorLerp = true;
+    public bool changeSize = false, _colorLerp = true, lerpFromStart = false;
     Vector3 originalSize;
     public float scale = 2f;
 
@@ -23,6 +23,8 @@ public class lerpColor : MonoBehaviour {
         getColor();
 
         originalSize = this.transform.localScale;
+        if (lerpFromStart)
+            Lerp(0.5f);
     }
 
     void getColor()
@@ -115,6 +117,11 @@ public class lerpColor : MonoBehaviour {
        
         if(_colorLerp)
             setColor(currentColor);
+
+        //if (repeat)
+        //{
+
+        //}
         //this.GetComponent<Renderer>().material.color = currentColor;
         //this.GetComponent<SkinnedMeshRenderer>().material.color = currentColor;
         if (changeSize)

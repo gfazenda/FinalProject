@@ -125,6 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yHeight: 0.5
+  tile: {fileID: 1934932985058964, guid: d7940cd8cfab88c4c8bfe101b84478ba, type: 2}
   effectRadius: 1
 --- !u!135 &135622348671106756
 SphereCollider:
