@@ -25,6 +25,7 @@ public class MissileObject : MonoBehaviour {
     public void LookDown()
     {
         this.transform.rotation = new Quaternion(-180, 0, 0, 0);
+        this.GetComponent<Rigidbody>().isKinematic = false;
         moveDuration = 0.8f;
         attacking = true;
     }
@@ -39,7 +40,9 @@ public class MissileObject : MonoBehaviour {
         }
 
         if (transform.position == targetPos && moving)
+        {
             moving = false;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -3,14 +3,18 @@ using UnityEngine.EventSystems;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+
 public class UXManager : MonoBehaviour {
     private static UXManager _instance;
 
     public static UXManager instance { get { return _instance; } }
 
 
-    public enum textOption {middle,top,bottom};
+    public enum textOption { middle, top, bottom };
     public enum msgType { info, warning };
+
+    public enum moveDirection { Left, Right, Up, Down };
 
     public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj;
     TextMeshProUGUI middleText, topText, bottomText, dmgText;
@@ -18,6 +22,8 @@ public class UXManager : MonoBehaviour {
     HealthBar hpScript, manaScript;
     bool skillsEnabled = true;
     public Button overcharge, mine, missile;
+
+    public Button left,right,top, down;
 
     private void Awake()
     {
@@ -30,8 +36,8 @@ public class UXManager : MonoBehaviour {
             _instance = this;
         }
 
-        
-        
+
+
         ConfigureTexts();
         ConfigureButtons();
         hpScript = hpObj.GetComponent<HealthBar>();
@@ -39,20 +45,21 @@ public class UXManager : MonoBehaviour {
         // DontDestroyOnLoad(this);
         EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
         EventManager.StartListening(Events.DamageUpdate, UpdatePlayerDamage);
-        EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
-       // EventManager.StartListening(Events.PlayerTurn, EnableButtons);
+      //  EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
+        EventManager.StartListening(Events.DisableMoveButtons, () => ChangeMoveButtons(false));
+        EventManager.StartListening(Events.EnableMoveButtons, () => ChangeMoveButtons(true));
     }
 
 
     public void UpdatePlayerHP(float hp, float maxhp)
     {
-        hpScript.UpdateBarWithText(hp,maxhp);
+        hpScript.UpdateBarWithText(hp, maxhp);
     }
 
 
     public void UpdatePlayerMana(int mana, int maxMana)
     {
-        manaScript.UpdateBarWithText(mana,maxMana);
+        manaScript.UpdateBarWithText(mana, maxMana);
     }
 
     void UpdatePlayerDamage()
@@ -73,13 +80,32 @@ public class UXManager : MonoBehaviour {
         missile.interactable = false;
     }
 
-    public void EnableButtons()
+    public void ChangeMoveButtons(bool activate)
     {
-        Debug.Log("enable");
-      //  skillsEnabled = BoardManager.Instance._playerScript.CanAct();
-        overcharge.interactable = true;
-        mine.interactable = true;
-        missile.interactable = true;
+        left.gameObject.SetActive(activate);
+        right.gameObject.SetActive(activate);
+        top.gameObject.SetActive(activate);
+        down.gameObject.SetActive(activate);
+
+        if (!activate)
+            DisableButtons();
+    }
+
+    public void EnableButtons(List<string> skills)
+    {
+        for (int i = 0; i < skills.Count; i++)
+        {
+            if(skills[i] == Skills.Overcharge)
+            {
+                overcharge.interactable = true;
+            }else if(skills[i] == Skills.RemoteMine)
+            {
+                mine.interactable = true;
+            }else if (skills[i] == Skills.Missile)
+            {
+                missile.interactable = true;
+            }
+        }
     }
 
 
@@ -88,6 +114,12 @@ public class UXManager : MonoBehaviour {
         overcharge.GetComponent<ButtonPress>().onClick.AddListener(CallOvercharge);
         mine.GetComponent<ButtonPress>().onClick.AddListener(CallPlaceMines);
         missile.GetComponent<ButtonPress>().onClick.AddListener(CallMissile);
+
+        left.onClick.AddListener(() => CallPlayerMove(moveDirection.Left));
+        right.onClick.AddListener(() => CallPlayerMove(moveDirection.Right));
+        top.onClick.AddListener(() => CallPlayerMove(moveDirection.Up));
+        down.onClick.AddListener(() => CallPlayerMove(moveDirection.Down));
+
     }
 
     void ConfigureTexts()
@@ -117,6 +149,30 @@ public class UXManager : MonoBehaviour {
     void CallPlaceMines()
     {
         BoardManager.Instance._playerScript.ShowMineMarkers();
+    }
+
+    public void CallPlayerMove(moveDirection dir)
+    {
+        int horizontal = 0, vertical = 0;
+        switch (dir)
+        {
+            case moveDirection.Up:
+                Debug.Log("ewrhiuwehrewhr");
+                vertical = 1;
+                break;
+            case moveDirection.Left:
+                horizontal = -1;
+                break;
+            case moveDirection.Right:
+                horizontal = 1;
+                break;
+            case moveDirection.Down:
+                vertical = -1;
+                break;
+            default:
+                break;
+        }
+        BoardManager.Instance._playerScript.TentativeMove(horizontal, vertical);
     }
 
     // Update is called once per frame

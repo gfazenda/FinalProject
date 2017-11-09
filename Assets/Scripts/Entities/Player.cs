@@ -10,7 +10,7 @@ public class Player : Character {
 
     private Vector2 touchOrigin = -Vector2.one;
 
-    bool playerTurn = true, performedAction = false, usedOverCharge = false, spellsBlocked = false, usedSkill = false;
+    bool playerTurn = true, performedAction = false, usedOverCharge = false, spellsBlocked = false, usedSkill = false, checkSkills = true;
     
     public enum Actions { Move, Overcharge, Missile, Mine, BasicAtk };
     Actions currentAction;
@@ -31,6 +31,7 @@ public class Player : Character {
     PlayerStatus _status;
 
     public List<Skill> _skillList = new List<Skill>();
+    List<string> activeSkills = new List<string>();
     Dictionary<string, Skill> _skills = new Dictionary<string, Skill>();
     Skill currentSkill = null;
 
@@ -63,8 +64,30 @@ public class Player : Character {
     {
         playerTurn = CanAct();
 
+    #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
+           EventManager.TriggerEvent(Events.EnableMoveButtons);
+    #endif
+
         if (playerTurn && !spellsBlocked)
-            UXManager.instance.EnableButtons();
+            CheckAndActivateSkills();
+    }
+
+
+    void CheckAndActivateSkills()
+    {
+        if (checkSkills)
+        {
+            activeSkills.Clear();
+            foreach (KeyValuePair<string, Skill> skill in _skills)
+            {
+                if (CanUseSpell(skill.Value.manacost)){
+                    activeSkills.Add(skill.Key);
+                }
+            }
+        }
+
+        UXManager.instance.EnableButtons(activeSkills);
+        checkSkills = false;
     }
 
     void SetEnemiesTurn()
@@ -239,7 +262,7 @@ public class Player : Character {
         return (Mathf.Abs(xswipe) > minimumXswipe || Mathf.Abs(yswipe) > minimumYswipe);
     }
 
-    private void TentativeMove(int horizontal, int vertical)
+    public void TentativeMove(int horizontal, int vertical)
     {
         tentativePos = new Coord(position);
         tentativePos.x += horizontal;
@@ -288,12 +311,13 @@ public class Player : Character {
     void UpdateMana(int cost)
     {
         manaPool -= cost;
+        checkSkills = true;
         UXManager.instance.UpdatePlayerMana(manaPool,maxMana);
     }
 
     public void PerformAction(Actions _action, Coord target = null)
     {
-        
+        EventManager.TriggerEvent(Events.DisableMoveButtons);
         finishedMove = true;
         switch (_action)
         {

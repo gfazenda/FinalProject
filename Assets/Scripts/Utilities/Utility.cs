@@ -26,6 +26,8 @@ public static class Events
     public const string LevelLoaded = "LevelLoaded";
     public const string DamageUpdate = "DamageUpdate";
     public const string PlayerConfigured = "PlayerConfigured";
+    public const string DisableMoveButtons = "DisableMoveButtons";
+    public const string EnableMoveButtons = "EnableMoveButtons";
 }
 
 
@@ -42,5 +44,14 @@ public static class Tags
     public const string PoisonExplosion = "PoisonExplosion";
 
 }
+
+public static class Skills
+{
+    public const string Overcharge = "Overcharge";
+    public const string RemoteMine = "RemoteMine";
+    public const string Missile = "Missile";
+}
+
+
 
 

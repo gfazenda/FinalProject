@@ -47,4 +47,15 @@ public class SkillInfo : MonoBehaviour, IPointerDownHandler
         this.gameObject.SetActive(false);
     }
 
+
+    private void OnEnable()
+    {
+        EventManager.TriggerEvent(Events.DisableMoveButtons);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.TriggerEvent(Events.EnableMoveButtons);
+    }
+
 }

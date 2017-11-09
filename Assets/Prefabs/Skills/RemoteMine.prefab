@@ -53,5 +53,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: RemoteMine
   manacost: 8
-  damage: 15
+  damage: 20
   cooldown: 0
