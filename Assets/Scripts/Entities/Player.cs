@@ -112,6 +112,13 @@ public class Player : Character {
     public void BlockSpells(bool block)
     {
         spellsBlocked = block;
+        if (spellsBlocked)
+        {
+            UXManager.instance.DisableButtons();
+        }else
+        {
+            CheckAndActivateSkills();
+        }
     }
 
     private void OnMouseDown()

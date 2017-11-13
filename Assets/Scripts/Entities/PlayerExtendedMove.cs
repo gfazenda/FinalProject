@@ -219,8 +219,7 @@ public class PlayerExtendedMove : MonoBehaviour
     {
         Coord nextPos = new Coord(path[path.Count-1]);
         path.RemoveAt(path.Count-1);
-        markers[markerCount].SetActive(false);
-        markerCount--;
+        markers[path.Count-1].SetActive(false);
         if(path.Count == 0)
         {
             pathConfirmed = false;

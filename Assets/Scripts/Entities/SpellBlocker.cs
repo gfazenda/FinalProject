@@ -32,7 +32,7 @@ public class SpellBlocker : SpecialTile {
                 currTile = BoardManager.Instance.GetPositionType(currPos);
                 if (currTile != BoardManager.tileType.outOfLimits && currTile != BoardManager.tileType.obstacle)
                 {
-                    tiles.Add(Instantiate(tile, BoardManager.Instance.CoordToPosition(currPos), Quaternion.identity));
+                    tiles.Add(Instantiate(tile, BoardManager.Instance.CoordToPosition(currPos), Quaternion.identity,this.transform));
                 }
             }
         }

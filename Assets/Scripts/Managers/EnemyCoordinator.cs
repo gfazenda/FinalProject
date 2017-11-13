@@ -7,7 +7,8 @@ public class EnemyCoordinator : MonoBehaviour {
 
     public static EnemyCoordinator Instance { get { return _instance; } }
     bool configured = false;
-    float delayPerEnemy = 0.3f;
+    public bool enemiesTurn = false;
+    float turnDelay = 0.3f;
     float delay;
 
     List<GameObject> enemies = new List<GameObject>();
@@ -69,11 +70,12 @@ public class EnemyCoordinator : MonoBehaviour {
 
     public float GetEnemyTurnDuration()
     {
-        return (delayPerEnemy * enemies.Count)/2;
+        return turnDelay;
     }
 
     void CallEnemyActions()
     {
+        enemiesTurn = true;
         //   Debug.Log("enemies doing");
         if (enemies.Count > 0)
             StartCoroutine(DoEnemiesAction());
@@ -87,6 +89,7 @@ public class EnemyCoordinator : MonoBehaviour {
 
     void CallPlayerTurn()
     {
+        enemiesTurn = false;
         EventManager.TriggerEvent(Events.PlayerTurn);
     }
 
@@ -109,7 +112,7 @@ public class EnemyCoordinator : MonoBehaviour {
            
 
         }
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(turnDelay   );
         Debug.Log("player doing");
         CallPlayerTurn();
     }

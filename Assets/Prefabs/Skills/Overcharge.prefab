@@ -52,6 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Overcharge
-  manacost: 20
-  damage: 35
+  manacost: 40
+  damage: 20
   cooldown: 3

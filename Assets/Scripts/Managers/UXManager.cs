@@ -74,7 +74,7 @@ public class UXManager : MonoBehaviour {
 
     public void DisableButtons()
     {
-        if (BoardManager.Instance._playerScript.CanAct() && !BoardManager.Instance._playerScript.spellsBlocked)
+        if (!EnemyCoordinator.Instance.enemiesTurn && !BoardManager.Instance._playerScript.spellsBlocked)
             return;
 
         overcharge.interactable = false;
