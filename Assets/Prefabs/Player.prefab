@@ -367,6 +367,7 @@ MonoBehaviour:
   overchargeManacost: 5
   mineManacost: 10
   overchargeTurns: 3
+  spellsBlocked: 0
   damagePrefab: {fileID: 1589254335494676}
   _skillList:
   - {fileID: 114665188727847092, guid: 79a4bafb75dde71438be16a705b91fb3, type: 2}
@@ -446,6 +447,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 164353809b1709441b6438e0dd678dad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  markerPrefab: {fileID: 1934932985058964, guid: e895befca7762994db16e5debb20b761,
+    type: 2}
 --- !u!114 &114752086632357666
 MonoBehaviour:
   m_ObjectHideFlags: 1

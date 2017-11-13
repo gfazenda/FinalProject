@@ -6,17 +6,18 @@ public class Player : Character {
     public int manaPool = 100;
     public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
-    float timer, minimumXswipe = 100f, minimumYswipe = 100f;
+    float timer, minimumSwipe = 100f;
 
     private Vector2 touchOrigin = -Vector2.one;
 
-    bool playerTurn = true, performedAction = false, usedOverCharge = false, spellsBlocked = false, usedSkill = false, checkSkills = true;
-    
+    bool playerTurn = true, performedAction = false, usedOverCharge = false, usedSkill = false, checkSkills = true, isClcked = false;
+    public bool spellsBlocked = false;
     public enum Actions { Move, Overcharge, Missile, Mine, BasicAtk };
     Actions currentAction;
 
     MineController _mineScript;
-    
+    PlayerExtendedMove _extendedMove;
+
     BoardManager.tileType targetType;
     Coord tentativePos = new Coord();
 
@@ -25,7 +26,6 @@ public class Player : Character {
     GameObject explosion = null;
 
     List<GameObject> explosions = new List<GameObject>();
-
 
     string feedbackMessage;
     PlayerStatus _status;
@@ -39,6 +39,8 @@ public class Player : Character {
     {
         _mineScript = this.GetComponent<MineController>();
         _status = this.GetComponent<PlayerStatus>();
+        _extendedMove = this.GetComponent<PlayerExtendedMove>();
+
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
         
     }
@@ -67,6 +69,8 @@ public class Player : Character {
     #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
            EventManager.TriggerEvent(Events.EnableMoveButtons);
     #endif
+        if (_extendedMove.PathConfigured())
+            GoToNextWaypoint();
 
         if (playerTurn && !spellsBlocked)
             CheckAndActivateSkills();
@@ -113,7 +117,43 @@ public class Player : Character {
     private void OnMouseDown()
     {
         if (!moving && playerTurn)
-            BoardManager.Instance.DisplayMarkers(position, 1);
+        {
+            isClcked = !isClcked;
+            _extendedMove.PlayerClicked(isClcked);
+        }
+            //BoardManager.Instance.DisplayMarkers(position, 1);
+    }
+
+    void GoToNextWaypoint()
+    {
+        Coord nextPos = _extendedMove.NextPosition();
+        isClcked = false;
+        if (IsGround(nextPos))
+            PerformAction(Actions.Move, nextPos);
+        else
+        {
+            CancelPath();
+        }
+    }
+
+    public void ConfirmPath()
+    {
+        _extendedMove.ConfirmPath();
+        if (!_extendedMove.PathConfigured()) { 
+            isClcked = false;
+            _extendedMove.PlayerClicked(isClcked);
+        }   
+        GoToNextWaypoint();
+    }
+
+    public void CancelPath()
+    {
+        _extendedMove.CancelMovement();
+    }
+
+    bool IsGround(Coord pos)
+    {
+        return BoardManager.Instance.GetPositionType(pos) == BoardManager.tileType.ground;
     }
 
     public override void TakeDamage(float damage)
@@ -169,7 +209,7 @@ public class Player : Character {
         {
             feedbackMessage = "Actions disabled for " + waitingTurns + " turn(s)";
         }
-        UXManager.instance.DisplayMessage(feedbackMessage,timer);
+        UXManager.instance.DisplayMessage(feedbackMessage,timer*2);
     }
 
 
@@ -206,7 +246,7 @@ public class Player : Character {
         //Check if we have a non-zero value for horizontal or vertical
 
 
-        if (!moving && horizontal != 0 || vertical != 0)
+        if (!moving && horizontal != 0 || vertical != 0 && !isClcked)
         {
             Debug.Log("here");
             TentativeMove(horizontal, vertical);
@@ -226,40 +266,66 @@ public class Player : Character {
             {
                 //If so, set touchOrigin to the position of that touch
                 touchOrigin = myTouch.position;
+                return;
+            }
+
+            //Set touchEnd to equal the position of this touch
+            Vector2 touchEnd = myTouch.position;
+
+            //Calculate the difference between the beginning and end of the touch on the x axis.
+            float x = touchEnd.x - touchOrigin.x;
+
+            //Calculate the difference between the beginning and end of the touch on the y axis.
+            float y = touchEnd.y - touchOrigin.y;
+
+
+            if (!ValidSwipe(x, y))
+                return;
+
+            if (isClcked)
+            {
+                if (myTouch.phase == TouchPhase.Moved)
+                {
+
+                    if (Mathf.Abs(x) > Mathf.Abs(y))
+                    {
+                        _extendedMove.CalculateSwipe(false, x, minimumSwipe);
+                    }else
+                    {
+                        _extendedMove.CalculateSwipe(true,y, minimumSwipe);
+                    }
+
+                }
+
             }
 
             //If the touch phase is not Began, and instead is equal to Ended and the x of touchOrigin is greater or equal to zero:
             else if (myTouch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
             {
-                //Set touchEnd to equal the position of this touch
-                Vector2 touchEnd = myTouch.position;
-
-                //Calculate the difference between the beginning and end of the touch on the x axis.
-                float x = touchEnd.x - touchOrigin.x;
-
-                //Calculate the difference between the beginning and end of the touch on the y axis.
-                float y = touchEnd.y - touchOrigin.y;
-
-
-                if (!ValidSwipe(x,y))
-                    return;
+               
                 //Set touchOrigin.x to -1 so that our else if statement will evaluate false and not repeat immediately.
                 touchOrigin.x = -1;
 
                 //Check if the difference along the x axis is greater than the difference along the y axis.
                 if (Mathf.Abs(x) > Mathf.Abs(y))
-                    //If x is greater than zero, set horizontal to 1, otherwise set it to -1
+                {
                     horizontal = x > 0 ? 1 : -1;
-                else
-                    //If y is greater than zero, set horizontal to 1, otherwise set it to -1
+                }else
+                {
                     vertical = y > 0 ? 1 : -1;
+                }
+                //    //If x is greater than zero, set horizontal to 1, otherwise set it to -1
+                //    horizontal = x > 0 ? 1 : -1;
+               
+                //    //If y is greater than zero, set horizontal to 1, otherwise set it to -1
+                //    
             }
         }
     }
 
     bool ValidSwipe(float xswipe, float yswipe)
     {
-        return (Mathf.Abs(xswipe) > minimumXswipe || Mathf.Abs(yswipe) > minimumYswipe);
+        return (Mathf.Abs(xswipe) >= minimumSwipe || Mathf.Abs(yswipe) >= minimumSwipe);
     }
 
     public void TentativeMove(int horizontal, int vertical)
@@ -381,6 +447,7 @@ public class Player : Character {
         playerTurn = false;
         BoardManager.Instance.DisableMarkers();
         EventManager.TriggerEvent(Events.EnemiesTurn);
+            
     }
 
     void Overcharge()
@@ -432,7 +499,7 @@ public class Player : Character {
         _skills.TryGetValue("RemoteMine", out currentSkill);
         if (CanUseSpell(currentSkill.manacost))
         {
-            BoardManager.Instance.DisplayMarkers(position, 3, true, true);
+            BoardManager.Instance.DisplayMarkers(position, 2, true, true);
         }
         else
         {

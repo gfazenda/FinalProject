@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 224840742623625692}
   - component: {fileID: 222200703328850602}
   - component: {fileID: 114828767522676658}
+  - component: {fileID: 114465943147021446}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -165,9 +166,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0099a92c750c5a240924ecfce6bff0c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  yHeight: 0.5
   damage: 20
-  turnsToLive: 5
+  turnsToLive: 4
   turnsInfo: {fileID: 114828767522676658}
+--- !u!114 &114465943147021446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1908304238901656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!114 &114828767522676658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -180,7 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 1, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

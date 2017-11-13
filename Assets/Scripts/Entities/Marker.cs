@@ -36,7 +36,7 @@ public class Marker : MonoBehaviour {
                 currentColor = Color.cyan;
                 break;
             case MarkerType.information:
-                currentColor = Color.red;
+                currentColor = Color.yellow;
                 break;
         }
         currentColor.a = transparency;

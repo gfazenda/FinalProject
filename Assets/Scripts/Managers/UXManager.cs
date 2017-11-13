@@ -21,7 +21,7 @@ public class UXManager : MonoBehaviour {
 
     HealthBar hpScript, manaScript;
     bool skillsEnabled = true;
-    public Button overcharge, mine, missile;
+    public Button overcharge, mine, missile, path, cancelPath;
 
     public Button left,right,top, down;
 
@@ -42,10 +42,10 @@ public class UXManager : MonoBehaviour {
         ConfigureButtons();
         hpScript = hpObj.GetComponent<HealthBar>();
         manaScript = manaObj.GetComponent<HealthBar>();
-        // DontDestroyOnLoad(this);
+
         EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
         EventManager.StartListening(Events.DamageUpdate, UpdatePlayerDamage);
-      //  EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
+        EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
         EventManager.StartListening(Events.DisableMoveButtons, () => ChangeMoveButtons(false));
         EventManager.StartListening(Events.EnableMoveButtons, () => ChangeMoveButtons(true));
     }
@@ -74,7 +74,9 @@ public class UXManager : MonoBehaviour {
 
     public void DisableButtons()
     {
-        Debug.Log("disable");
+        if (BoardManager.Instance._playerScript.CanAct() && !BoardManager.Instance._playerScript.spellsBlocked)
+            return;
+
         overcharge.interactable = false;
         mine.interactable = false;
         missile.interactable = false;
@@ -82,13 +84,11 @@ public class UXManager : MonoBehaviour {
 
     public void ChangeMoveButtons(bool activate)
     {
+        return;
         left.gameObject.SetActive(activate);
         right.gameObject.SetActive(activate);
         top.gameObject.SetActive(activate);
         down.gameObject.SetActive(activate);
-
-        if (!activate)
-            DisableButtons();
     }
 
     public void EnableButtons(List<string> skills)
@@ -115,11 +115,35 @@ public class UXManager : MonoBehaviour {
         mine.GetComponent<ButtonPress>().onClick.AddListener(CallPlaceMines);
         missile.GetComponent<ButtonPress>().onClick.AddListener(CallMissile);
 
+        path.onClick.AddListener(ConfirmPlayerPath);
+        cancelPath.onClick.AddListener(CancelPlayerPath);
+
+
         left.onClick.AddListener(() => CallPlayerMove(moveDirection.Left));
         right.onClick.AddListener(() => CallPlayerMove(moveDirection.Right));
         top.onClick.AddListener(() => CallPlayerMove(moveDirection.Up));
         down.onClick.AddListener(() => CallPlayerMove(moveDirection.Down));
 
+    }
+
+    public void ShowPathButton(bool show)
+    {
+        path.gameObject.SetActive(show);
+    }
+
+    public void ShowCancelPath(bool show)
+    {
+        cancelPath.gameObject.SetActive(show);
+    }
+
+    void ConfirmPlayerPath()
+    {
+        BoardManager.Instance._playerScript.ConfirmPath();
+    }
+
+    void CancelPlayerPath()
+    {
+        BoardManager.Instance._playerScript.CancelPath();
     }
 
     void ConfigureTexts()
@@ -157,7 +181,6 @@ public class UXManager : MonoBehaviour {
         switch (dir)
         {
             case moveDirection.Up:
-                Debug.Log("ewrhiuwehrewhr");
                 vertical = 1;
                 break;
             case moveDirection.Left:
