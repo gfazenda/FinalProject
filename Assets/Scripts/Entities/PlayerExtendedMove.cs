@@ -12,7 +12,7 @@ public class PlayerExtendedMove : MonoBehaviour
 
     Player _pScript;
     Coord currentPos;
-    int markerCount = 0, arraySize = 5;
+    int markerCount = 0, arraySize = 5, currentIndex = 0;
 
     void Start()
     {
@@ -189,7 +189,7 @@ public class PlayerExtendedMove : MonoBehaviour
             CancelMovement();
             return;
         }
-
+        currentIndex = 0;
         pathConfirmed = true;
         
         UXManager.instance.ShowPathButton(false);
@@ -205,9 +205,9 @@ public class PlayerExtendedMove : MonoBehaviour
             markers[i].SetActive(true);
         }
 
-        markerCount = path.Count;
-        path.Reverse();
-        markers.Reverse();
+        //markerCount = path.Count;
+        //path.Reverse();
+        //markers.Reverse();
     }
 
     public bool PathConfigured()
@@ -217,10 +217,12 @@ public class PlayerExtendedMove : MonoBehaviour
 
     public Coord NextPosition()
     {
-        Coord nextPos = new Coord(path[path.Count-1]);
-        path.RemoveAt(path.Count-1);
-        markers[path.Count-1].SetActive(false);
-        if(path.Count == 0)
+        Coord nextPos = new Coord(path[currentIndex]);
+        
+        markers[currentIndex].SetActive(false);
+        currentIndex++;
+
+        if(currentIndex == path.Count)
         {
             pathConfirmed = false;
             CancelMovement();

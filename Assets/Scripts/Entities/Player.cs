@@ -303,6 +303,10 @@ public class Player : Character {
                     }
 
                 }
+                else if (myTouch.phase == TouchPhase.Ended)
+                {
+                    ConfirmPath();
+                }
 
             }
 
