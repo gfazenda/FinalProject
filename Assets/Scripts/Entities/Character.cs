@@ -31,7 +31,7 @@ public class Character : MonoBehaviour {
     {
         _entityScript = this.GetComponent<Entity>();
          //  position = new Coord((int)initPosition.x, (int)initPosition.y);
-         targetPos = BoardManager.Instance.CoordToPosition(position, false);
+     //    targetPos = BoardManager.Instance.CoordToPosition(position, false);
     }
 
     public virtual void SetPosition(Coord newPos)

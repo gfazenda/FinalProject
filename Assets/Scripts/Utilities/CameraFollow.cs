@@ -12,7 +12,7 @@ public class CameraFollow : MonoBehaviour
     {
         //target = GameObject.FindGameObjectWithTag(Tags.Player);
         target = BoardManager.Instance._player;
-        offset = target.transform.position - new Vector3(-4, 9, -7);//target.transform.position - transform.position;
+        offset = new Vector3(1,8,1);//target.transform.position - transform.position;
     }
 
     void LateUpdate()
@@ -21,7 +21,7 @@ public class CameraFollow : MonoBehaviour
         //float desiredAngle = target.transform.eulerAngles.y;
         //float angle = Mathf.LerpAngle(currentAngle, desiredAngle, Time.deltaTime * damping);
         //Quaternion rotation = Quaternion.Euler(0, angle, 0);
-        transform.position = target.transform.position - (/*rotation **/ offset);
+        transform.position = target.transform.position + (/*rotation **/ offset);
 
         //transform.LookAt(target.transform);
     }

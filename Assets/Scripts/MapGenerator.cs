@@ -188,9 +188,10 @@ public class MapGenerator : MonoBehaviour
     {
         Vector3 enemyPosition = CoordToPosition(position.x, position.y, false);
         Transform newEnemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
-        enemyCoords.Add(newEnemy.gameObject);
+       
         newEnemy.gameObject.GetComponent<Enemy>().position = (position);
         newEnemy.parent = enemiesHolder;
+        enemyCoords.Add(newEnemy.gameObject);
         return newEnemy;
     }
 
@@ -254,7 +255,9 @@ public class MapGenerator : MonoBehaviour
     {
         int yPos = 0;
         if (!ground) yPos = 1;
-        return new Vector3(-mapSize.x / 2 + 0.5f + x, yPos, -mapSize.y / 2 + 0.5f + y);
+        float xOffset = (mapSize.x % 2 == 0) ? 0.5f : -0.5f;
+        float yOffset = (mapSize.y % 2 == 0) ? 0.5f : -0.5f;
+        return new Vector3(-mapSize.x / 2 + xOffset + x, yPos, -mapSize.y / 2 + yOffset + y);
     }
 
     public Coord GetRandomCoord()
@@ -269,7 +272,7 @@ public class MapGenerator : MonoBehaviour
         mapSize = new Vector2(size.x, size.y);
     }
 
-    public void CreateBoardFromFile(LevelInformation level)
+    public BoardManager.tileType[,] CreateBoardFromFile(LevelInformation level)
     {
         InitializeVariables();
         InitializeMap();
@@ -277,13 +280,13 @@ public class MapGenerator : MonoBehaviour
         Coord currentCoord;
         int currentObj;
         mapSize = level.mapSize;
+        BoardManager.tileType[,] map = new BoardManager.tileType[(int)mapSize.x,(int)mapSize.y];
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
             {
-                Debug.Log("wtf " + x + y);
                  currentCoord = new Coord(x, y);
-                 currentObj = level.objects[x, y];
+                 currentObj = level.objects[x, ((int)(mapSize.y - 1) - y)];
                 if ((BoardManager.tileType)currentObj == BoardManager.tileType.outOfLimits)
                 {
                     continue;
@@ -292,11 +295,11 @@ public class MapGenerator : MonoBehaviour
                 {
                     InstantiatePrefab(currentCoord, groundPrefab, groundHolder,true);
                 }
-
+                map[x, y] = (BoardManager.tileType)currentObj;
                 switch ((BoardManager.tileType)currentObj)
                 {
                     case BoardManager.tileType.enemy:
-                        enemyCoords.Add(InstantiateEnemy(currentCoord).gameObject);
+                        InstantiateEnemy(currentCoord);
                         break;
                     case BoardManager.tileType.player:
                         playerCoord = new Coord(currentCoord);
@@ -307,7 +310,9 @@ public class MapGenerator : MonoBehaviour
                         wallCoords.Add(currentCoord);
                         break;
                     case BoardManager.tileType.obstacle:
-                        obstacleCoords.Add(InstantiatePrefab(currentCoord, trapPrefab[Random.Range(0, trapPrefab.Count - 1)], blocksHolder).gameObject);
+                        Transform currObs = InstantiatePrefab(currentCoord, trapPrefab[Random.Range(0, trapPrefab.Count - 1)], blocksHolder);
+                        obstacleCoords.Add(currObs.gameObject);
+                        currObs.GetComponent<SpecialTile>().SetPosition(currentCoord);
                         break;
                     case BoardManager.tileType.exit:
                         exitCoord = new Coord(currentCoord);
@@ -317,7 +322,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-
+        return map;
 
     }
 

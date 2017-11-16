@@ -255,7 +255,6 @@ public class Player : Character {
 
         if (!moving && horizontal != 0 || vertical != 0 && !isClcked)
         {
-            Debug.Log("here");
             TentativeMove(horizontal, vertical);
         }
     }
@@ -370,7 +369,6 @@ public class Player : Character {
         }
         else if ((targetType == BoardManager.tileType.ground))
         {
-            Debug.Log("here2");
             PerformAction(Actions.Move, tentativePos);
         }
         else if (targetType == BoardManager.tileType.exit)

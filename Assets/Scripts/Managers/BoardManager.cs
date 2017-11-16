@@ -57,7 +57,8 @@ public class BoardManager : MonoBehaviour
             LevelInformation currentBoard = GameManager.Instance.LoadLevelFile();
             mapHeight = (int)currentBoard.mapSize.y;
             mapWidth = (int)currentBoard.mapSize.x;
-            _mapGenerator.CreateBoardFromFile(currentBoard);
+            gameBoard = new tileType[mapWidth, mapHeight];
+            gameBoard = _mapGenerator.CreateBoardFromFile(currentBoard);
         }
         else
         {
@@ -67,7 +68,7 @@ public class BoardManager : MonoBehaviour
             _mapGenerator.GenerateMap();
         }
 
-        gameBoard = new tileType[mapWidth, mapHeight];
+       
         gameGrid = new Node[mapWidth, mapHeight];
 
         _player = _mapGenerator.GetPlayer();
@@ -85,38 +86,38 @@ public class BoardManager : MonoBehaviour
     void InitializeBoard()
     {
 
-        for (int x = 0; x < mapWidth; x++)
-        {
-            for (int y = 0; y < mapHeight; y++)
-            {
-                gameBoard[x, y] = tileType.ground;
-            }
-        }
+        //for (int x = 0; x < mapWidth; x++)
+        //{
+        //    for (int y = 0; y < mapHeight; y++)
+        //    {
+        //        gameBoard[x, y] = tileType.ground;
+        //    }
+        //}
 
-        List<Coord> walls = _mapGenerator.GetWalls();
-        for (int i = 0; i < walls.Count; i++)
-        {
-            gameBoard[walls[i].x, walls[i].y] = tileType.wall;
-        }
+        //List<Coord> walls = _mapGenerator.GetWalls();
+        //for (int i = 0; i < walls.Count; i++)
+        //{
+        //    gameBoard[walls[i].x, walls[i].y] = tileType.wall;
+        //}
 
-        mapObstacles = _mapGenerator.GetObstacles();
-        for (int i = 0; i < mapObstacles.Count; i++)
-        {
-            Coord position = mapObstacles[i].GetComponent<SpecialTile>().GetPosition();
-            gameBoard[position.x, position.y] = tileType.obstacle;
-        }
+        //mapObstacles = _mapGenerator.GetObstacles();
+        //for (int i = 0; i < mapObstacles.Count; i++)
+        //{
+        //    Coord position = mapObstacles[i].GetComponent<SpecialTile>().GetPosition();
+        //    gameBoard[position.x, position.y] = tileType.obstacle;
+        //}
 
-        /* List<Coord> */
+        ///* List<Coord> */
         listOfEnemies = _mapGenerator.GetEnemies();
-        for (int i = 0; i < listOfEnemies.Count; i++)
-        {
-            Coord position = listOfEnemies[i].GetComponent<Enemy>().GetPosition();
-            gameBoard[position.x, position.y] = tileType.enemy;
-        }
+        //for (int i = 0; i < listOfEnemies.Count; i++)
+        //{
+        //    Coord position = listOfEnemies[i].GetComponent<Enemy>().GetPosition();
+        //    gameBoard[position.x, position.y] = tileType.enemy;
+        //}
         EventManager.TriggerEvent(Events.EnemiesCreated);
 
-        gameBoard[_mapGenerator.exitCoord.x, _mapGenerator.exitCoord.y] = tileType.exit;
-        gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.player;
+        //gameBoard[_mapGenerator.exitCoord.x, _mapGenerator.exitCoord.y] = tileType.exit;
+        //gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.player;
     }
 
     void InitializeGrid()
@@ -198,16 +199,11 @@ public class BoardManager : MonoBehaviour
     {
         float yPos = 0.5f;
         if (!marker) yPos = 1f;
-        return new Vector3(-mapWidth / 2 + 0.5f + pos.x, yPos, -mapHeight / 2 + 0.5f + pos.y);
+        float xOffset = (mapWidth % 2 == 0) ? 0.5f : -1f;
+        float yOffset = (mapHeight % 2 == 0) ? 0.5f : -1f;      
+        return new Vector3((-mapWidth / 2 + xOffset) + pos.x, yPos, (-mapHeight / 2 + yOffset) + pos.y);
     }
 
-    public Coord PositionToCoord(Vector3 pos)
-    {
-        int a = (int) (pos.x / ((float)mapWidth)  + 0.5f);
-        int b = (int)(pos.z / ((float)mapHeight) + 0.5f);
-        Debug.Log(a + " " + b);
-        return new Coord(a, b);
-    }
 
     public tileType GetPositionType(Coord pos)
     {
