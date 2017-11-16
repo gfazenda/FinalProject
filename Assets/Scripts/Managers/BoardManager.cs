@@ -7,7 +7,7 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
-    public enum tileType { ground, player, wall, enemy, exit, obstacle, outOfLimits };
+    public enum tileType { outOfLimits, ground, wall, obstacle , enemy, player, exit  };
 
     MapGenerator _mapGenerator;
     public GameObject _player;
@@ -52,13 +52,23 @@ public class BoardManager : MonoBehaviour
         
         _mapGenerator = this.GetComponent<MapGenerator>();
 
-        mapWidth = (int)_mapGenerator.mapSize.x;
-        mapHeight = (int)_mapGenerator.mapSize.y;
+        if (GameManager.Instance.currentLevel < 10)
+        {
+            LevelInformation currentBoard = GameManager.Instance.LoadLevelFile();
+            mapHeight = (int)currentBoard.mapSize.y;
+            mapWidth = (int)currentBoard.mapSize.x;
+            _mapGenerator.CreateBoardFromFile(currentBoard);
+        }
+        else
+        {
+
+            mapWidth = (int)_mapGenerator.mapSize.x;
+            mapHeight = (int)_mapGenerator.mapSize.y;
+            _mapGenerator.GenerateMap();
+        }
 
         gameBoard = new tileType[mapWidth, mapHeight];
         gameGrid = new Node[mapWidth, mapHeight];
-
-        _mapGenerator.GenerateMap();
 
         _player = _mapGenerator.GetPlayer();
         _playerScript = _player.GetComponent<Player>();

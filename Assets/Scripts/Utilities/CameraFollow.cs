@@ -12,7 +12,7 @@ public class CameraFollow : MonoBehaviour
     {
         //target = GameObject.FindGameObjectWithTag(Tags.Player);
         target = BoardManager.Instance._player;
-        offset = target.transform.position - transform.position;
+        offset = target.transform.position - new Vector3(-4, 9, -7);//target.transform.position - transform.position;
     }
 
     void LateUpdate()

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public Transform tilePrefab, blockPrefab, player, exitPrefab;
+    public Transform groundPrefab, blockPrefab, player, exitPrefab;
     public List<Transform> enemyPrefab = new List<Transform>();
     public List<Transform> trapPrefab = new List<Transform>();
     public Vector2 mapSize;
@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour
     int enemyCount = 0, obstacleCount = 0;
     public Coord playerCoord;
     public Coord exitCoord;
-    Transform playerObj = null, currentObstacle = null;
+    Transform playerObj = null, currentObstacle = null, mapHolder, groundHolder, enemiesHolder, blocksHolder;
     int obstaclesPlaced = 0;
     bool placeObstacle = false;
 
@@ -34,37 +34,42 @@ public class MapGenerator : MonoBehaviour
         return playerObj.gameObject;
     }
 
-    public void GenerateMap()
+    void InitializeVariables()
     {
-        enemyCount = (GameManager.Instance.currentLevel) + baseEnemyNumber;
-        obstacleCount = Random.Range(0,(GameManager.Instance.currentLevel+2)) + baseObstacleNumber;
         allTileCoords = new List<Coord>();
         wallCoords = new List<Coord>();
         obstacleCoords = new List<GameObject>();
         enemyCoords = new List<GameObject>();
+        mapHolder = new GameObject(mapObjName).transform;
+        mapHolder.parent = this.transform;
+
+        groundHolder = new GameObject("GroundObjs").transform;
+        groundHolder.parent = mapHolder.transform;
+
+        enemiesHolder = new GameObject("Enemies").transform;
+        enemiesHolder.parent = mapHolder.transform;
+
+        blocksHolder = new GameObject("Blocks").transform;
+        blocksHolder.parent = mapHolder.transform;
+
+        if (transform.Find(mapObjName))
+        {
+            DestroyImmediate(transform.Find(mapObjName).gameObject);
+        }
+    }
+
+    public void GenerateMap()
+    {
+        InitializeVariables();
+        enemyCount = (GameManager.Instance.currentLevel) + baseEnemyNumber;
+        obstacleCount = Random.Range(0,(GameManager.Instance.currentLevel+2)) + baseObstacleNumber;
+       
         exitCoord = new Coord((int)Random.Range(0, mapSize.x), (int)(mapSize.y - 1));
         obstaclesPlaced = 0;
 
         InitializeMap();
         //seed = System.DateTime.UtcNow.Millisecond;
         shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), (int)System.DateTime.Now.Ticks));
-
-        if (transform.Find(mapObjName))
-        {
-            DestroyImmediate(transform.Find(mapObjName).gameObject);
-        }
-
-        Transform mapHolder = new GameObject(mapObjName).transform;
-        mapHolder.parent = this.transform;
-
-        Transform groundHolder = new GameObject("GroundObjs").transform;
-        groundHolder.parent = mapHolder.transform;
-
-        Transform enemiesHolder = new GameObject("Enemies").transform;
-        enemiesHolder.parent = mapHolder.transform;
-
-        Transform blocksHolder = new GameObject("Blocks").transform;
-        blocksHolder.parent = mapHolder.transform;
 
         PlaceGround(groundHolder);
 
@@ -98,7 +103,7 @@ public class MapGenerator : MonoBehaviour
             for (int y = 0; y < mapSize.y; y++)
             {
                 Vector3 tilePosition = CoordToPosition(x, y);
-                Transform newTile = (Transform)Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
+                Transform newTile = (Transform)Instantiate(groundPrefab, tilePosition, Quaternion.Euler(Vector3.right * 90));
                 newTile.localScale = Vector3.one * (1 - outlinePercent);
                 newTile.GetComponent<SpecialTile>().SetPosition(new Coord(x, y));
                 newTile.parent = groundHolder.transform;
@@ -139,20 +144,25 @@ public class MapGenerator : MonoBehaviour
                 }
             }
 
-            Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
-            Transform newObstacle = Instantiate(currentObstacle, obstaclePosition, Quaternion.identity) as Transform;
-            newObstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
+            Transform obstacle = InstantiatePrefab(randomCoord, currentObstacle, blocksHolder);
+            obstacle.gameObject.GetComponent<SpecialTile>().SetPosition(randomCoord);
             if (placeObstacle)
             {
-                obstacleCoords.Add(newObstacle.gameObject);
-                
+                obstacleCoords.Add(obstacle.gameObject);
             }
             else
             {
                 wallCoords.Add(randomCoord);
             }
-            newObstacle.parent = blocksHolder;
         }
+    }
+
+    Transform InstantiatePrefab(Coord position, Transform prefab, Transform objHolder, bool ground = false)
+    {
+        Vector3 prefabPosition = CoordToPosition(position.x, position.y, ground);
+        Transform newObstacle = Instantiate(prefab, prefabPosition, Quaternion.identity) as Transform;
+        newObstacle.parent = objHolder;
+        return newObstacle;
     }
 
     private void GenerateEnemies(Transform enemiesHolder)
@@ -165,12 +175,23 @@ public class MapGenerator : MonoBehaviour
                 randomCoord = GetRandomCoord();
             }
 
-            Vector3 enemyPosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
-            Transform newEnemy = Instantiate(enemyPrefab[Random.Range(0,enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
-            enemyCoords.Add(newEnemy.gameObject);
-            newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
-            newEnemy.parent = enemiesHolder;
+            InstantiateEnemy(randomCoord);
+            //Vector3 enemyPosition = CoordToPosition(randomCoord.x, randomCoord.y, false);
+            //Transform newEnemy = Instantiate(enemyPrefab[Random.Range(0,enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
+            //enemyCoords.Add(newEnemy.gameObject);
+            //newEnemy.gameObject.GetComponent<Enemy>().position = (randomCoord);
+            //newEnemy.parent = enemiesHolder;
         }
+    }
+
+    Transform InstantiateEnemy(Coord position)
+    {
+        Vector3 enemyPosition = CoordToPosition(position.x, position.y, false);
+        Transform newEnemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
+        enemyCoords.Add(newEnemy.gameObject);
+        newEnemy.gameObject.GetComponent<Enemy>().position = (position);
+        newEnemy.parent = enemiesHolder;
+        return newEnemy;
     }
 
     void CreatePlayer()
@@ -241,6 +262,63 @@ public class MapGenerator : MonoBehaviour
         Coord randomCoord = shuffledTileCoords.Dequeue();
         shuffledTileCoords.Enqueue(randomCoord);
         return randomCoord;
+    }
+
+    public void SetMapSize(Vector2 size)
+    {
+        mapSize = new Vector2(size.x, size.y);
+    }
+
+    public void CreateBoardFromFile(LevelInformation level)
+    {
+        InitializeVariables();
+        InitializeMap();
+       // PlaceGround(groundHolder);
+        Coord currentCoord;
+        int currentObj;
+        mapSize = level.mapSize;
+        for (int x = 0; x < mapSize.x; x++)
+        {
+            for (int y = 0; y < mapSize.y; y++)
+            {
+                Debug.Log("wtf " + x + y);
+                 currentCoord = new Coord(x, y);
+                 currentObj = level.objects[x, y];
+                if ((BoardManager.tileType)currentObj == BoardManager.tileType.outOfLimits)
+                {
+                    continue;
+                }
+                else
+                {
+                    InstantiatePrefab(currentCoord, groundPrefab, groundHolder,true);
+                }
+
+                switch ((BoardManager.tileType)currentObj)
+                {
+                    case BoardManager.tileType.enemy:
+                        enemyCoords.Add(InstantiateEnemy(currentCoord).gameObject);
+                        break;
+                    case BoardManager.tileType.player:
+                        playerCoord = new Coord(currentCoord);
+                        CreatePlayer();
+                        break;
+                    case BoardManager.tileType.wall:
+                        InstantiatePrefab(currentCoord, blockPrefab, blocksHolder);
+                        wallCoords.Add(currentCoord);
+                        break;
+                    case BoardManager.tileType.obstacle:
+                        obstacleCoords.Add(InstantiatePrefab(currentCoord, trapPrefab[Random.Range(0, trapPrefab.Count - 1)], blocksHolder).gameObject);
+                        break;
+                    case BoardManager.tileType.exit:
+                        exitCoord = new Coord(currentCoord);
+                        InstantiatePrefab(exitCoord, exitPrefab, mapHolder);
+                        break;
+
+                }
+            }
+        }
+
+
     }
 
 

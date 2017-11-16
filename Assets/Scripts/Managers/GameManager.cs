@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
     
     public int maxFrameRate = 60;
 
+    public TextFileReader _fileReader;
     
     
     
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour {
         }
 
         DontDestroyOnLoad(this);
-
+        _fileReader = this.GetComponent<TextFileReader>();
         //EventManager.StartListening(Events.EnemiesTurn, CallEnemyActions);
         //EventManager.StartListening(Events.EnemiesCreated, PopulateEnemies);
 
@@ -65,6 +66,11 @@ public class GameManager : MonoBehaviour {
         EventManager.StopListening(Events.LevelLost, ReloadLevel);
     }
 
+
+    public LevelInformation LoadLevelFile()
+    {
+        return _fileReader.LoadFile("Level" + currentLevel + ".txt");
+    }
 
     void NextLevel()
     {
