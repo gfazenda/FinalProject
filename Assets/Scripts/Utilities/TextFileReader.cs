@@ -9,10 +9,7 @@ public class TextFileReader: MonoBehaviour
 
 
     public Text t;
-    void Start() {
-
-        LoadFile("swdlkjsdkl");
-    }
+    
 
 
  ////   [MenuItem("Tools/Write file")]
@@ -53,15 +50,16 @@ public class TextFileReader: MonoBehaviour
     public LevelInformation LoadFile(string file)
     {
         string thing = null;
-        string path = Path.Combine(Application.streamingAssetsPath, "Levels\\Level1.txt");
+        string path = Path.Combine(Application.streamingAssetsPath, "Levels\\");
+        path += file;
         //path = Path.Combine(path, "\\Level1.txt");
         if (Application.platform == RuntimePlatform.Android)
         {
-            path = "jar:file://" + Application.dataPath + "!/assets/Levels/testfile.txt";
+            path = "jar:file://" + Application.dataPath + "!/assets/Levels/" + file;
             WWW wwwfile = new WWW(path);
             while (!wwwfile.isDone) { }
           //  t.text = wwwfile.text;
-          //  thing = t.text;
+            thing = wwwfile.text;
         }else
         {
             thing = File.ReadAllText(path);
