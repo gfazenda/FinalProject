@@ -9,8 +9,9 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance { get { return _instance; } }
 
     
-    public int maxFrameRate = 60;
+    public int maxFrameRate = 30;
 
+    [HideInInspector]
     public TextFileReader _fileReader;
     
     

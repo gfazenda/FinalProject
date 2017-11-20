@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 
 //[CustomEditor(typeof(UIController))]
 public class UIController : MonoBehaviour
 {
     public List<Image> buttons;
     public bool autoPopulate = true, horizontal = true, configureAtRuntime = true;
-    [Tooltip("Values in screen % (1 to 100)")]
+   // [Tooltip("Values in screen % (1 to 100)")]
     public float sizeX, offset, sizeY;
 
-    [Tooltip("1st button position")]
+    //[Tooltip("1st button position")]
     public Vector2 startPosition;
 
     void Start ()

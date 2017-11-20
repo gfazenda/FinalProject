@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: fbf93dc593f72594692b9c2ed98c692a
+timeCreated: 1511136568
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Moondance
+  fontNames:
+  - Moondance
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
