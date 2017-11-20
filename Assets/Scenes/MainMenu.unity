@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 423604107}
   - component: {fileID: 423604106}
   - component: {fileID: 423604105}
+  - component: {fileID: 423604108}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -277,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: -900027084, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 0.5675456, b: 0.2352941, a: 1}
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
 --- !u!114 &423604106
@@ -319,6 +320,23 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 423604103}
+--- !u!114 &423604108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 423604103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startColor: {r: 1, g: 0.3913455, b: 0, a: 1}
+  finalColor: {r: 1, g: 1, b: 0, a: 1}
+  meshType: 2
+  _lerpType: 0
+  lerpDuration: 3
+  repeat: 1
 --- !u!1 &747444327
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,17 +880,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e73c11c463946294895c9751d1a64a42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons:
-  - {fileID: 1847264817}
-  - {fileID: 825323556}
-  - {fileID: 355048033}
-  autoPopulate: 0
-  horizontal: 0
-  configureAtRuntime: 0
-  sizeX: 40
-  offset: 10
-  sizeY: 10
-  startPosition: {x: 0.3, y: 0.1}
 --- !u!1 &1517032280
 GameObject:
   m_ObjectHideFlags: 0

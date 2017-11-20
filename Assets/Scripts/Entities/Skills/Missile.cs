@@ -9,6 +9,13 @@ public class Missile : Skill {
     Coord targetPosition;
     public GameObject missile;
     GameObject instantiatedMissile;
+
+    private void Start()
+    {
+        base.Start();
+        description = "Deadly missile that lands one turn after being launched. It kills any enemy and leaves a hole in the board.";
+    }
+
     public override void DoEffect(Coord position)
     {
         EventManager.StartListening(Events.PlayerTurn, LaunchMissile);

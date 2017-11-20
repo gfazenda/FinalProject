@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class lerpColor : MonoBehaviour {
@@ -8,7 +9,7 @@ public class lerpColor : MonoBehaviour {
 
     public enum MeshType
     {
-        Renderer, SkinnedMesh
+        Renderer, SkinnedMesh, Text
     }
     public MeshType meshType = MeshType.Renderer;
 
@@ -56,7 +57,11 @@ public class lerpColor : MonoBehaviour {
                     this.GetComponent<SkinnedMeshRenderer>().material.color = currentColor;
                 }
                 break;
-
+            case MeshType.Text:
+                {
+                    this.GetComponent<Text>().color = currentColor;
+                }
+                break;
         }
     }
 

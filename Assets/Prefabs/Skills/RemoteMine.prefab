@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: RemoteMine
+  description: Powerful mine that explodes and affects all the tiles around it. Please
+    chose where to plant it and it will explode after a number of turns
   manacost: 8
   damage: 20
   cooldown: 0

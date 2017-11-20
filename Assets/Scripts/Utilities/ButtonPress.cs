@@ -20,6 +20,7 @@ public class ButtonPress : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         if (Interactable())
         {
+            Debug.Log("wehwerkjhewrkwerk");
             held = false;
             Invoke("OnLongPress", holdTime);
         }

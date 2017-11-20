@@ -33,7 +33,8 @@ public class SkillInfo : MonoBehaviour, IPointerDownHandler
         this.gameObject.SetActive(true);
         _skills.TryGetValue(skillname, out currentSkill);
         name.text = currentSkill.name;
-        description.text = "blablabla";//currentSkill.description;
+        description.text = currentSkill.description;
+        Debug.Log("desc "  + currentSkill.description);
         values.text = "Damage: " + currentSkill.damage + " \nManacost: " + currentSkill.manacost;
     }
 

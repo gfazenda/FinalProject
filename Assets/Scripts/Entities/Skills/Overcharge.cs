@@ -6,7 +6,9 @@ public class Overcharge : Skill {
 
 	// Use this for initialization
 	void Start () {
-		
+        base.Start();
+        description = "Attack in area that affects up to 2 tiles of distance from you in all directions. \nOnce used you lose 3 rounds to recharge the robot`s battery.";
+        Debug.Log("descccc");
 	}
 	
 	// Update is called once per frame

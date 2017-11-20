@@ -52,8 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Missile
+  description: Deadly missile that lands one turn after being launched. It kills any
+    enemy and leaves a hole in the board.
   manacost: 50
   damage: 100
   cooldown: 20
-  turnsToImpact: 2
   missile: {fileID: 1823346046616786, guid: afcd9291b6a160e449c5106217707f90, type: 2}
