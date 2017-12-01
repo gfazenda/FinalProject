@@ -25,7 +25,7 @@ public class Character : MonoBehaviour {
     public GameObject deathParticle;
 
     float moveTimer = 0;
-    float moveDuration = 0.3f;
+    float moveDuration = 0.2f;
 
     protected void Start()
     {

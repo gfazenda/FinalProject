@@ -7,7 +7,7 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
-    public enum tileType { outOfLimits, ground, wall, obstacle , enemy, player, exit  };
+    public enum tileType { outOfLimits, ground, wall, obstacle , enemy, player, exit, rock, venon, lava, drain, block  };
 
     MapGenerator _mapGenerator;
     public GameObject _player;

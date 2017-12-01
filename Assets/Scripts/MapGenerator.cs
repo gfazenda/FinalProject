@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public Transform groundPrefab, blockPrefab, player, exitPrefab;
-    public List<Transform> enemyPrefab = new List<Transform>();
-    public List<Transform> trapPrefab = new List<Transform>();
+    public Transform groundPrefab, blockPrefab, player, exitPrefab, venoalien, rockmonster, lavathing, drain, blocker;
+    List<Transform> enemyPrefab = new List<Transform>();
+    List<Transform> trapPrefab = new List<Transform>();
     public Vector2 mapSize;
     public int maxNumberOfObstacles = 3;
     [Range(0, 1)]
@@ -56,6 +56,14 @@ public class MapGenerator : MonoBehaviour
         {
             DestroyImmediate(transform.Find(mapObjName).gameObject);
         }
+
+        enemyPrefab.Add(venoalien);
+        enemyPrefab.Add(rockmonster);
+        enemyPrefab.Add(lavathing);
+
+        trapPrefab.Add(drain);
+        trapPrefab.Add(blocker);
+
     }
 
     public void GenerateMap()
@@ -184,11 +192,15 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    Transform InstantiateEnemy(Coord position)
+    Transform InstantiateEnemy(Coord position, Transform prefab = null)
     {
         Vector3 enemyPosition = CoordToPosition(position.x, position.y, false);
-        Transform newEnemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
-       
+        Transform newEnemy = null;
+        if(prefab != null){
+            newEnemy = Instantiate(prefab, enemyPosition, Quaternion.identity) as Transform;
+        }else{
+            newEnemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], enemyPosition, Quaternion.identity) as Transform;
+        }
         newEnemy.gameObject.GetComponent<Enemy>().position = (position);
         newEnemy.parent = enemiesHolder;
         enemyCoords.Add(newEnemy.gameObject);
@@ -281,6 +293,7 @@ public class MapGenerator : MonoBehaviour
         int currentObj;
         mapSize = level.mapSize;
         BoardManager.tileType[,] map = new BoardManager.tileType[(int)mapSize.x,(int)mapSize.y];
+        Transform currObs = null;
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
@@ -310,7 +323,7 @@ public class MapGenerator : MonoBehaviour
                         wallCoords.Add(currentCoord);
                         break;
                     case BoardManager.tileType.obstacle:
-                        Transform currObs = InstantiatePrefab(currentCoord, trapPrefab[Random.Range(0, trapPrefab.Count - 1)], blocksHolder);
+                        currObs = InstantiatePrefab(currentCoord, trapPrefab[Random.Range(0, trapPrefab.Count - 1)], blocksHolder);
                         obstacleCoords.Add(currObs.gameObject);
                         currObs.GetComponent<SpecialTile>().SetPosition(currentCoord);
                         break;
@@ -318,7 +331,25 @@ public class MapGenerator : MonoBehaviour
                         exitCoord = new Coord(currentCoord);
                         InstantiatePrefab(exitCoord, exitPrefab, mapHolder);
                         break;
-
+                    case BoardManager.tileType.venon:
+                        InstantiateEnemy(currentCoord, venoalien);
+                        break;
+                    case BoardManager.tileType.rock:
+                        InstantiateEnemy(currentCoord, rockmonster);
+                        break;
+                    case BoardManager.tileType.lava:
+                        InstantiateEnemy(currentCoord, lavathing);
+                        break;
+                    case BoardManager.tileType.block:
+                        currObs = InstantiatePrefab(currentCoord, blocker, blocksHolder);
+                        obstacleCoords.Add(currObs.gameObject);
+                        currObs.GetComponent<SpecialTile>().SetPosition(currentCoord);
+                        break;
+                    case BoardManager.tileType.drain:
+                        currObs = InstantiatePrefab(currentCoord, drain, blocksHolder);
+                        obstacleCoords.Add(currObs.gameObject);
+                        currObs.GetComponent<SpecialTile>().SetPosition(currentCoord);
+                        break;
                 }
             }
         }

@@ -5,6 +5,8 @@ using UnityEngine;
 public class MagmaEnemy : Enemy {
     RaycastHit hit;
     bool found = false;
+
+    public GameObject projectile;
     protected override void PerformAttack(){
         
         LookAtCoord(player.GetPosition());
@@ -15,6 +17,7 @@ public class MagmaEnemy : Enemy {
             if (hit.collider.tag == Tags.Player)
             {
                 base.PerformAttack();
+                projectile.GetComponent<Projectile>().Shot(this.transform.position, ppos);
             }
         }
         else
