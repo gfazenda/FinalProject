@@ -2,54 +2,92 @@
 using System.IO;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
 public class TextFileReader: MonoBehaviour
 {
 
 
 
-    public Text t;
-    
-
-
- ////   [MenuItem("Tools/Write file")]
- //   static void WriteString()
- //   {
- //       string path = "Assets/Resources/testfile.txt";
-
- //       //Write some text to the test.txt file
- //       StreamWriter writer = new StreamWriter(path, true);
- //       writer.WriteLine("Test");
- //       writer.Close();
-
- //       //Re-import the file to update the reference in the editor
- //      // AssetDatabase.ImportAsset(path);
- //       TextAsset asset = (TextAsset)Resources.Load("test");
-
- //       //Print the text from the file
- //       Debug.Log(asset.text);
- //   }
-
- // //  [MenuItem("Tools/Read file")]
- //   static void ReadString()
- //   {
- //       string path = "Assets/Resources/test.txt";
-
- //       //Read the text from directly from the test.txt file
- //       StreamReader reader = new StreamReader(path);
- //       Debug.Log(reader.ReadToEnd());
- //       reader.Close();
- //   }
-
+    void Start()
+    {
+        WriteString();
+        ReadCurrentLevel();
+    }
     public Vector2 ReadCurrentMapSize()
     {
         LoadFile("Level" + GameManager.Instance.currentLevel + ".txt");
         return Vector2.zero;
     }
 
+    static void WriteString()
+    {
+
+        StreamWriter file;
+          string fileName="CurrentLevel.txt";
+    //  https://forum.unity.com/threads/resolved-cant-write-in-application-persistentdatapath-no-error-sent.492203/
+         string path = Path.Combine(Application.streamingAssetsPath, fileName);
+        //path = Path.Combine(path, "\\Level1.txt");
+        if (Application.platform == RuntimePlatform.Android)
+        {
+                path = Application.persistentDataPath + "/" + fileName;
+        }
+ 
+            if (!File.Exists(path))
+            {
+                file = File.CreateText(path);
+                file.WriteLine("888");
+                file.Close();
+            }
+            else
+            {
+                File.WriteAllText(path, "9999");
+            }
+ 
+            Debug.Log(path);
+        // catch (Exception e)
+        // {
+        // }
+        // string fileName="CurrentLevel.txt";
+        // string path = Path.Combine(Application.streamingAssetsPath, fileName);
+        // if (Application.platform == RuntimePlatform.Android)
+        // {
+        //     path = Application.persistentDataPath + @"/PlayerInfo/" + fileName;
+        // }
+        // TextWriter tw = new StreamWriter(path);
+        // tw.Write("2");
+        // tw.Close();
+    }
+
+    public int ReadCurrentLevel(){
+        int currLevel = -1;
+        string fileName="CurrentLevel.txt";
+        string fileString = null;
+        string path = Path.Combine(Application.streamingAssetsPath, fileName);
+        //path = Path.Combine(path, "\\Level1.txt");
+        if (Application.platform == RuntimePlatform.Android)
+        {
+            path = "jar:file://" + Application.persistentDataPath + "/" + fileName;
+            Debug.Log(path);
+            WWW wwwfile = new WWW(path);
+            while (!wwwfile.isDone) { }
+          //  t.text = wwwfile.text;
+            fileString = wwwfile.text;
+        }else
+        {
+            fileString = File.ReadAllText(path);
+        }
+
+        // if(fileString != null){
+        //     currLevel = int.Parse(fileString);
+        // }
+        Debug.Log("current level isssssss" + fileString);
+        return currLevel;
+    }
+
+
+
     public LevelInformation LoadFile(string file)
     {
-        string thing = null;
+        string fileString = null;
         string path = Path.Combine(Application.streamingAssetsPath, "Levels\\");
         path += file;
         //path = Path.Combine(path, "\\Level1.txt");
@@ -59,17 +97,17 @@ public class TextFileReader: MonoBehaviour
             WWW wwwfile = new WWW(path);
             while (!wwwfile.isDone) { }
           //  t.text = wwwfile.text;
-            thing = wwwfile.text;
+            fileString = wwwfile.text;
         }else
         {
-            thing = File.ReadAllText(path);
-            thing.Replace("\\n", "");
-            thing.Trim();
+            fileString = File.ReadAllText(path);
+            fileString.Replace("\\n", "");
+            fileString.Trim();
             
          //   t.text = thing[0] + "" + thing[1];
             
         }
-        string[] lines = thing.Split('\n');
+        string[] lines = fileString.Split('\n');
 
         LevelInformation level = new LevelInformation();
         level.mapSize = new Vector2(float.Parse(lines[0]), float.Parse(lines[1]));
