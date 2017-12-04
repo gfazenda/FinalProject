@@ -62,10 +62,11 @@ public class BoardManager : MonoBehaviour
         }
         else
         {
-
             mapWidth = (int)_mapGenerator.mapSize.x;
             mapHeight = (int)_mapGenerator.mapSize.y;
+            gameBoard = new tileType[mapWidth, mapHeight];
             _mapGenerator.GenerateMap();
+            InitializeBoard();
         }
 
        
@@ -80,44 +81,51 @@ public class BoardManager : MonoBehaviour
         exitCoord = _mapGenerator.exitCoord;
         boardCreated = true;
         InitializeGrid();
-        InitializeBoard();
+        
+        InitializeEnemies();
     }
 
     void InitializeBoard()
     {
+        _player = _mapGenerator.GetPlayer();
+        _playerScript = _player.GetComponent<Player>();
+        for (int x = 0; x < mapWidth; x++)
+        {
+            for (int y = 0; y < mapHeight; y++)
+            {
+                gameBoard[x, y] = tileType.ground;
+            }
+        }
 
-        //for (int x = 0; x < mapWidth; x++)
-        //{
-        //    for (int y = 0; y < mapHeight; y++)
-        //    {
-        //        gameBoard[x, y] = tileType.ground;
-        //    }
-        //}
+        List<Coord> walls = _mapGenerator.GetWalls();
+        for (int i = 0; i < walls.Count; i++)
+        {
+            gameBoard[walls[i].x, walls[i].y] = tileType.wall;
+        }
 
-        //List<Coord> walls = _mapGenerator.GetWalls();
-        //for (int i = 0; i < walls.Count; i++)
-        //{
-        //    gameBoard[walls[i].x, walls[i].y] = tileType.wall;
-        //}
-
-        //mapObstacles = _mapGenerator.GetObstacles();
-        //for (int i = 0; i < mapObstacles.Count; i++)
-        //{
-        //    Coord position = mapObstacles[i].GetComponent<SpecialTile>().GetPosition();
-        //    gameBoard[position.x, position.y] = tileType.obstacle;
-        //}
+        mapObstacles = _mapGenerator.GetObstacles();
+        for (int i = 0; i < mapObstacles.Count; i++)
+        {
+            Coord position = mapObstacles[i].GetComponent<SpecialTile>().GetPosition();
+            gameBoard[position.x, position.y] = tileType.obstacle;
+        }
 
         ///* List<Coord> */
-        listOfEnemies = _mapGenerator.GetEnemies();
-        //for (int i = 0; i < listOfEnemies.Count; i++)
-        //{
-        //    Coord position = listOfEnemies[i].GetComponent<Enemy>().GetPosition();
-        //    gameBoard[position.x, position.y] = tileType.enemy;
-        //}
-        EventManager.TriggerEvent(Events.EnemiesCreated);
+        for (int i = 0; i < listOfEnemies.Count; i++)
+        {
+            Coord position = listOfEnemies[i].GetComponent<Enemy>().GetPosition();
+            gameBoard[position.x, position.y] = tileType.enemy;
+        }
 
-        //gameBoard[_mapGenerator.exitCoord.x, _mapGenerator.exitCoord.y] = tileType.exit;
-        //gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.player;
+
+        gameBoard[_mapGenerator.exitCoord.x, _mapGenerator.exitCoord.y] = tileType.exit;
+        gameBoard[_playerScript.GetPosition().x, _playerScript.GetPosition().y] = tileType.player;
+    }
+
+    void InitializeEnemies()
+    {
+        listOfEnemies = _mapGenerator.GetEnemies();
+        EventManager.TriggerEvent(Events.EnemiesCreated);
     }
 
     void InitializeGrid()
