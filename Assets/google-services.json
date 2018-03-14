@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "933956465657",
+    "firebase_url": "https://galacticcrusade-gfazenda.firebaseio.com",
+    "project_id": "galacticcrusade-gfazenda",
+    "storage_bucket": "galacticcrusade-gfazenda.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933956465657:android:03011405d790eb74",
+        "android_client_info": {
+          "package_name": "com.GabrielFazenda.GalacticCrusade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933956465657-9ervq0fuf2nnlojpsjm3v5f9ug2nubvk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.GabrielFazenda.GalacticCrusade",
+            "certificate_hash": "4572f1521a31e8251e21f58081f241e07eab9728"
+          }
+        },
+        {
+          "client_id": "933956465657-5tjj1jj2spo0ionfqvptb5kum9lbf4st.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdU1sEEr_xOR-1Mr9Jk3bMQk7AX9uTn5M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933956465657-5tjj1jj2spo0ionfqvptb5kum9lbf4st.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

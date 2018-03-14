@@ -205,6 +205,7 @@ public class UXManager : MonoBehaviour {
 
     IEnumerator ShowMessage(string message, float delay, textOption option = textOption.middle)
     {
+        float timer = 0;
         TextMeshProUGUI currentText = null;
         switch (option)
         {
@@ -219,12 +220,40 @@ public class UXManager : MonoBehaviour {
             default:
                 break;
         }
-
-
-
         currentText.text = message;
         currentText.gameObject.SetActive(true);
-        yield return new WaitForSeconds(delay);
+        while(timer < delay)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+
+        }
+        
         currentText.gameObject.SetActive(false);
     }
+
+    //IEnumerator ShowMessage(string message, float delay, textOption option = textOption.middle)
+    //{
+    //    TextMeshProUGUI currentText = null;
+    //    switch (option)
+    //    {
+    //        case textOption.middle:
+    //            currentText = middleText;
+    //            break;
+    //        case textOption.top:
+    //            currentText = topText;
+    //            break;
+    //        case textOption.bottom:
+    //            break;
+    //        default:
+    //            break;
+    //    }
+
+
+
+    //    currentText.text = message;
+    //    currentText.gameObject.SetActive(true);
+    //    yield return new WaitForSeconds(delay);
+    //    currentText.gameObject.SetActive(false);
+    //}
 }

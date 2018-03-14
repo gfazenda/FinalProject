@@ -121,16 +121,4 @@ public class Character : MonoBehaviour {
 
         transform.position = Vector3.Lerp(transform.position, targetPos, step);
     }
-
-    IEnumerator Move2()
-    {
-        while(transform.position != targetPos)
-        {
-            step = speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-            yield return new WaitForSeconds(0.2f);
-        }
-      
-        moving = false;
-    }
 }

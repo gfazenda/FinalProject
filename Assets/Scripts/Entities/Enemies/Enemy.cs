@@ -12,6 +12,7 @@ public class Enemy : Character {
     int failedAttempts = 0;
     public bool diagonalAtk = false;
 
+
     void CreatePath()
     {        
         playerPosition = player.GetPosition();
@@ -28,6 +29,7 @@ public class Enemy : Character {
     {
         player.TakeDamage(damage);
         LookAtCoord(player.GetPosition());
+        GameLogs.Instance.AddLog(GameLogs.logType.enemyDamage, "", (int)damage);
     }
 
     protected virtual void PerformMove()
