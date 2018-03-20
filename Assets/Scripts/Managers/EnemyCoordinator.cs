@@ -8,7 +8,7 @@ public class EnemyCoordinator : MonoBehaviour {
     public static EnemyCoordinator Instance { get { return _instance; } }
     bool configured = false;
     public bool enemiesTurn = false;
-    float turnDelay = 0.3f;
+    public float turnDelay = 0.3f;
     float delay;
 
     List<GameObject> enemies = new List<GameObject>();
@@ -112,7 +112,7 @@ public class EnemyCoordinator : MonoBehaviour {
            
 
         }
-        yield return new WaitForSeconds(turnDelay   );
+        yield return new WaitForSeconds(turnDelay);
         Debug.Log("player doing");
         CallPlayerTurn();
     }

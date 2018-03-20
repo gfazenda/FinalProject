@@ -8,8 +8,8 @@ public class Coord {
     
     public Coord()
     {
-        x = 0;
-        y = 0;
+        x = -1;
+        y = -1;
     }
     
     public Coord(Coord original)

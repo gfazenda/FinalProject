@@ -55,5 +55,5 @@ MonoBehaviour:
   description: Attack in area that affects up to 2 tiles of distance from you in all
     directions. Once used you lose 3 rounds to recharge the robot`s battery.
   manacost: 40
-  damage: 20
+  damage: 5
   cooldown: 3

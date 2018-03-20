@@ -47,7 +47,7 @@ public class MissileObject : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (attacking && collision.gameObject.tag == Tags.Ground)
+        if (attacking && collision.gameObject.tag == Tags.Ground /*|| collision.gameObject.tag == Tags.Enemy*/)
         {
             BoardManager.Instance.InstantiateEffect(Tags.Explosion, whereToHit);
             BoardManager.Instance.TileAttacked(whereToHit, damage);

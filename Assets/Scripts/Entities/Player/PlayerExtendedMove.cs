@@ -124,7 +124,7 @@ public class PlayerExtendedMove : MonoBehaviour
         positions = positions > 5 ? 5 : positions;
         //if (positions < 2)
         //    return;
-
+        bool initial = true;
         path.Clear();
 
         if (swipeDist > 0)
@@ -146,7 +146,7 @@ public class PlayerExtendedMove : MonoBehaviour
                     ActivateMarker(newpos);
                     path.Add(newpos);
                 }
-                else// if (BoardManager.Instance.GetPositionType(newpos) == BoardManager.tileType.enemy)
+                else if (initial)
                 {
                     if (verticalSwipe)
                         _pScript.TentativeMove(0, i);
@@ -155,6 +155,8 @@ public class PlayerExtendedMove : MonoBehaviour
 
                     break;
                 }
+
+                initial = false;
                 //else
                 //{
                 //    break;
@@ -182,11 +184,11 @@ public class PlayerExtendedMove : MonoBehaviour
                     ActivateMarker(newpos);
                     path.Add(newpos);
                 }
-                else if (BoardManager.Instance.GetPositionType(newpos) == BoardManager.tileType.enemy)
-                {
-                    path.Add(newpos);
-                }
-                else
+                //else if (BoardManager.Instance.GetPositionType(newpos) == BoardManager.tileType.enemy)
+                //{
+                //    path.Add(newpos);
+                //}
+                else if(initial)
                 {
                     if (verticalSwipe)
                         _pScript.TentativeMove(0, i);
@@ -195,6 +197,8 @@ public class PlayerExtendedMove : MonoBehaviour
 
                     break;
                 }
+
+                initial = false;
             }
         }
     }

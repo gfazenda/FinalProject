@@ -11,8 +11,11 @@ public class Player : Character {
     private Vector2 touchOrigin = -Vector2.one;
 
     bool playerTurn = true, performedAction = false, usedOverCharge = false, usedSkill = false, checkSkills = true, isClcked = false;
+
     public bool spellsBlocked = false;
+    public Coord invalidPos = null;
     public enum Actions { Move, Overcharge, Missile, Mine, BasicAtk };
+
     Actions currentAction;
 
     MineController _mineScript;
@@ -372,7 +375,7 @@ public class Player : Character {
         {
             PerformAction(Actions.BasicAtk, tentativePos);
         }
-        else if ((targetType == BoardManager.tileType.ground))
+        else if ((targetType == BoardManager.tileType.ground) && !tentativePos.CompareTo(invalidPos))
         {
             PerformAction(Actions.Move, tentativePos);
         }
@@ -399,11 +402,13 @@ public class Player : Character {
     {
         EventManager.TriggerEvent(Events.DisableMoveButtons);
         finishedMove = true;
+        string actionInfo = "";
         switch (_action)
         {
             case Actions.Move:
                 base.SetPosition(target);
                 BoardManager.Instance.DisableMarkers();
+                GameLogs.Instance.AddLog(GameLogs.logType.playerMovement, target.DebugInfo());
                 break;
             case Actions.Overcharge:
                 if (CanUseSpell(overchargeManacost))
@@ -413,6 +418,7 @@ public class Player : Character {
                     waitingTurns = currentSkill.cooldown;
                     usedOverCharge = true;
                     target = position;
+                    actionInfo = "Overcharge";
                     //   Overcharge();
                 }
                 else
@@ -422,17 +428,21 @@ public class Player : Character {
                 break;
             case Actions.Missile:
                 _skills.TryGetValue("Missile", out currentSkill);
+                invalidPos = target;
                 usedSkill = true;
+                actionInfo = "Missile";
                 break;
             case Actions.Mine:
                 //   UpdateMana(mineManacost);
                 _skills.TryGetValue("RemoteMine", out currentSkill);
                 usedSkill = true;
+                actionInfo = "Mine";
                 // _mineScript.PlaceMine(target);
                 break;
             case Actions.BasicAtk:
                 LookAtCoord(target);
                 BoardManager.Instance.TileAttacked(target, damage);
+                GameLogs.Instance.AddLog(GameLogs.logType.plyerDamage, actionInfo, (int)damage);
                 break;
             default:
                 break;
@@ -441,9 +451,9 @@ public class Player : Character {
         {
             UpdateMana(currentSkill.manacost);
             currentSkill.DoEffect(target);
-
+            GameLogs.Instance.AddLog(GameLogs.logType.skillUsed, actionInfo);
         }
-
+        
         performedAction = true;
 
         if (finishedMove)

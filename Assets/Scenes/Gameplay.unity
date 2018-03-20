@@ -6251,6 +6251,7 @@ MonoBehaviour:
   characterType: 3
   deathParticle: {fileID: 1265611803004274, guid: bd25d9843433b304a916a8e37c20610c,
     type: 2}
+  moveDuration: 0.2
   range: 2
   diagonalAtk: 1
   projectile: {fileID: 0}
@@ -7090,6 +7091,11 @@ Prefab:
     - target: {fileID: 4411566765990368, guid: 9ac507538bc26f44692a2eebe25cb2b1, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114317643205024278, guid: 9ac507538bc26f44692a2eebe25cb2b1,
+        type: 2}
+      propertyPath: turnDelay
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 9ac507538bc26f44692a2eebe25cb2b1, type: 2}
@@ -12938,7 +12944,7 @@ MonoBehaviour:
   m_SubmitButton: Submit
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
+  m_RepeatDelay: 0
   m_ForceModuleActive: 0
 --- !u!114 &881046233
 MonoBehaviour:
@@ -15254,7 +15260,9 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: 10
+  m_text: '1
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 715b80e429c437e40867928a4e1fc975, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 715b80e429c437e40867928a4e1fc975, type: 2}
@@ -15323,7 +15331,7 @@ MonoBehaviour:
     textComponent: {fileID: 1122751468}
     characterCount: 2
     spriteCount: 0
-    spaceCount: 0
+    spaceCount: 1
     wordCount: 1
     linkCount: 0
     lineCount: 1

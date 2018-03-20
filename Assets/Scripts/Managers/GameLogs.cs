@@ -19,7 +19,7 @@ public class GameLogs : MonoBehaviour {
         }
     }
 
-    public enum logType { plyerDamage, enemyDamage, skillUsed, enemyKilled, playerKilled}
+    public enum logType { plyerDamage, playerMovement, enemyDamage, skillUsed, enemyKilled, playerKilled}
 
     List<GameLog> logs = new List<GameLog>();
 
@@ -48,6 +48,6 @@ public class GameLogs : MonoBehaviour {
         currentLog.value = value;
 
         logs.Add(currentLog);
-        Debug.Log(logs.ToString());
+       // Debug.Log(logs.ToString());
     }
 }

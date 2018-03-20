@@ -85,7 +85,7 @@ public class Enemy : Character {
         }else
         {
             failedAttempts++;
-            if (failedAttempts >= 3)
+            if (failedAttempts >= 2)
             {
                 CreatePath();
                 failedAttempts = 0;

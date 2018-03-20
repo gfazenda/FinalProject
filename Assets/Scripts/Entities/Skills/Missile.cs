@@ -7,9 +7,9 @@ public class Missile : Skill {
     int turnsToImpact = 1;
     int currentTurns = 0;
     Coord targetPosition;
-    public GameObject missile;
-    GameObject instantiatedMissile;
-
+    public GameObject missile, target;
+    GameObject instantiatedMissile, instantiatedTarget;
+    Coord OutOfLimits = new Coord();
     private void Start()
     {
         base.Start();
@@ -22,14 +22,16 @@ public class Missile : Skill {
         currentTurns = turnsToImpact;
         targetPosition = position;
         instantiatedMissile = null;
+        //do not instantiate anymore, just enable/disable plz
         instantiatedMissile = Instantiate(missile, BoardManager.Instance._playerScript.transform.position, Quaternion.identity);
+        instantiatedTarget = Instantiate(target, BoardManager.Instance.CoordToPosition(position), Quaternion.identity);// Quaternion.Euler(90,0,0));
         RepositionMissile();
     }
 
-    private void FixedUpdate()
-    {
-        Vector3 missilePos = instantiatedMissile.transform.position;
-    }
+    //private void FixedUpdate()
+    //{
+    //    Vector3 missilePos = instantiatedMissile.transform.position;
+    //}
 
     void RepositionMissile()
     {
@@ -43,21 +45,19 @@ public class Missile : Skill {
     void LaunchMissile()
     {
         Debug.Log("missile in the works");
-        if (currentTurns > 0)
-        {
-            currentTurns--;
-        }
-        else
+
+        if(currentTurns <= 0)
         {
             Debug.Log("wowoow");
            
           //  BoardManager.Instance.InstantiateEffect(Tags.Explosion, targetPosition);
             EventManager.StopListening(Events.PlayerTurn, LaunchMissile);
 
-
+            BoardManager.Instance._playerScript.invalidPos = OutOfLimits;
             instantiatedMissile.GetComponent<MissileObject>().LookDown();
             instantiatedMissile.GetComponent<MissileObject>().GoToTarget(BoardManager.Instance.CoordToPosition(targetPosition));
+            Destroy(instantiatedTarget);
         }
-
+        currentTurns--;
     }
 }

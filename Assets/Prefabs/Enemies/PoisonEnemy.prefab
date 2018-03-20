@@ -107,6 +107,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -122,6 +123,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -219,7 +221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  damage: 5
+  damage: 1
   yHeight: 0.5
   position:
     x: 0
@@ -280,7 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd51d9b143f995b40aafd26dbd141ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 40
+  HP: 2
   maxHP: 0
   healthAmount: 0
 --- !u!136 &136940034356184878
@@ -353,7 +355,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1916801840942814}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -50, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224117077325858816}
@@ -372,7 +374,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1290974558039896}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -1.108}
+  m_LocalPosition: {x: 0, y: 1.6430016, z: -1.108}
   m_LocalScale: {x: 0.012070836, y: 0.0025263752, z: 0}
   m_Children:
   - {fileID: 224193836787718832}

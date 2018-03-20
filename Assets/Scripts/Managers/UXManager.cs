@@ -119,10 +119,10 @@ public class UXManager : MonoBehaviour {
         cancelPath.onClick.AddListener(CancelPlayerPath);
 
 
-        left.onClick.AddListener(() => CallPlayerMove(moveDirection.Left));
-        right.onClick.AddListener(() => CallPlayerMove(moveDirection.Right));
-        top.onClick.AddListener(() => CallPlayerMove(moveDirection.Up));
-        down.onClick.AddListener(() => CallPlayerMove(moveDirection.Down));
+        //left.onClick.AddListener(() => CallPlayerMove(moveDirection.Left));
+        //right.onClick.AddListener(() => CallPlayerMove(moveDirection.Right));
+        //top.onClick.AddListener(() => CallPlayerMove(moveDirection.Up));
+        //down.onClick.AddListener(() => CallPlayerMove(moveDirection.Down));
 
     }
 
