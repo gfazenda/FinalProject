@@ -44,6 +44,11 @@ public class Character : MonoBehaviour {
         SetMoving();
     }
 
+    public float GetHP()
+    {
+        return _entityScript.HP;
+    }
+
     public Coord GetPosition()
     {
         return position;

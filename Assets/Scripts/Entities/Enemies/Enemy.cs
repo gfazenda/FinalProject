@@ -4,8 +4,9 @@ using UnityEngine;
 
 //[RequireComponent(typeof(AStar))]
 public class Enemy : Character {
+
     public float range = 1;
-    protected float atkRange;
+    public float atkRange;
     Coord playerPosition = new Coord();
     List<Coord> myPath = new List<Coord>();
     protected Player player = null;
@@ -39,6 +40,11 @@ public class Enemy : Character {
             this.SetPosition(myPath[0]);
             myPath.RemoveAt(0);
         }
+    }
+
+    public Coord GetNextMove()
+    {
+        return myPath[0];
     }
 
     protected bool AttackIsValid()
@@ -75,8 +81,8 @@ public class Enemy : Character {
             CreatePath();
            // Debug.Log("repath");
         }
-        if (myPath.Count == 0)
-            return;
+        //if (myPath.Count == 0)
+        //    return;
         // Debug.Log("count " + myPath.Count);
         //Debug.Log("dist " + BoardManager.Instance.Distance(position, player.GetPosition()));
         if (BoardManager.Instance.GetPositionType(myPath[0]) == BoardManager.tileType.ground)
