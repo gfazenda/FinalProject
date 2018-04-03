@@ -6,7 +6,7 @@ using UnityEngine;
 public class Enemy : Character {
 
     public float range = 1;
-    public float atkRange;
+    public float atkRange, currentDistance = 100;
     Coord playerPosition = new Coord();
     List<Coord> myPath = new List<Coord>();
     protected Player player = null;
@@ -47,14 +47,19 @@ public class Enemy : Character {
         return myPath[0];
     }
 
-    protected bool AttackIsValid()
+    protected bool AttackIsValid(Coord pos)
     {
-        return (diagonalAtk == BoardManager.IsInDiagonal(position, player.GetPosition()));
+        return (diagonalAtk == BoardManager.IsInDiagonal(pos, player.GetPosition()));
+    }
+
+    protected bool CanAttackAt(Coord pos)
+    {
+        return (BoardManager.Distance(pos, player.GetPosition())<=atkRange && AttackIsValid(pos));
     }
 
     protected virtual void PerformAttack()
     {
-        if(AttackIsValid())
+        if(AttackIsValid(position))
             DamagePlayer();
     }
 
@@ -67,19 +72,76 @@ public class Enemy : Character {
 
     public virtual void DoAction()
     {
-        if (BoardManager.Distance(position,player.GetPosition()) <= atkRange && AttackIsValid())
+        currentDistance = BoardManager.Distance(position, player.GetPosition());
+        if (currentDistance <= atkRange && AttackIsValid(position))
         {
             // Debug.Log("close enough " + BoardManager.Distance(position, player.GetPosition()));
             //Debug.Log(atkRange);
             PerformAttack();
             return;
         }
-        
 
+        if (currentDistance < 3)
+        {
+            if (PerformAdvancedMove())
+            {
+                PerformMove();
+                return;
+            }
+        }
+
+
+        PerformBasicMove();
+
+
+
+       
+
+    }
+
+    private bool PerformAdvancedMove()
+    {
+        Debug.Log("doing advanced");
+        bool moveDone = false;
+        Coord possibleMove = new Coord(position);
+
+
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = -1; j < 2; j++)
+            {
+
+                if (i == 0 || j == 0)
+                {
+                    Debug.Log(i + " " + j);
+                    possibleMove.x = position.x + i;
+                    possibleMove.y = position.y + j;
+                    if (BoardManager.Instance.GetPositionType(possibleMove) == BoardManager.tileType.ground)
+                    {
+                        if (CanAttackAt(possibleMove) && AttackIsValid(possibleMove))
+                        {
+                            myPath.Clear();
+                            myPath.Add(possibleMove);
+                            return true;
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+        return moveDone;
+
+        
+    }
+
+    private void PerformBasicMove()
+    {
         if (playerPosition == null || playerPosition != player.GetComponent<Player>().GetPosition() || myPath.Count == 0)
-        {           
+        {
             CreatePath();
-           // Debug.Log("repath");
+            // Debug.Log("repath");
         }
         //if (myPath.Count == 0)
         //    return;
@@ -88,7 +150,8 @@ public class Enemy : Character {
         if (BoardManager.Instance.GetPositionType(myPath[0]) == BoardManager.tileType.ground)
         {
             PerformMove();
-        }else
+        }
+        else
         {
             failedAttempts++;
             if (failedAttempts >= 2)
@@ -97,7 +160,5 @@ public class Enemy : Character {
                 failedAttempts = 0;
             }
         }
-
-
     }
 }

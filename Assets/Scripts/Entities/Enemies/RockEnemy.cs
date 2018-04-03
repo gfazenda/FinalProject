@@ -9,7 +9,7 @@ public class RockEnemy : Enemy {
     int currentCD = 0;
     protected override void PerformAttack()
     {
-        if (!AttackIsValid())
+        if (!AttackIsValid(position))
             return;
 
         if (currentCD <= 0 && StunPlayer())
