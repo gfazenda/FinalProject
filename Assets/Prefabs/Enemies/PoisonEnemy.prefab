@@ -229,7 +229,10 @@ MonoBehaviour:
   characterType: 4
   deathParticle: {fileID: 1265611803004274, guid: bd25d9843433b304a916a8e37c20610c,
     type: 2}
+  moveDuration: 0.2
   range: 1
+  atkRange: 0
+  currentDistance: 100
   diagonalAtk: 0
 --- !u!114 &114282874856948210
 MonoBehaviour:

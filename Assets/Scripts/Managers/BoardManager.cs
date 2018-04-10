@@ -128,6 +128,11 @@ public class BoardManager : MonoBehaviour
         EventManager.TriggerEvent(Events.EnemiesCreated);
     }
 
+    public Vector2 BoardHeightWidth()
+    {
+        return new Vector2(mapWidth, mapHeight);
+    }
+
     void InitializeGrid()
     {
         for (int x = 0; x < mapWidth; x++)
@@ -145,6 +150,10 @@ public class BoardManager : MonoBehaviour
         return mapHeight * mapWidth;
     }
 
+    public tileType[,] GetGameBoard()
+    {
+        return gameBoard;
+    }
 
 
     #region AStar methods
@@ -212,6 +221,10 @@ public class BoardManager : MonoBehaviour
         return new Vector3((-mapWidth / 2 + xOffset) + pos.x, yPos, (-mapHeight / 2 + yOffset) + pos.y);
     }
 
+    public Coord GetExitCoord()
+    {
+        return exitCoord;
+    }
 
     public tileType GetPositionType(Coord pos)
     {

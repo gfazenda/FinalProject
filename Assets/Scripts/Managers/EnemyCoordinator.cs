@@ -7,7 +7,7 @@ public class EnemyCoordinator : MonoBehaviour {
 
     public static EnemyCoordinator Instance { get { return _instance; } }
     bool configured = false;
-    public bool enemiesTurn = false;
+    public bool enemiesTurn = false, useMinimax = false;
     public float turnDelay = 0.3f;
     float delay;
 
@@ -108,7 +108,14 @@ public class EnemyCoordinator : MonoBehaviour {
                 UpdateDelayTime();
                 continue;
             }
-            enemies[i].GetComponent<Enemy>().DoAction();
+            if (useMinimax)
+            {
+                MiniMax.Instance.CheckNextAction(enemies[i]);
+            }
+            else
+            {
+                enemies[i].GetComponent<Enemy>().DoAction();
+            }
            
 
         }

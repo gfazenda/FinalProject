@@ -15,7 +15,7 @@ public class PoisonEnemy : Enemy {
     }
 
 
-    protected override void PerformMove()
+    public override void PerformMove(Coord destination)
     {
         poisonPrefab = null;
         poisonPrefab = ObjectPooler.SharedInstance.GetPooledObject(Tags.Poison);
@@ -25,6 +25,6 @@ public class PoisonEnemy : Enemy {
             poisonPrefab.GetComponent<SpecialTile>().SetPosition(position);
             poisonPrefab.SetActive(true);
         }
-        base.PerformMove();
+        base.PerformMove(destination);
     }
 }

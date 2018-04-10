@@ -33,12 +33,12 @@ public class Enemy : Character {
         GameLogs.Instance.AddLog(GameLogs.logType.enemyDamage, "", (int)damage);
     }
 
-    protected virtual void PerformMove()
+    public virtual void PerformMove(Coord destination)
     {
-        if (BoardManager.Distance(myPath[0], position) == 1)
+        if (BoardManager.Distance(destination, position) == 1)
         {
-            this.SetPosition(myPath[0]);
-            myPath.RemoveAt(0);
+            this.SetPosition(destination);
+            
         }
     }
 
@@ -57,7 +57,7 @@ public class Enemy : Character {
         return (BoardManager.Distance(pos, player.GetPosition())<=atkRange && AttackIsValid(pos));
     }
 
-    protected virtual void PerformAttack()
+    public virtual void PerformAttack()
     {
         if(AttackIsValid(position))
             DamagePlayer();
@@ -81,14 +81,15 @@ public class Enemy : Character {
             return;
         }
 
-        if (currentDistance < 3)
-        {
-            if (PerformAdvancedMove())
-            {
-                PerformMove();
-                return;
-            }
-        }
+        //if (currentDistance < 3)
+        //{
+        //    if (PerformAdvancedMove())
+        //    {
+        //        PerformMove(myPath[0]);
+        //        myPath.RemoveAt(0);
+        //        return;
+        //    }
+        //}
 
 
         PerformBasicMove();
@@ -149,7 +150,8 @@ public class Enemy : Character {
         //Debug.Log("dist " + BoardManager.Instance.Distance(position, player.GetPosition()));
         if (BoardManager.Instance.GetPositionType(myPath[0]) == BoardManager.tileType.ground)
         {
-            PerformMove();
+            PerformMove(myPath[0]);
+            myPath.RemoveAt(0);
         }
         else
         {

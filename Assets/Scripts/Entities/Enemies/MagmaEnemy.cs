@@ -7,7 +7,7 @@ public class MagmaEnemy : Enemy {
     bool found = false;
 
     public GameObject projectile;
-    protected override void PerformAttack(){
+    public override void PerformAttack(){
         
         LookAtCoord(player.GetPosition());
         Vector3 ppos = player.gameObject.transform.position;//BoardManager.Instance.CoordToPosition(player.GetPosition(), false);

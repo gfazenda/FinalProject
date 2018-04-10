@@ -7,7 +7,7 @@ public class RockEnemy : Enemy {
     float currentRandom; 
     public int stunCD = 3;
     int currentCD = 0;
-    protected override void PerformAttack()
+    public override void PerformAttack()
     {
         if (!AttackIsValid(position))
             return;
