@@ -16,7 +16,8 @@ public class MiniMax : MonoBehaviour
     List<MMNode> actions = new List<MMNode>();
 
     int atkValue = 100, moveCloser = 10, takeDMG = -100, closerToTarget = 1, move = 2;
-    int mapHeight = 0, mapWidth = 0, treeLevel = 3;
+    int mapHeight = 0, mapWidth = 0;
+    public int treeLevel = 8;
     Coord playerPosition, exitPosition;
     float distToPlayer, distToExit, atkRange;
 
@@ -43,10 +44,21 @@ public class MiniMax : MonoBehaviour
         Vector2 mapInfo = BoardManager.Instance.BoardHeightWidth();
         mapWidth = (int)mapInfo.x;
         mapHeight = (int)mapInfo.y;
+        MMNode result;
+
+        //if (actions.Count == 0)
+        //{
+        //    CalculateEnemyMoves(node, enemy);
+        //    //result =
+        //        GetFirstNode(DoMinimax(node, treeLevel, true));
+        //}
+
+        //result = actions[actions.Count-1];
+        //actions.RemoveAt(actions.Count-1);
 
         CalculateEnemyMoves(node, enemy);
+        result = GetFirstNode(DoMinimax(node, treeLevel, true));
 
-        MMNode result = DoMinimax(node, 3, true);
         Debug.Log("performing:");
         Debug.Log(result.value + " "+  result.action + " " + result.targetPosition.DebugInfo());
 
@@ -70,15 +82,15 @@ public class MiniMax : MonoBehaviour
         distToExit = BoardManager.Distance(c, BoardManager.Instance.GetExitCoord());
         exitPosition = BoardManager.Instance.GetExitCoord();
 
-        if (distToPlayer <= atkRange)
-        {
-            // MMNode child = new MMNode(MMNode.ActionType.Atk, atkValue, c);
-            // node.children.Add(child);
-            AddNode(node, MMNode.ActionType.Atk, atkValue, BoardManager.Instance._playerScript.position);
-           // return;
-        }
+        //if (distToPlayer <= atkRange)
+        //{
+        //    // MMNode child = new MMNode(MMNode.ActionType.Atk, atkValue, c);
+        //    // node.children.Add(child);
+        //    AddNode(node, MMNode.ActionType.Atk, atkValue, BoardManager.Instance._playerScript.position);
+        //   // return;
+        //}
 
-        CreateEnemyMoveNodes(node, c, 3);
+        CreateEnemyMoveNodes(node, c, treeLevel);
 
         //for (int i = 0; i < length; i++)
         //{
@@ -89,6 +101,21 @@ public class MiniMax : MonoBehaviour
 
     }
 
+    MMNode GetFirstNode(MMNode node)
+    {
+        if (!node.playerAction) actions.Add(node);
+        if (node.parent.parent == null)
+        {
+            return node;
+        }
+        else
+        {
+            Debug.Log("the node is");
+            Debug.Log(node.value + " " + node.action + " " + node.targetPosition.DebugInfo() + " p: " + node.playerAction);
+            return GetFirstNode(node.parent);
+        }
+    }
+
     private void CreateEnemyMoveNodes(MMNode node, Coord position, int level)
     {
         if (level <= 0)
@@ -97,30 +124,44 @@ public class MiniMax : MonoBehaviour
         Coord newPosition = new Coord();
         BoardManager.tileType[,] newBoard = node.resultingBoard;
         BoardManager.tileType nextTile;
+        float potentialDist = 100, bestDist = 100;
+        int bonus = 1, currBonus = 0;
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
             {
                 if (i == 0 || j == 0)
                 {
-                   
+                    bonus = 0;
                     newPosition.x = position.x + i;
                     newPosition.y = position.y + j;
                     nextTile = GetType(node.resultingBoard, newPosition);
-                    if(nextTile == BoardManager.tileType.ground)
+
+                    if (nextTile == BoardManager.tileType.ground)
                     {
                         newBoard = (BoardManager.tileType[,])node.resultingBoard.Clone();
-                        int value = move
-                                    + (distToPlayer > BoardManager.Distance(newPosition, playerPosition) ? moveCloser : 0)
-                                    + (distToExit > BoardManager.Distance(newPosition, exitPosition) ? closerToTarget : 0)
+                        potentialDist = BoardManager.Distance(newPosition, playerPosition);
+                        int value = move 
+                            + (distToExit > BoardManager.Distance(newPosition, exitPosition) ? closerToTarget : 0)
                                     ;
+                        if (distToPlayer > potentialDist) {
+                            if(bestDist > potentialDist)
+                            {
+                                bestDist = potentialDist;
+                                bonus = currBonus + 1;
+                                currBonus = bonus;
+                            }
+                            value += moveCloser + bonus;
+
+                        }
+                                    
                         newBoard[position.x, position.y] = BoardManager.tileType.ground;
                         newBoard[newPosition.x, newPosition.y] = BoardManager.tileType.enemy;
                         MMNode child = AddNode(node, MMNode.ActionType.Move, value, new Coord(newPosition), newBoard);
                         CreatePlayerMoveNodes(child, level - 1);
                     }else if (nextTile == BoardManager.tileType.player)
                     {
-                        MMNode child = AddNode(node, MMNode.ActionType.Atk, atkValue, new Coord(newPosition));
+                        MMNode child = AddNode(node, MMNode.ActionType.Atk, atkValue, position);
                         CreatePlayerMoveNodes(child, level - 1);
                     }
                 }
@@ -161,18 +202,18 @@ public class MiniMax : MonoBehaviour
                     if (nextTile == BoardManager.tileType.ground)
                     {
                         newBoard = (BoardManager.tileType[,])parent.resultingBoard.Clone();
-                        int value = -1 * ( move
+                        int value =// -1 * 
+                            ( move
                                     + (playerDistToExit > BoardManager.Distance(newPosition, exitPosition) ? moveCloser : 0) 
                                     );
-
                         newBoard[position.x, position.y] = BoardManager.tileType.ground;
                         newBoard[newPosition.x, newPosition.y] = BoardManager.tileType.player;
-                        MMNode child = AddNode(parent, MMNode.ActionType.Move, value, new Coord(newPosition), newBoard);
+                        MMNode child = AddNode(parent, MMNode.ActionType.Move, value, new Coord(newPosition), newBoard,true);
                         CreateEnemyMoveNodes(child, parent.targetPosition, level-1);
                     }
                     else if (nextTile == BoardManager.tileType.enemy)
                     {
-                        MMNode child = AddNode(parent, MMNode.ActionType.Atk, -atkValue, new Coord(newPosition));
+                        MMNode child = AddNode(parent, MMNode.ActionType.Atk, atkValue, new Coord(newPosition),playeraction:true);
                         CreateEnemyMoveNodes(child, parent.targetPosition, level - 1);
                     }
                 }
@@ -197,11 +238,11 @@ public class MiniMax : MonoBehaviour
         return null;
     }
 
-    MMNode AddNode(MMNode parent, MMNode.ActionType at, int value , Coord coordinate, BoardManager.tileType[,] board = null)
+    MMNode AddNode(MMNode parent, MMNode.ActionType at, int value , Coord coordinate, BoardManager.tileType[,] board = null, bool playeraction = false)
     {
-        MMNode child = new MMNode(at, value, coordinate);
+        MMNode child = new MMNode(at, value, coordinate, playeraction);
         child.parent = parent;
-        child.resultingBoard = board == null ? parent.resultingBoard : board;
+        child.resultingBoard = board == null ? (BoardManager.tileType[,])parent.resultingBoard.Clone() : board;
         parent.children.Add(child);
         return child;
     }
@@ -220,9 +261,9 @@ public class MiniMax : MonoBehaviour
 
     MMNode DoMinimax(MMNode node, int depth, bool maxPlayer)
     {
-        if (depth == 0 || node.children == null)
+        if (depth == 0 || node.children.Count == 0)
         {
-            return node.parent.parent;
+            return node;
         }
 
         MMNode resultingNode = null, currNode = null;
@@ -264,13 +305,7 @@ public class MiniMax : MonoBehaviour
         return resultingNode;
     }
 
-    void PrintTree(MMNode node)
-    {
-        for (int i = 0; i < node.children.Count; i++)
-        {
-            Debug.Log(node.children[i].value);
-        }
-    }
+
 
 }
 
@@ -285,16 +320,18 @@ public class MiniMax : MonoBehaviour
         public List<MMNode> children = new List<MMNode>();
         public BoardManager.tileType[,] resultingBoard;
         public MMNode parent;
+        public bool playerAction = false;
         public MMNode()
         {
 
         }
 
-        public MMNode(ActionType at, float _value, Coord pos)
+        public MMNode(ActionType at, float _value, Coord pos, bool playeraction = false)
         {
             action = at;
             value = _value;
             targetPosition = pos;
+            playerAction = playeraction;
         }
 
 

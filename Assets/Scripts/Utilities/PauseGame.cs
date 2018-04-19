@@ -9,23 +9,25 @@ public class PauseGame : MonoBehaviour {
 
         void Start()
         {
-            this.gameObject.SetActive(!gameIsPaused);
+        // this.gameObject.SetActive(!gameIsPaused);
         }
 
 
         public void Pause()
         {
+            gameIsPaused = !gameIsPaused;
             Time.timeScale = gameIsPaused ? 0 : 1;
-            this.gameObject.SetActive(gameIsPaused);
-            ChangeUIObjects();
+            UXManager.instance.GamePaused(gameIsPaused);
+           // this.gameObject.SetActive(gameIsPaused);
+            //ChangeUIObjects();
             //Disable scripts that still work while timescale is set to 0
         }
 
-        private void ChangeUIObjects(){
-            for (int i = 0; i < objsToDeactivate.Count; i++)
-            {
-                objsToDeactivate[i].SetActive(gameIsPaused);
-            }
-        }
+        //private void ChangeUIObjects(){
+        //    for (int i = 0; i < objsToDeactivate.Count; i++)
+        //    {
+        //        objsToDeactivate[i].SetActive(gameIsPaused);
+        //    }
+        //}
 }
 

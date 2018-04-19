@@ -82,6 +82,13 @@ public class UXManager : MonoBehaviour {
         missile.interactable = false;
     }
 
+    public void GamePaused(bool paused)
+    {
+        overcharge.interactable = !paused;
+        mine.interactable = !paused;
+        missile.interactable = !paused;
+    }
+
     public void ChangeMoveButtons(bool activate)
     {
         return;
@@ -117,7 +124,7 @@ public class UXManager : MonoBehaviour {
 
         path.onClick.AddListener(ConfirmPlayerPath);
         cancelPath.onClick.AddListener(CancelPlayerPath);
-
+   
 
         //left.onClick.AddListener(() => CallPlayerMove(moveDirection.Left));
         //right.onClick.AddListener(() => CallPlayerMove(moveDirection.Right));

@@ -6,12 +6,12 @@ using UnityEngine;
 public class Enemy : Character {
 
     public float range = 1;
-    public float atkRange, currentDistance = 100;
+    public float atkRange, moveRange, currentDistance = 100;
     Coord playerPosition = new Coord();
-    List<Coord> myPath = new List<Coord>();
+    public List<Coord> myPath = new List<Coord>();
     protected Player player = null;
     int failedAttempts = 0;
-    public bool diagonalAtk = false;
+    public bool diagonalAtk = false, moved = false;
 
 
     void CreatePath()
@@ -24,6 +24,7 @@ public class Enemy : Character {
     {
         player = BoardManager.Instance._playerScript;
         atkRange = range * Utility.distanceMultiplier;
+        moveRange = 1;
     }
 
     protected virtual void DamagePlayer()
@@ -35,10 +36,12 @@ public class Enemy : Character {
 
     public virtual void PerformMove(Coord destination)
     {
-        if (BoardManager.Distance(destination, position) == 1)
+        Debug.Log("doing move "+ BoardManager.Distance(destination, position));
+        if (BoardManager.Distance(destination, position) == moveRange && BoardManager.Instance.GetPositionType(destination)== BoardManager.tileType.ground )
         {
+            Debug.Log("doing move2");
             this.SetPosition(destination);
-            
+            moved = true;
         }
     }
 
@@ -59,7 +62,7 @@ public class Enemy : Character {
 
     public virtual void PerformAttack()
     {
-        if(AttackIsValid(position))
+        if(CanAttackAt(position))
             DamagePlayer();
     }
 
@@ -72,6 +75,7 @@ public class Enemy : Character {
 
     public virtual void DoAction()
     {
+        moved = false;
         currentDistance = BoardManager.Distance(position, player.GetPosition());
         if (currentDistance <= atkRange && AttackIsValid(position))
         {
@@ -139,19 +143,20 @@ public class Enemy : Character {
 
     private void PerformBasicMove()
     {
-        if (playerPosition == null || playerPosition != player.GetComponent<Player>().GetPosition() || myPath.Count == 0)
+        if (playerPosition == null || !playerPosition.CompareTo(player.GetComponent<Player>().GetPosition()) || myPath.Count == 0)
         {
             CreatePath();
             // Debug.Log("repath");
         }
-        //if (myPath.Count == 0)
-        //    return;
+        if (myPath.Count == 0)
+            return;
         // Debug.Log("count " + myPath.Count);
         //Debug.Log("dist " + BoardManager.Instance.Distance(position, player.GetPosition()));
         if (BoardManager.Instance.GetPositionType(myPath[0]) == BoardManager.tileType.ground)
         {
             PerformMove(myPath[0]);
-            myPath.RemoveAt(0);
+            if(moved)
+                myPath.RemoveAt(0);
         }
         else
         {

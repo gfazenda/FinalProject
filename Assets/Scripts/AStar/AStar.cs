@@ -31,6 +31,7 @@ public class AStar : MonoBehaviour {
 
     public List<Coord> FindPath(Coord startPos, Coord targetPos)
     {
+        path = new List<Coord>();
         Node startNode = BoardManager.Instance.GetNode(startPos);
         Node targetNode = BoardManager.Instance.GetNode(targetPos);
 

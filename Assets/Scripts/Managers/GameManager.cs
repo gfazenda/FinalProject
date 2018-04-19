@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour {
     public int currentLevel = 1;
 
     bool initialized = false;
+
     private void Awake()
     {
         QualitySettings.vSyncCount = 0;
