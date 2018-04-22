@@ -1,0 +1,15 @@
+Todos os ícones do jogo foram adquiridos através do side Icon Finder, sob a licença de uso comercial livre. 
+Na versão final haverá uma tela de créditos para a música utilizada e um dos ícones. 
+Modelos 3D são de desenvolvimento próprio.
+Efeitos de partícula adquiridos na AssetStore.
+
+Créditos:
+
+Icone da mina remota
+Autor:
+irmirx
+https://opengameart.org/content/animated-traps-and-obstacles
+https://creativecommons.org/licenses/by/3.0/
+
+Música:
+https://freesound.org/people/TheFlakesMaster/

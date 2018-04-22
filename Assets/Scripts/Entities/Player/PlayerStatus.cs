@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerStatus : MonoBehaviour {
     bool poisoned = false, burned = false;
     public enum statuses { poisoned, burned};
-    int poisonTurns = 0, poisonDuration = 3, poisonDMG = 5;
+    int poisonTurns = 0, poisonDuration = 3, poisonDMG = 1;
     Player _pScript;
     // Use this for initialization
     void Start()

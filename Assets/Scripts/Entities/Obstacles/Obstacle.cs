@@ -27,7 +27,7 @@ public class Obstacle : SpecialTile {
                 currPos.x = i;
                 currPos.y = j;
                 currTile = BoardManager.Instance.GetPositionType(currPos);
-                if (currTile != (BoardManager.tileType.outOfLimits) && currTile != (BoardManager.tileType.wall) && currTile != (BoardManager.tileType.obstacle))
+                if (TileIsValid())
                 {
                     Instantiate(tile, BoardManager.Instance.CoordToPosition(currPos), Quaternion.identity, this.transform);
                 }
@@ -35,8 +35,8 @@ public class Obstacle : SpecialTile {
         }
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    private bool TileIsValid()
+    {
+        return currTile != (BoardManager.tileType.outOfLimits) && currTile != (BoardManager.tileType.wall) && currTile != (BoardManager.tileType.obstacle);
+    }
 }

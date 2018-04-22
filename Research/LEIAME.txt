@@ -1,0 +1,13 @@
+LEIA ME
+
+Jogo: Galactic Crusade
+Autor/Desenvolvedor: Gabriel Fazenda
+Plataforma: Android
+
+Como Jogar:
+
+Movimentação e ataque normal -> Swipe
+Movimentação de até 5 casas -> Swipe longo
+Utilização de poders -> clique nos ícones
+Informação sobre poderes -> clique + hold nos ícones
+Menu de pausa possui opção de voltar ao menu, reiniciar a fase ou resumir partida.

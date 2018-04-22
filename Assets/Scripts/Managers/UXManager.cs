@@ -69,7 +69,7 @@ public class UXManager : MonoBehaviour {
 
     public bool TouchOverUI(int id)
     {
-        return EventSystem.current.IsPointerOverGameObject(id);
+        return EventSystem.current.IsPointerOverGameObject(id) || EventSystem.current.currentSelectedGameObject != null;
     }
 
     public void DisableButtons()
@@ -87,6 +87,7 @@ public class UXManager : MonoBehaviour {
         overcharge.interactable = !paused;
         mine.interactable = !paused;
         missile.interactable = !paused;
+        BoardManager.Instance.DisableMarkers();
     }
 
     public void ChangeMoveButtons(bool activate)
@@ -206,11 +207,11 @@ public class UXManager : MonoBehaviour {
     }
 
     // Update is called once per frame
-    public void DisplayMessage (string msg, float duration, textOption option = textOption.middle) {
-        StartCoroutine(ShowMessage(msg, duration, option));
+    public void DisplayMessage (string msg, float duration, textOption option = textOption.middle, bool alert = false) {
+        StartCoroutine(ShowMessage(msg, duration, option,alert));
     }
 
-    IEnumerator ShowMessage(string message, float delay, textOption option = textOption.middle)
+    IEnumerator ShowMessage(string message, float delay, textOption option = textOption.middle, bool alert = false)
     {
         float timer = 0;
         TextMeshProUGUI currentText = null;
@@ -228,6 +229,9 @@ public class UXManager : MonoBehaviour {
                 break;
         }
         currentText.text = message;
+        if (alert)
+            currentText.color = Color.red;
+       // currentText.color = Color.red;
         currentText.gameObject.SetActive(true);
         while(timer < delay)
         {

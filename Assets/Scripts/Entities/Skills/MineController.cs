@@ -9,7 +9,7 @@ public class MineController : Skill {
     private void Start()
     {
         base.Start();
-        description = "Powerful mine that explodes and affects all the tiles around it. Please chose where to plant it and it will explode after a number of turns";
+        description = "Powerful mine that explodes and affects all the tiles around it. It explodes after a number of turns once planted";
     }
 
     public override void DoEffect(Coord position) {

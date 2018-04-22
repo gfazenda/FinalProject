@@ -76,6 +76,11 @@ public class Enemy : Character {
     public virtual void DoAction()
     {
         moved = false;
+        if(waitingTurns > 0)
+        {
+            waitingTurns -= 1;
+            return;
+        }
         currentDistance = BoardManager.Distance(position, player.GetPosition());
         if (currentDistance <= atkRange && AttackIsValid(position))
         {

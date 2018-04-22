@@ -69,7 +69,7 @@ public class MapGenerator : MonoBehaviour
     public void GenerateMap()
     {
         InitializeVariables();
-        enemyCount = (GameManager.Instance.currentLevel) + baseEnemyNumber;
+        enemyCount = (GameManager.Instance.currentLevel)/2 + baseEnemyNumber;
         obstacleCount = Random.Range(0,(GameManager.Instance.currentLevel+2)) + baseObstacleNumber;
        
         exitCoord = new Coord((int)Random.Range(0, mapSize.x), (int)(mapSize.y - 1));
@@ -130,10 +130,7 @@ public class MapGenerator : MonoBehaviour
             obstacleMap[randomCoord.x, randomCoord.y] = true;
             currentObstacleCount++;
 
-            while (randomCoord.CompareTo(playerCoord)
-                  || randomCoord.CompareTo(exitCoord)
-                  || BoardManager.Distance(randomCoord, playerCoord) < 2
-                  || !MapIsFullyAccessible(obstacleMap, currentObstacleCount))
+            while (ObstacleIsInvalid(obstacleMap, currentObstacleCount, randomCoord))
             {
                 obstacleMap[randomCoord.x, randomCoord.y] = false;
                 randomCoord = GetRandomCoord();
@@ -147,7 +144,7 @@ public class MapGenerator : MonoBehaviour
                 placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
                 if (placeObstacle)
                 {
-                    currentObstacle = trapPrefab[Random.Range(0,trapPrefab.Count)];
+                    currentObstacle = trapPrefab[Random.Range(0, trapPrefab.Count)];
                     obstaclesPlaced++;
                 }
             }
@@ -163,6 +160,14 @@ public class MapGenerator : MonoBehaviour
                 wallCoords.Add(randomCoord);
             }
         }
+    }
+
+    private bool ObstacleIsInvalid(bool[,] obstacleMap, int currentObstacleCount, Coord randomCoord)
+    {
+        return randomCoord.CompareTo(playerCoord)
+                          || randomCoord.CompareTo(exitCoord)
+                          || BoardManager.Distance(randomCoord, playerCoord) < 2
+                          || !MapIsFullyAccessible(obstacleMap, currentObstacleCount);
     }
 
     Transform InstantiatePrefab(Coord position, Transform prefab, Transform objHolder, bool ground = false)

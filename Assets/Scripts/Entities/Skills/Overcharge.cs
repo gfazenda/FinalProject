@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Overcharge : Skill {
-
+    public int range = 2, turnPenalty = 2;
 	// Use this for initialization
 	void Start () {
         base.Start();
@@ -20,12 +20,12 @@ public class Overcharge : Skill {
     {
         Debug.Log("ooooooo");
         BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground };
-        List<KeyValuePair<BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2, types, true);
+        List<KeyValuePair<BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, range, types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
         {
             BoardManager.Instance.InstantiateEffect(Tags.ElectricExplosion, t.Value);
             if (t.Key == BoardManager.tileType.enemy)
-                EnemyCoordinator.Instance.EnemyDamaged((damage), t.Value);
+                EnemyCoordinator.Instance.EnemyDamaged(damage, t.Value);
         }
     }
 

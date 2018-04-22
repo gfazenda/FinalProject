@@ -28,6 +28,8 @@ public static class Events
     public const string PlayerConfigured = "PlayerConfigured";
     public const string DisableMoveButtons = "DisableMoveButtons";
     public const string EnableMoveButtons = "EnableMoveButtons";
+    public const string GamePaused = "GamePaused";
+    public const string GameUnpaused = "GameUnpaused";
 }
 
 
@@ -51,6 +53,13 @@ public static class Skills
     public const string RemoteMine = "RemoteMine";
     public const string Missile = "Missile";
 }
+
+public static class Scenes
+{
+    public const string MainMenu = "MainMenu";
+    public const string Gameplay = "Gameplay";
+}
+
 
 
 

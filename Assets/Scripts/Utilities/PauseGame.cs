@@ -3,31 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PauseGame : MonoBehaviour {
-    public List<GameObject> objsToDeactivate = new List<GameObject>();
+  
 
         bool gameIsPaused = false;
-
-        void Start()
-        {
-        // this.gameObject.SetActive(!gameIsPaused);
-        }
-
+    public GameObject pausePanel, pauseButton;
 
         public void Pause()
         {
             gameIsPaused = !gameIsPaused;
             Time.timeScale = gameIsPaused ? 0 : 1;
             UXManager.instance.GamePaused(gameIsPaused);
-           // this.gameObject.SetActive(gameIsPaused);
-            //ChangeUIObjects();
-            //Disable scripts that still work while timescale is set to 0
+            EventManager.TriggerEvent(Events.GamePaused);
+            pausePanel.gameObject.SetActive(gameIsPaused);
+            pauseButton.gameObject.SetActive(!gameIsPaused);
         }
 
-        //private void ChangeUIObjects(){
-        //    for (int i = 0; i < objsToDeactivate.Count; i++)
-        //    {
-        //        objsToDeactivate[i].SetActive(gameIsPaused);
-        //    }
-        //}
+        public void Restart()
+        {
+            Pause();
+            GameManager.Instance.ReloadLevel();
+        }
+
+        public void BackToMenu()
+        {
+            Pause();
+            GameManager.Instance.BackToMenu();
+        }
+
+
 }
 

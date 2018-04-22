@@ -1,7 +1,6 @@
 ﻿public class SpellBlocker : Obstacle {
 
-    int instances = 0;
-    float currentDistance = 10f, damageRemoved = 0, endingDamage = 0, currentDrain = 0;
+    float currentDistance = 10f;
 
     private void OnEnable()
     {

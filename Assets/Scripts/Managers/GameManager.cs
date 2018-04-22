@@ -83,11 +83,18 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(scene.name);
     }
 
-    void ReloadLevel()
+    public void ReloadLevel()
     {
         Debug.Log("reload");
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
+    }
+
+    public void BackToMenu()
+    {
+        Debug.Log("back");
+        //Scene scene = SceneManager.GetSceneByName(Scenes.MainMenu);
+        SceneManager.LoadScene(Scenes.MainMenu);
     }
 
     IEnumerator ExecuteAfterTime(float time)

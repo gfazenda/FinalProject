@@ -136,6 +136,18 @@ public class EnemyCoordinator : MonoBehaviour {
         }
     }
 
+    public void EnemyParalyzed(int turns, Coord position)
+    {
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.GetComponent<Enemy>().position.CompareTo(position))
+            {
+                enemy.GetComponent<Enemy>().SetTurnPenalty(turns);
+                return;
+            }
+        }
+    }
+
     public bool HasEnemies()
     {
         return enemies.Count != 0;

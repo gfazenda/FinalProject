@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class RemoteMine : SpecialTile {
 
-    public int damage = 20;
+    public int damage = 2;
     int turnsAlive = 0;
     public int turnsToLive = 2;
     public Text turnsInfo;

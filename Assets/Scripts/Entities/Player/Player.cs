@@ -4,7 +4,7 @@ using UnityEngine;
 public class Player : Character {
 
     public int manaPool = 100;
-    public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
+  //  public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
     float timer, minimumSwipe = 100f;
 
@@ -13,7 +13,7 @@ public class Player : Character {
     bool playerTurn = true, performedAction = false, usedOverCharge = false, usedSkill = false, checkSkills = true, isClcked = false;
 
     public bool spellsBlocked = false;
-    public Coord invalidPos = null;
+    public Coord invalidPos = new Coord(-1,-1);
     public enum Actions { Move, Overcharge, Missile, Mine, BasicAtk };
 
     Actions currentAction;
@@ -34,6 +34,7 @@ public class Player : Character {
     PlayerStatus _status;
 
     public List<Skill> _skillList = new List<Skill>();
+
     List<string> activeSkills = new List<string>();
     Dictionary<string, Skill> _skills = new Dictionary<string, Skill>();
     Skill currentSkill = null;
@@ -45,7 +46,13 @@ public class Player : Character {
         _extendedMove = this.GetComponent<PlayerExtendedMove>();
 
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
-        
+        EventManager.StartListening(Events.GamePaused, GamePaused);
+
+    }
+
+    void GamePaused()
+    {
+        playerTurn = !playerTurn;
     }
 
     void Start()
@@ -193,7 +200,7 @@ public class Player : Character {
         {
             timer = EnemyCoordinator.Instance.GetEnemyTurnDuration();
             ShowWaiting();
-            if (waitingTurns <= (overchargeTurns - 1))
+            if (waitingTurns >= 2)
             {
                 DisableExplosions();
             }
@@ -227,7 +234,7 @@ public class Player : Character {
     // Update is called once per frame
     void Update ()
     {
-        if (performedAction || moving)
+        if (performedAction || moving || !playerTurn)
             return;
         // if (!GameManager.instance.playersTurn) return;
 
@@ -235,7 +242,7 @@ public class Player : Character {
         int vertical = 0;       //Used to store the vertical move direction.
 
         //Check if we are running either in the Unity editor or in a standalone build.
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
+        #if UNITY_STANDALONE || UNITY_WEBPLAYER
 
         //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
@@ -288,7 +295,7 @@ public class Player : Character {
             float y = touchEnd.y - touchOrigin.y;
 
 
-            if (!ValidSwipe(x, y))
+            if (UXManager.instance.TouchOverUI(myTouch.fingerId) || !ValidSwipe(x, y))
                 return;
 
             if (isClcked)
@@ -411,9 +418,10 @@ public class Player : Character {
                 GameLogs.Instance.AddLog(GameLogs.logType.playerMovement, target.DebugInfo());
                 break;
             case Actions.Overcharge:
-                if (CanUseSpell(overchargeManacost))
+                _skills.TryGetValue("Overcharge", out currentSkill);
+                if (CanUseSpell(currentSkill.manacost))
                 {
-                    _skills.TryGetValue("Overcharge", out currentSkill);
+                  //  _skills.TryGetValue("Overcharge", out currentSkill);
                     usedSkill = true;
                     waitingTurns = currentSkill.cooldown;
                     usedOverCharge = true;
@@ -423,7 +431,7 @@ public class Player : Character {
                 }
                 else
                 {
-                    UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
+                    DisplayNoMana();
                 }
                 break;
             case Actions.Missile:
@@ -460,6 +468,11 @@ public class Player : Character {
             CallNextTurn();
     }
 
+    private static void DisplayNoMana()
+    {
+        UXManager.instance.DisplayMessage("Not enough mana", 0.3f,alert:true);
+    }
+
     private void LateUpdate()
     {
         if (playerTurn && performedAction && finishedMove)
@@ -472,22 +485,6 @@ public class Player : Character {
         BoardManager.Instance.DisableMarkers();
         EventManager.TriggerEvent(Events.EnemiesTurn);
             
-    }
-
-    void Overcharge()
-    {
-        UpdateMana(overchargeManacost);
-        waitingTurns = overchargeTurns;
-        usedOverCharge = true;
-
-        BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground };
-        List < KeyValuePair < BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 2,types, true);
-        foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)
-        {
-            explosions.Add(BoardManager.Instance.InstantiateEffect(Tags.ElectricExplosion, t.Value));
-            if (t.Key == BoardManager.tileType.enemy)
-                EnemyCoordinator.Instance.EnemyDamaged((damage*3), t.Value);
-        }
     }
 
     void DisableExplosions()
@@ -514,7 +511,7 @@ public class Player : Character {
         }
         else
         {
-            UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
+            DisplayNoMana();
         }
     }
 
@@ -527,7 +524,7 @@ public class Player : Character {
         }
         else
         {
-            UXManager.instance.DisplayMessage("Not enough mana", 0.3f);
+            DisplayNoMana();
         }
     }
 }
