@@ -4,27 +4,42 @@ using UnityEngine;
 
 public class Missile : Skill {
 
-    int turnsToImpact = 1;
+    public int turnsToImpact = 1;
     int currentTurns = 0;
+    bool initialized = false;
     Coord targetPosition;
     public GameObject missile, target;
-    GameObject instantiatedMissile, instantiatedTarget;
-    Coord OutOfLimits = new Coord();
+    GameObject instantiatedMissile, instantiatedTarget = null;
+    Vector3 impactPosition;
+    Coord OutOfLimits = new Coord(-1,-1);
     private void Start()
     {
         base.Start();
         description = "Deadly missile that lands one turn after being launched. It kills any enemy and leaves a hole in the board.";
     }
 
+    void Initialize(){
+         instantiatedTarget = Instantiate(target, new Vector3(200,200,200), Quaternion.identity);
+         instantiatedMissile = Instantiate(missile, new Vector3(200,200,200), Quaternion.identity);
+    }
+
     public override void DoEffect(Coord position)
     {
+        if(!initialized)
+            Initialize();
+
         EventManager.StartListening(Events.PlayerTurn, LaunchMissile);
         currentTurns = turnsToImpact;
         targetPosition = position;
-        instantiatedMissile = null;
-        //do not instantiate anymore, just enable/disable plz
-        instantiatedMissile = Instantiate(missile, BoardManager.Instance._playerScript.transform.position, Quaternion.identity);
-        instantiatedTarget = Instantiate(target, BoardManager.Instance.CoordToPosition(position), Quaternion.identity);// Quaternion.Euler(90,0,0));
+
+        impactPosition = BoardManager.Instance.CoordToPosition(targetPosition);
+        
+        instantiatedMissile.transform.position = (BoardManager.Instance._playerScript.transform.position);
+        instantiatedMissile.SetActive(true);
+
+        instantiatedTarget.transform.position = impactPosition;
+        instantiatedTarget.SetActive(true);
+        
         RepositionMissile();
     }
 
@@ -35,10 +50,10 @@ public class Missile : Skill {
 
     void RepositionMissile()
     {
-        Vector3 newPosition = BoardManager.Instance.CoordToPosition(targetPosition);
+        Vector3 newPosition = impactPosition;
         newPosition.y = 15;
         instantiatedMissile.GetComponent<MissileObject>().setCoordinates(targetPosition, damage);
-        instantiatedMissile.GetComponent<MissileObject>().GoToTarget(newPosition);
+        instantiatedMissile.GetComponent<MissileObject>().FlyAway();
         //instantiatedMissile.transform.position = newPosition;
     }
 
@@ -52,11 +67,12 @@ public class Missile : Skill {
            
           //  BoardManager.Instance.InstantiateEffect(Tags.Explosion, targetPosition);
             EventManager.StopListening(Events.PlayerTurn, LaunchMissile);
-
             BoardManager.Instance._playerScript.invalidPos = OutOfLimits;
             instantiatedMissile.GetComponent<MissileObject>().LookDown();
-            instantiatedMissile.GetComponent<MissileObject>().GoToTarget(BoardManager.Instance.CoordToPosition(targetPosition));
-            Destroy(instantiatedTarget);
+            //instantiatedMissile.GetComponent<MissileObject>().GoToTarget(impactPosition);
+             instantiatedMissile.GetComponent<MissileObject>().GoToTarget();
+            //Destroy(instantiatedTarget);
+            instantiatedTarget.SetActive(false);
         }
         currentTurns--;
     }

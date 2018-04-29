@@ -4,22 +4,35 @@ using UnityEngine;
 
 public class MissileObject : MonoBehaviour {
     float moveTimer = 0;
-    float moveDuration = 10f;
+    public float moveDuration = 10f;
     Vector3 targetPos;
     bool moving = false, attacking = false;
     Coord whereToHit;
+    Vector3 hitPosition;
     float damage;
     public void setCoordinates(Coord coord, float dmg)
     {
         whereToHit = coord;
+        hitPosition = BoardManager.Instance.CoordToPosition(whereToHit);
         damage = dmg;
     }
 
-    public void GoToTarget(Vector3 target)
+    public void GoToTarget()
     {
-        targetPos = target;
+        targetPos = hitPosition;
+        Move();
+    }
+
+    void Move(){
         moveTimer = 0;
         moving = true;
+    }
+
+    public void FlyAway(){
+        Vector3 farPosition = hitPosition;
+        farPosition.y += 15;
+        targetPos = farPosition;
+        Move();
     }
 
     public void LookDown()
@@ -53,7 +66,9 @@ public class MissileObject : MonoBehaviour {
             BoardManager.Instance.TileAttacked(whereToHit, damage);
             BoardManager.Instance.SetInvalidPosition(whereToHit);
             Destroy(collision.gameObject);
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
+            gameObject.SetActive(false);
+            moving = false;
         }
     }
 }

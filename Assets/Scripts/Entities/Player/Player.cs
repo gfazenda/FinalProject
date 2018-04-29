@@ -10,7 +10,9 @@ public class Player : Character {
 
     private Vector2 touchOrigin = -Vector2.one;
 
-    bool playerTurn = true, performedAction = false, usedOverCharge = false, usedSkill = false, checkSkills = true, isClcked = false;
+    bool playerTurn = true, performedAction = false, 
+    usedOverCharge = false, usedSkill = false, 
+    checkSkills = true, isClcked = false, missileLaunched = false;
 
     public bool spellsBlocked = false;
     public Coord invalidPos = new Coord(-1,-1);
@@ -200,11 +202,11 @@ public class Player : Character {
         {
             timer = EnemyCoordinator.Instance.GetEnemyTurnDuration();
             ShowWaiting();
-            if (waitingTurns >= 2)
-            {
-                DisableExplosions();
-            }
-            Invoke("SetEnemiesTurn", (timer));
+            // if (waitingTurns <= 2)
+            // {
+            //     DisableExplosions();
+            // }
+            Invoke("SetEnemiesTurn", (timer*2));
             // Debug.Log("s1");
             return false;
         }
@@ -247,7 +249,7 @@ public class Player : Character {
         //Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
         horizontal = (int)(Input.GetAxisRaw("Horizontal"));
 
-        ////Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
+        ///Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
         vertical = (int)(Input.GetAxisRaw("Vertical"));
 
         //Check if moving horizontally, if so set vertical to zero.
@@ -359,25 +361,7 @@ public class Player : Character {
         tentativePos.x += horizontal;
         tentativePos.y += vertical;
         targetType = BoardManager.Instance.GetPositionType(tentativePos);
-        //switch (targetType)
-        //{
-        //    case BoardManager.tileType.ground:
-        //        break;
-        //    case BoardManager.tileType.player:
-        //        break;
-        //    case BoardManager.tileType.wall:
-        //        break;
-        //    case BoardManager.tileType.enemy:
-        //        break;
-        //    case BoardManager.tileType.exit:
-        //        break;
-        //    case BoardManager.tileType.obstacle:
-        //        break;
-        //    case BoardManager.tileType.outOfLimits:
-        //        break;
-        //    default:
-        //        break;
-        //}
+
         if (targetType == BoardManager.tileType.enemy || targetType == BoardManager.tileType.obstacle)
         {
             PerformAction(Actions.BasicAtk, tentativePos);
@@ -464,8 +448,8 @@ public class Player : Character {
         
         performedAction = true;
 
-        if (finishedMove)
-            CallNextTurn();
+        // if (finishedMove)
+        //     CallNextTurn();
     }
 
     private static void DisplayNoMana()
@@ -485,16 +469,6 @@ public class Player : Character {
         BoardManager.Instance.DisableMarkers();
         EventManager.TriggerEvent(Events.EnemiesTurn);
             
-    }
-
-    void DisableExplosions()
-    {
-        //Debug.Log("EWROWERJKWERHKWEHRKJEHRJKHW");
-        for (int i = 0; i < explosions.Count; i++)
-        {
-            explosions[i].SetActive(false);
-        }
-        explosions.Clear();
     }
 
     public void DoOvercharge()

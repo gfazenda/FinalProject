@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerSkills : MonoBehaviour {
-    [System.Serializable]
+    
     public struct Skill
     {
 
@@ -11,7 +11,7 @@ public class PlayerSkills : MonoBehaviour {
 
     // [SerializeField]
     public List<Skill> skills;
-
+    int countDown;
 	// Use this for initialization
 	void Start () {
 		
