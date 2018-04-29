@@ -299,10 +299,16 @@ MonoBehaviour:
     x: 0
     y: 0
   characterType: 4
-  deathParticle: {fileID: 1265611803004274, guid: bd25d9843433b304a916a8e37c20610c,
+  deathParticle: {fileID: 1265611803004274, guid: 74738b45254511a499cc6dc3dc06b021,
     type: 2}
+  moveDuration: 0.2
   range: 2
+  atkRange: 0
+  moveRange: 0
+  currentDistance: 100
+  myPath: []
   diagonalAtk: 1
+  moved: 0
   projectile: {fileID: 1032663303757842}
 --- !u!114 &114596921507774626
 MonoBehaviour:

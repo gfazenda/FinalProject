@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 199984375361246808}
   - component: {fileID: 114578506487371768}
   m_Layer: 0
-  m_Name: Death
+  m_Name: DeathRock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54,8 +54,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-  - {r: 0.42647058, g: 0.42647058, b: 0.42647058, a: 1}
-  - {r: 0.9632353, g: 0.4620794, b: 0.0070826192, a: 1}
+  - {r: 0.4568555, g: 0.47794116, b: 0.45874596, a: 1}
+  - {r: 0.20847748, g: 0.42647058, b: 0.20069203, a: 1}
 --- !u!198 &198754271951983322
 ParticleSystem:
   m_ObjectHideFlags: 1
