@@ -15,7 +15,7 @@ public class Player : Character {
     checkSkills = true, isClcked = false, missileLaunched = false;
 
     public bool spellsBlocked = false;
-    public Coord invalidPos = new Coord(-1,-1);
+    public Coord invalidPos;
     public enum Actions { Move, Overcharge, Missile, Mine, BasicAtk };
 
     Actions currentAction;
@@ -46,7 +46,7 @@ public class Player : Character {
         _mineScript = this.GetComponent<MineController>();
         _status = this.GetComponent<PlayerStatus>();
         _extendedMove = this.GetComponent<PlayerExtendedMove>();
-
+        invalidPos = new Coord(-1, -1);
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
         EventManager.StartListening(Events.GamePaused, GamePaused);
 

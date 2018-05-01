@@ -11,11 +11,11 @@ public class EnemyCoordinator : MonoBehaviour {
     public float turnDelay = 0.3f;
     float delay;
 
-    List<GameObject> enemies = new List<GameObject>();
+    public List<GameObject> enemies = new List<GameObject>();
     AStar _astar;
     EnemyMinimax _minimax;
     // Use this for initialization
-    void Awake ()
+    void Awake()
     {
         if (_instance != null && _instance != this)
         {
@@ -41,6 +41,14 @@ public class EnemyCoordinator : MonoBehaviour {
         _minimax = this.GetComponent<EnemyMinimax>();
     }
 
+    public void RereadEnemies()
+    {
+        enemies.Clear();
+        enemies.AddRange(GameObject.FindGameObjectsWithTag(Tags.Enemy));
+        InitializeEnemies();
+        UpdateDelayTime();
+    }
+
 
     public List<Coord> GetPath(Coord enemyPosition, Coord playerPosition)
     {
@@ -59,13 +67,18 @@ public class EnemyCoordinator : MonoBehaviour {
         enemies.Clear();// = new List<GameObject>();
         //enemies.AddRange(GameObject.FindGameObjectsWithTag(Tags.Enemy));
         enemies = BoardManager.Instance.listOfEnemies;
+        InitializeEnemies();
+        // delay = (delayPerEnemy / enemies.Count);
+        UpdateDelayTime();
+        //Debug.Log("got enemies " + enemies.Count);
+    }
+
+    void InitializeEnemies()
+    {
         for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].GetComponent<Enemy>().Initialize();
         }
-        // delay = (delayPerEnemy / enemies.Count);
-        UpdateDelayTime();
-        //Debug.Log("got enemies " + enemies.Count);
     }
 
     public float GetEnemyTurnDuration()

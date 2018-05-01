@@ -55,7 +55,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colors:
   - {r: 0, g: 1, b: 0.08965516, a: 1}
-  - {r: 0.50547665, g: 1, b: 0.2205882, a: 1}
+  - {r: 0.36551726, g: 1, b: 0, a: 1}
 --- !u!198 &198754271951983322
 ParticleSystem:
   m_ObjectHideFlags: 1

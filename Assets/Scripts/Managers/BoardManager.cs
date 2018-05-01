@@ -207,6 +207,11 @@ public class BoardManager : MonoBehaviour
         gameBoard[pos.x, pos.y] = tileType.ground;
     }
 
+    public void SetPositionType(Coord pos, tileType type)
+    {
+        gameBoard[pos.x, pos.y] = type;
+    }
+
     public void SetInvalidPosition(Coord pos)
     {
         gameBoard[pos.x, pos.y] = tileType.outOfLimits;
