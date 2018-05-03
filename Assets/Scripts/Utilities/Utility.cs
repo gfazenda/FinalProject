@@ -60,6 +60,11 @@ public static class Scenes
     public const string Gameplay = "Gameplay";
 }
 
+public static class Prefs
+{
+    public const string Level = "Level";
+}
+
 
 
 

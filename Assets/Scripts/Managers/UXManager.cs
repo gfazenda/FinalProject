@@ -43,7 +43,7 @@ public class UXManager : MonoBehaviour {
         hpScript = hpObj.GetComponent<HealthBar>();
         manaScript = manaObj.GetComponent<HealthBar>();
 
-        EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
+        //EventManager.StartListening(Events.LevelLoaded, ShowLevelOverlay);
         EventManager.StartListening(Events.DamageUpdate, UpdatePlayerDamage);
         EventManager.StartListening(Events.EnemiesTurn, DisableButtons);
         EventManager.StartListening(Events.DisableMoveButtons, () => ChangeMoveButtons(false));
@@ -163,7 +163,7 @@ public class UXManager : MonoBehaviour {
         topText.text = "";
     }
 
-    void ShowLevelOverlay()
+    public void ShowLevelOverlay()
     {
         DisplayMessage("Level " + GameManager.Instance.currentLevel, 2f, textOption.top);
     }

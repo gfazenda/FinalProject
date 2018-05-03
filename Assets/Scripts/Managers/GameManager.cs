@@ -13,13 +13,13 @@ public class GameManager : MonoBehaviour {
 
     [HideInInspector]
     public TextFileReader _fileReader;
-    
-    
+
+    public bool loadPlayerLevel = true;
     
 
     public int currentLevel = 1;
 
-    bool initialized = false;
+    bool initialized = false, firstLevelPlayed = true;
 
     private void Awake()
     {
@@ -72,13 +72,23 @@ public class GameManager : MonoBehaviour {
 
     public LevelInformation LoadLevelFile()
     {
+        if (loadPlayerLevel && firstLevelPlayed)
+        {
+            int levelFromFile = _fileReader.ReadCurrentLevel();
+            currentLevel = levelFromFile == -1 ? currentLevel : levelFromFile;
+            firstLevelPlayed = false;
+        }
+        UXManager.instance.ShowLevelOverlay();
         return _fileReader.LoadFile("Level" + currentLevel + ".txt");
     }
 
     void NextLevel()
     {
         Debug.Log("load");
+
         currentLevel++;
+        _fileReader.SaveLevel(currentLevel);
+
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
     }
@@ -93,7 +103,6 @@ public class GameManager : MonoBehaviour {
     public void BackToMenu()
     {
         Debug.Log("back");
-        //Scene scene = SceneManager.GetSceneByName(Scenes.MainMenu);
         SceneManager.LoadScene(Scenes.MainMenu);
     }
 

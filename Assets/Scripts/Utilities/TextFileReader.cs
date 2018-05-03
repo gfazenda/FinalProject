@@ -9,8 +9,8 @@ public class TextFileReader: MonoBehaviour
 
     void Start()
     {
-        WriteString();
-        ReadCurrentLevel();
+        //WriteString();
+        //ReadCurrentLevel();
     }
     public Vector2 ReadCurrentMapSize()
     {
@@ -18,31 +18,36 @@ public class TextFileReader: MonoBehaviour
         return Vector2.zero;
     }
 
-    static void WriteString()
+    public void SaveLevel(int level)
     {
 
-        StreamWriter file;
-          string fileName="CurrentLevel.txt";
-    //  https://forum.unity.com/threads/resolved-cant-write-in-application-persistentdatapath-no-error-sent.492203/
-         string path = Path.Combine(Application.streamingAssetsPath, fileName);
-        //path = Path.Combine(path, "\\Level1.txt");
-        if (Application.platform == RuntimePlatform.Android)
-        {
-                path = Application.persistentDataPath + "/" + fileName;
-        }
+    //    StreamWriter file;
+    //      string fileName="CurrentLevel.txt";
+    ////  https://forum.unity.com/threads/resolved-cant-write-in-application-persistentdatapath-no-error-sent.492203/
+    //     string path = Path.Combine(Application.streamingAssetsPath, fileName);
+    //    //path = Path.Combine(path, "\\Level1.txt");
+    //    if (Application.platform == RuntimePlatform.Android)
+    //    {
+    //        path = Application.persistentDataPath + "/" + fileName;
+    //       // path = "jar:file://" + Application.dataPath + "!/assets/" + fileName;
+    //    }
  
-            if (!File.Exists(path))
-            {
-                file = File.CreateText(path);
-                file.WriteLine("888");
-                file.Close();
-            }
-            else
-            {
-                File.WriteAllText(path, "9999");
-            }
+    //        if (!File.Exists(path))
+    //        {
+    //            file = File.CreateText(path);
+    //            Debug.Log("file not here");
+    //            file.WriteLine(level.ToString());
+    //            file.Close();
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("file issss here");
+    //        File.WriteAllText(path, level.ToString());
+               
+    //        }
+            PlayerPrefs.SetInt(Prefs.Level, level);
  
-            Debug.Log(path);
+        //    Debug.Log(path);
         // catch (Exception e)
         // {
         // }
@@ -58,29 +63,31 @@ public class TextFileReader: MonoBehaviour
     }
 
     public int ReadCurrentLevel(){
-        int currLevel = -1;
-        string fileName="CurrentLevel.txt";
-        string fileString = null;
-        string path = Path.Combine(Application.streamingAssetsPath, fileName);
-        //path = Path.Combine(path, "\\Level1.txt");
-        if (Application.platform == RuntimePlatform.Android)
-        {
-            path = "jar:file://" + Application.persistentDataPath + "/" + fileName;
-            Debug.Log(path);
-            WWW wwwfile = new WWW(path);
-            while (!wwwfile.isDone) { }
-          //  t.text = wwwfile.text;
-            fileString = wwwfile.text;
-        }else
-        {
-            fileString = File.ReadAllText(path);
-        }
+        //int currLevel = -1;
+        //string fileName="CurrentLevel.txt";
+        //string fileString = null;
+        //string path = Path.Combine(Application.streamingAssetsPath, fileName);
+        ////path = Path.Combine(path, "\\Level1.txt");
+        //if (Application.platform == RuntimePlatform.Android)
+        //{
+        //    path = "jar:file://" + Application.dataPath + "!/assets/" + fileName;
+        //    Debug.Log(path);
+        //    WWW wwwfile = new WWW(path);
+        //    while (!wwwfile.isDone) { }
+        //  //  t.text = wwwfile.text;
+        //    fileString = wwwfile.text;
+        //}else
+        //{
+        //    fileString = File.ReadAllText(path);
+        //}
 
-        // if(fileString != null){
-        //     currLevel = int.Parse(fileString);
-        // }
-        Debug.Log("current level isssssss" + fileString);
-        return currLevel;
+        //// if(fileString != null){
+        ////     currLevel = int.Parse(fileString);
+        //// }
+        //currLevel = System.Convert.ToInt32(fileString);
+        //Debug.Log("current level isssssss " + currLevel.ToString());
+        //return currLevel;
+        return PlayerPrefs.GetInt(Prefs.Level, 1);
     }
 
 
@@ -131,7 +138,7 @@ public class TextFileReader: MonoBehaviour
         //var filepath = string.Format("{0}/{1}", Application.persistentDataPath, "alphabet.t");
         //File.WriteAllBytes(filepath, wwwfile.bytes);
         
-        Debug.Log(path);
+      //  Debug.Log(path);
         return level;
         //Debug.Log(thing);
     }
