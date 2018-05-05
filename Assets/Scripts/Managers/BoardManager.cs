@@ -7,7 +7,7 @@ public class BoardManager : MonoBehaviour
     private static BoardManager _instance;
 
     public static BoardManager Instance { get { return _instance; } }
-    public enum tileType { outOfLimits, ground, wall, obstacle , enemy, player, exit, rock, venon, lava, drain, block  };
+    public enum tileType { outOfLimits, ground, wall, obstacle , enemy, player, exit, rock, venon, lava, drain, block, laser };
 
     MapGenerator _mapGenerator;
     public GameObject _player;
@@ -239,6 +239,10 @@ public class BoardManager : MonoBehaviour
             if (exitCoord.CompareTo(pos))
             {
                 return tileType.exit;
+            }
+            if(gameBoard[pos.x, pos.y] == tileType.lava || gameBoard[pos.x, pos.y] == tileType.rock || gameBoard[pos.x, pos.y] == tileType.venon)
+            {
+                return tileType.enemy;
             }
             return gameBoard[pos.x, pos.y];
         }

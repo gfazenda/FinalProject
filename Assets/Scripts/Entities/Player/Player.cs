@@ -6,7 +6,7 @@ public class Player : Character {
     public int manaPool = 100;
   //  public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
     int maxMana;
-    float timer, minimumSwipe = 100f;
+    float timer, minimumSwipe = 60f;
 
     private Vector2 touchOrigin = -Vector2.one;
 

@@ -10,44 +10,91 @@ public class LaserTower : MonoBehaviour {
     Coord posA, posB;
 
     bool active = false;
+    public bool horizontalTrap = true;
 
     enum phase {off, starting, started}
     phase currentState;
     int laserTurns = 1, currentTurns = 0;
 	// Use this for initialization
 	void Start () {
-        laserRenderer = laser.GetComponent<LineRenderer>();
-        RepositionTowers(new Coord(1, 3), new Coord(4, 3));
+        // laserRenderer = laser.GetComponent<LineRenderer>();
+        //RepositionTowers();
+      //  Initialize();
+      //  RenderLaser(originA.transform.position, originB.transform.position, Color.green);
+
+    }
+
+
+    public void CreateTrap(Coord a, Coord b)
+    {
+        posA = a;
+        posB = b;
+        horizontalTrap = posA.x != posB.x ? true : false;
+        
+        RepositionTowers();
         Initialize();
         RenderLaser(originA.transform.position, originB.transform.position, Color.green);
-        
     }
 
     void Initialize()
     {
-        int yPos = posA.y;
-        int xPos;
-        for (int i = posA.x+1; i < posB.x; i++)
+        if (horizontalTrap)
         {
-            xPos = i;
-            positionsAffected.Add(new Coord(xPos, yPos));
+            int yPos = posA.y;
+            int xPos;
+            for (int i = posA.x + 1; i < posB.x; i++)
+            {
+                xPos = i;
+                positionsAffected.Add(new Coord(xPos, yPos));
+            }
+        }else
+        {
+            int yPos;
+            int xPos = posA.x;
+            for (int i = posA.y + 1; i < posB.y; i++)
+            {
+                yPos = i;
+                positionsAffected.Add(new Coord(xPos, yPos));
+            }
         }
         currentState = phase.off;
     }
 
-    public void RepositionTowers(Coord a, Coord b)
+    public void RepositionTowers()
     {
-        posA = a;
-        posB = b;
-        towerA.transform.position = BoardManager.Instance.CoordToPosition(a);
-        towerB.transform.position = BoardManager.Instance.CoordToPosition(b);
-        towerB.transform.rotation = new Quaternion(0, 180, 0, 0);
-        BoardManager.Instance.SetInvalidPosition(a);
-        BoardManager.Instance.SetInvalidPosition(b);
+       /// posA = a;
+       // posB = b;
+        towerA.transform.position = BoardManager.Instance.CoordToPosition(posA);
+        towerB.transform.position = BoardManager.Instance.CoordToPosition(posB);
+        
+        //    towerA.transform.rotation = new Quaternion(0, -90, 0, 0);
+        if (!horizontalTrap)
+        {
+            if (posA.y < posB.y)
+            {
+                towerB.transform.Rotate(new Vector3(0, 90, 0));
+                towerA.transform.Rotate(new Vector3(0, -90, 0));
+            }else
+            {
+                towerB.transform.Rotate(new Vector3(0, -90, 0));
+                towerA.transform.Rotate(new Vector3(0, 90, 0));
+            }
+        }
+        else
+        {
+            if (posA.x < posB.x)
+                towerB.transform.Rotate(new Vector3(0, 180, 0));
+            else
+                towerA.transform.Rotate(new Vector3(0, 180, 0));
+        }
+
+        BoardManager.Instance.SetInvalidPosition(posA);
+        BoardManager.Instance.SetInvalidPosition(posB);
     }
 
     private void OnEnable()
     {
+        laserRenderer = laser.GetComponent<LineRenderer>();
         //RenderLaser(towerA.transform.position, towerB.transform.position, Color.green);
         EventManager.StartListening(Events.EnemiesTurn, DoEffect);
     }
@@ -68,14 +115,14 @@ public class LaserTower : MonoBehaviour {
                 break;
             case phase.starting:
                 laser.SetActive(true);
-                laserRenderer.SetColors(Color.red, Color.red);
+                ChangeLaserColor(Color.red);
                 currentTurns = 0;
                 currentState = phase.started;
                 break;
             case phase.started:
                 {
                     currentTurns++;
-                    laserRenderer.SetColors(Color.green, Color.green);
+                    ChangeLaserColor(Color.green);
                     if (currentTurns >= laserTurns)
                         currentState = phase.off;
                     CheckObjectsHit();
@@ -118,6 +165,12 @@ public class LaserTower : MonoBehaviour {
         }
     }
 
+    void ChangeLaserColor(Color newColor)
+    {
+        laserRenderer.startColor = (newColor);
+        laserRenderer.endColor = (newColor);
+    }
+
     // Update is called once per frame
     void Update () {
 		
@@ -129,12 +182,17 @@ public class LaserTower : MonoBehaviour {
        // myLine.transform.position = start;
        // myLine.AddComponent<LineRenderer>();
      //   LineRenderer lr = laser.GetComponent<LineRenderer>();
-        laserRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-        laserRenderer.SetColors(color, color);
-        laserRenderer.SetWidth(0.3f, 0.3f);
-
+    //    laserRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        //laserRenderer.SetColors(color, color);
+        ChangeLaserColor(color);
+        //laserRenderer.SetWidth(0.1f, 0.1f);
+        laserRenderer.startWidth = 0.1f;
+        laserRenderer.endWidth = 0.1f;
         laserRenderer.SetPosition(0, start);
         laserRenderer.SetPosition(1, end);
+
+        //laserRenderer.enabled = false;
+
         laser.SetActive(false);
         // GameObject.Destroy(myLine, duration);
     }

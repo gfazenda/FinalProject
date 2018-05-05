@@ -24,7 +24,7 @@ public class Enemy : Character {
     {
         player = BoardManager.Instance._playerScript;
         atkRange = range * Utility.distanceMultiplier;
-        transform.position = BoardManager.Instance.CoordToPosition(position);
+        transform.position = BoardManager.Instance.CoordToPosition(position,false);
         moveRange = 1;
     }
 

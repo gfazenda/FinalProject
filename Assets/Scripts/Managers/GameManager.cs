@@ -82,6 +82,11 @@ public class GameManager : MonoBehaviour {
         return _fileReader.LoadFile("Level" + currentLevel + ".txt");
     }
 
+    public void ResetLevelInfo()
+    {
+        PlayerPrefs.SetInt(Prefs.Level, 1);
+    }
+
     void NextLevel()
     {
         Debug.Log("load");

@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
 {
-    public Transform groundPrefab, blockPrefab, player, exitPrefab, venoalien, rockmonster, lavathing, drain, blocker;
+    public Transform groundPrefab, blockPrefab, player, exitPrefab, venoalien, rockmonster, lavathing, drain, blocker, laserPrefab;
     List<Transform> enemyPrefab = new List<Transform>();
     List<Transform> trapPrefab = new List<Transform>();
     public Vector2 mapSize;
     public int maxNumberOfObstacles = 3;
+    int laserTowers = 0;
     [Range(0, 1)]
     public float outlinePercent;
 
     public string mapObjName = "Map";
 
-    List<Coord> allTileCoords, wallCoords;
+    List<Coord> allTileCoords, wallCoords, towerCoords;
     List<GameObject> enemyCoords;
     List<GameObject> obstacleCoords;
     Queue<Coord> shuffledTileCoords;
@@ -38,6 +39,7 @@ public class MapGenerator : MonoBehaviour
     {
         allTileCoords = new List<Coord>();
         wallCoords = new List<Coord>();
+        towerCoords = new List<Coord>();
         obstacleCoords = new List<GameObject>();
         enemyCoords = new List<GameObject>();
         mapHolder = new GameObject(mapObjName).transform;
@@ -305,6 +307,10 @@ public class MapGenerator : MonoBehaviour
             {
                  currentCoord = new Coord(x, y);
                  currentObj = level.objects[x, ((int)(mapSize.y - 1) - y)];
+                if(currentObj == -1)
+                {
+                    currentObj = 12;
+                }
                 if ((BoardManager.tileType)currentObj == BoardManager.tileType.outOfLimits)
                 {
                     continue;
@@ -349,6 +355,17 @@ public class MapGenerator : MonoBehaviour
                         currObs = InstantiatePrefab(currentCoord, blocker, blocksHolder);
                         obstacleCoords.Add(currObs.gameObject);
                         currObs.GetComponent<SpecialTile>().SetPosition(currentCoord);
+                        break;
+                    case BoardManager.tileType.laser:
+                        laserTowers++;
+                        towerCoords.Add(currentCoord);
+                        if (laserTowers == 2)
+                        {
+                            currObs = InstantiatePrefab(currentCoord, laserPrefab, blocksHolder);
+                            currObs.GetComponent<LaserTower>().CreateTrap(towerCoords[0], towerCoords[1]);
+                            towerCoords.Clear();
+                            laserTowers = 0;
+                        }
                         break;
                     case BoardManager.tileType.drain:
                         currObs = InstantiatePrefab(currentCoord, drain, blocksHolder);
