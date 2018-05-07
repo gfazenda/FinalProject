@@ -18116,7 +18116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxFrameRate: 30
   _fileReader: {fileID: 0}
-  loadPlayerLevel: 0
+  loadPlayerLevel: 1
   currentLevel: 1
 --- !u!4 &1318059137
 Transform:

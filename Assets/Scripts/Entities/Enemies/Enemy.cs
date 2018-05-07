@@ -73,16 +73,29 @@ public class Enemy : Character {
         base.UpdateHPBar();
     }
 
+    protected bool CheckWaitingTurns()
+    {
+        if (waitingTurns > 0)
+        {
+            waitingTurns -= 1;
+            return true;
+        }
+        return false;
+    }
+
+    protected void PreActionSteps()
+    {
+        moved = false;
+        currentDistance = BoardManager.Distance(position, player.GetPosition());
+    }
+
 
     public virtual void DoAction()
     {
-        moved = false;
-        if(waitingTurns > 0)
-        {
-            waitingTurns -= 1;
+        PreActionSteps();
+        if (CheckWaitingTurns())
             return;
-        }
-        currentDistance = BoardManager.Distance(position, player.GetPosition());
+
         if (currentDistance <= atkRange && AttackIsValid(position))
         {
             // Debug.Log("close enough " + BoardManager.Distance(position, player.GetPosition()));
@@ -110,7 +123,7 @@ public class Enemy : Character {
 
     }
 
-    private bool PerformAdvancedMove()
+    protected bool PerformAdvancedMove()
     {
         Debug.Log("doing advanced");
         bool moveDone = false;
@@ -147,7 +160,7 @@ public class Enemy : Character {
         
     }
 
-    private void PerformBasicMove()
+    protected void PerformBasicMove()
     {
         if (playerPosition == null || !playerPosition.CompareTo(player.GetComponent<Player>().GetPosition()) || myPath.Count == 0)
         {
