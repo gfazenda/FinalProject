@@ -58,7 +58,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b3e356c5b72d8e745ae9a8fdcdf3b093, type: 2}
+  - {fileID: 2100000, guid: 7cb8d05d341f6204db2a84c8497ed1dd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -120,9 +120,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startColor: {r: 0.8707911, g: 1, b: 0.2794118, a: 0.634}
-  finalColor: {r: 0.87058824, g: 1, b: 0.2784314, a: 0.297}
-  meshType: 0
-  _lerpType: 1
-  lerpDuration: 1
+  targetColor: {r: 0.8014706, g: 0.7084804, b: 0.1885813, a: 1}
+  changeSize: 0
+  _colorLerp: 1
   repeat: 1
+  lerpFromStart: 1
+  scale: 2
+  duration: 1
+  setAtRuntime: 1
+  mesh: {fileID: 23785070077494754}
+  meshType: 0

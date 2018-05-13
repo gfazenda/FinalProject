@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using EZCameraShake;
 
 public class GameManager : MonoBehaviour {
     private static GameManager _instance;
@@ -67,6 +68,11 @@ public class GameManager : MonoBehaviour {
     {
         EventManager.StopListening(Events.LevelWon, NextLevel);
         EventManager.StopListening(Events.LevelLost, ReloadLevel);
+    }
+
+    public void ShakeCamera()
+    {
+        CameraShaker.Instance.ShakeOnce(6f, 4f, .1f, 1f);
     }
 
 

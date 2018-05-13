@@ -120,9 +120,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startColor: {r: 0.5019608, g: 0.17254902, b: 0.43529412, a: 1}
-  finalColor: {r: 0.5019608, g: 0.17254902, b: 0.43529412, a: 0.278}
-  meshType: 0
-  _lerpType: 1
-  lerpDuration: 1.5
+  targetColor: {r: 0.5955882, g: 0.2758975, b: 0.5470833, a: 1}
+  changeSize: 0
+  _colorLerp: 1
   repeat: 1
+  lerpFromStart: 1
+  scale: 2
+  duration: 1
+  setAtRuntime: 1
+  mesh: {fileID: 23785070077494754}
+  meshType: 0

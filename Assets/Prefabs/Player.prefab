@@ -157,12 +157,11 @@ GameObject:
   - component: {fileID: 4003265995800018}
   - component: {fileID: 114957556950048218}
   - component: {fileID: 114213946907963882}
-  - component: {fileID: 114373715926148422}
   - component: {fileID: 114752086632357666}
   - component: {fileID: 114212167879367126}
   - component: {fileID: 65609793662525780}
-  - component: {fileID: 114984963098165240}
   - component: {fileID: 114678887679230620}
+  - component: {fileID: 114262712066146204}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -367,9 +366,6 @@ MonoBehaviour:
     type: 2}
   moveDuration: 0.15
   manaPool: 100
-  overchargeManacost: 5
-  mineManacost: 10
-  overchargeTurns: 3
   spellsBlocked: 0
   invalidPos:
     x: 0
@@ -379,7 +375,7 @@ MonoBehaviour:
   - {fileID: 114665188727847092, guid: 79a4bafb75dde71438be16a705b91fb3, type: 2}
   - {fileID: 114605390912112830, guid: 0f15f9a3ccbfa974eaee97d361005e71, type: 2}
   - {fileID: 114926328197458246, guid: 114ab5283e0f6c84ca01ed3dfeb2422e, type: 2}
---- !u!114 &114373715926148422
+--- !u!114 &114262712066146204
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -387,14 +383,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1880381455124804}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9aae4efd84df6fb48a45be895062e74b, type: 3}
+  m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  manacost: 0
-  damage: 0
-  cooldown: 0
+  targetColor: {r: 1, g: 0, b: 0, a: 0}
+  changeSize: 1
+  _colorLerp: 1
+  scale: 0.95
+  duration: 0.3
+  setAtRuntime: 0
+  mesh: {fileID: 23447070634539974}
+  meshType: 0
 --- !u!114 &114652119320368524
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -538,18 +537,6 @@ MonoBehaviour:
   HP: 5
   maxHP: 0
   healthAmount: 0
---- !u!114 &114984963098165240
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1880381455124804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5e502349448e794cad1cf6cd49240cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skills: []
 --- !u!198 &198140278404948060
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 355048034}
   - component: {fileID: 355048033}
   - component: {fileID: 355048032}
+  - component: {fileID: 355048035}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -234,6 +235,57 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 355048030}
+--- !u!114 &355048035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 355048030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4919af002e9df47a293928cce8429b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectTime: 0.8
+  animateAtStartup: 1
+  startPosition: {x: 1.2, y: 0.3}
+  positionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  startScale: {x: 2, y: 2, z: 0}
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &423604103
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,6 +298,7 @@ GameObject:
   - component: {fileID: 423604106}
   - component: {fileID: 423604105}
   - component: {fileID: 423604108}
+  - component: {fileID: 423604109}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -330,17 +383,70 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 423604103}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startColor: {r: 1, g: 0.3913455, b: 0, a: 1}
-  finalColor: {r: 1, g: 1, b: 0, a: 1}
-  meshType: 2
-  _lerpType: 0
-  lerpDuration: 3
-  repeat: 1
+  targetColor: {r: 1, g: 0.43448275, b: 0, a: 0.516}
+  changeSize: 0
+  _colorLerp: 1
+  scale: 2
+  duration: 0
+  setAtRuntime: 0
+  mesh: {fileID: 0}
+  meshType: 0
+--- !u!114 &423604109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 423604103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4919af002e9df47a293928cce8429b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectTime: 0.5
+  animateAtStartup: 1
+  startPosition: {x: 0, y: 1}
+  positionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  startScale: {x: 3, y: 3, z: 0}
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &747444327
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,7 +783,6 @@ GameObject:
   - component: {fileID: 1070913243}
   - component: {fileID: 1070913246}
   - component: {fileID: 1070913245}
-  - component: {fileID: 1070913247}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -770,23 +875,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &1070913247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1070913241}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startColor: {r: 1, g: 0.3913455, b: 0, a: 1}
-  finalColor: {r: 1, g: 0, b: 0, a: 1}
-  meshType: 2
-  _lerpType: 0
-  lerpDuration: 3
-  repeat: 1
 --- !u!1 &1086363957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1184,6 +1272,7 @@ GameObject:
   - component: {fileID: 1847264818}
   - component: {fileID: 1847264817}
   - component: {fileID: 1847264816}
+  - component: {fileID: 1847264819}
   m_Layer: 5
   m_Name: Quit
   m_TagString: Untagged
@@ -1295,6 +1384,57 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1847264814}
+--- !u!114 &1847264819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1847264814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4919af002e9df47a293928cce8429b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectTime: 0.8
+  animateAtStartup: 1
+  startPosition: {x: -1, y: 0.1}
+  positionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  startScale: {x: 2, y: 2, z: 0}
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &1905152127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1307,7 +1447,6 @@ GameObject:
   - component: {fileID: 1905152129}
   - component: {fileID: 1905152132}
   - component: {fileID: 1905152131}
-  - component: {fileID: 1905152133}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1400,23 +1539,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &1905152133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1905152127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startColor: {r: 0, g: 1, b: 0.006896496, a: 1}
-  finalColor: {r: 1, g: 1, b: 0, a: 1}
-  meshType: 2
-  _lerpType: 0
-  lerpDuration: 2
-  repeat: 1
 --- !u!1 &1993897075
 GameObject:
   m_ObjectHideFlags: 0

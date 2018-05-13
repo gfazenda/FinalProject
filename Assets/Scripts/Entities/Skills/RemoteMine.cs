@@ -47,6 +47,9 @@ public class RemoteMine : SpecialTile {
     void Explode()
     {
         BoardManager.Instance.InstantiateEffect(Tags.Explosion, position);
+
+        GameManager.Instance.ShakeCamera();
+
         BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground};
         List<KeyValuePair<BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, 1, types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)

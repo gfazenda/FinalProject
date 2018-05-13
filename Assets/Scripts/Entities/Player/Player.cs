@@ -180,6 +180,7 @@ public class Player : Character {
         ShowDamagePrefab();
         base.TakeDamage(damage);
         UXManager.instance.UpdatePlayerHP(_entityScript.HP,_entityScript.maxHP);
+        this.GetComponent<lerpColor>().Lerp();
         if (_entityScript.Dead())
             EventManager.TriggerEvent(Events.LevelLost);
     }
