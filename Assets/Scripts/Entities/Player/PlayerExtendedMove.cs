@@ -146,13 +146,15 @@ public class PlayerExtendedMove : MonoBehaviour
                     ActivateMarker(newpos);
                     path.Add(newpos);
                 }
-                else if (initial)
+                else 
                 {
-                    if (verticalSwipe)
-                        _pScript.TentativeMove(0, i);
-                    else
-                        _pScript.TentativeMove(i, 0);
-
+                    if (initial)
+                    {
+                        if (verticalSwipe)
+                            _pScript.TentativeMove(0, i);
+                        else
+                            _pScript.TentativeMove(i, 0);
+                    }
                     break;
                 }
 
@@ -188,13 +190,15 @@ public class PlayerExtendedMove : MonoBehaviour
                 //{
                 //    path.Add(newpos);
                 //}
-                else if(initial)
+                else
                 {
-                    if (verticalSwipe)
-                        _pScript.TentativeMove(0, i);
-                    else
-                        _pScript.TentativeMove(i, 0);
-
+                    if (initial)
+                    {
+                        if (verticalSwipe)
+                            _pScript.TentativeMove(0, i);
+                        else
+                            _pScript.TentativeMove(i, 0);
+                    }
                     break;
                 }
 

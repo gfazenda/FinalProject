@@ -17175,7 +17175,7 @@ MonoBehaviour:
   maxFrameRate: 30
   _fileReader: {fileID: 0}
   loadPlayerLevel: 0
-  currentLevel: 1
+  currentLevel: 2
 --- !u!4 &1318059137
 Transform:
   m_ObjectHideFlags: 0

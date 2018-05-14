@@ -44,7 +44,9 @@ public class AStar : MonoBehaviour {
         {
             Node currentNode = openSet.RemoveFirst();
             closedSet.Add(currentNode);
+
             Debug.Log(currentNode.posX + " " + currentNode.posY);
+
             if (currentNode == targetNode)
             {
                 RetracePath(startNode, targetNode);

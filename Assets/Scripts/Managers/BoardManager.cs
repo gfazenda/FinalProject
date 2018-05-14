@@ -170,7 +170,7 @@ public class BoardManager : MonoBehaviour
         {
             for (int y = node.posY - radius; y <= node.posY + radius; y++)
             {
-                if (x == 0 && y == 0)
+                if (x == node.posX && y == node.posY)
                     continue;
 
                 int checkX = x;
@@ -313,7 +313,7 @@ public class BoardManager : MonoBehaviour
         return (a.x != b.x && a.y != b.y);
     }
 
-    public List<KeyValuePair<tileType, Coord>> GetNeighbours(Coord pos, int radius, tileType[] types, bool diagonal = false)
+    public List<KeyValuePair<tileType, Coord>> GetNeighbours(Coord pos, int radius, tileType[] types, bool diagonal = false, bool includeCenter = false)
     {
         List<KeyValuePair<tileType, Coord>> neighbours = new List<KeyValuePair<tileType, Coord>>();
         Coord newPosition = new Coord();
@@ -323,7 +323,7 @@ public class BoardManager : MonoBehaviour
             for (int y = pos.y - radius; y <= pos.y + radius; y++)
             {
                 newPosition = new Coord();
-                if (x == 0 && y == 0)
+                if (!includeCenter && (x == pos.x && y == pos.y))
                     continue;
 
 
