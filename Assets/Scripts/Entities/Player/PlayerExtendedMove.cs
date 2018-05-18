@@ -45,7 +45,7 @@ public class PlayerExtendedMove : MonoBehaviour
     public void PlayerClicked(bool selectPath)
     {
 
-        UXManager.instance.ShowPathButton(selectPath);
+       // UXManager.instance.ShowPathButton(selectPath);
         if (selectPath)
         {
             

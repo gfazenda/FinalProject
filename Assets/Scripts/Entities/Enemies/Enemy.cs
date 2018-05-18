@@ -37,10 +37,10 @@ public class Enemy : Character {
 
     public virtual void PerformMove(Coord destination)
     {
-        Debug.Log("doing move "+ BoardManager.Distance(destination, position));
+        //Debug.Log("doing move "+ BoardManager.Distance(destination, position));
         if (BoardManager.Distance(destination, position) == moveRange && BoardManager.Instance.GetPositionType(destination)== BoardManager.tileType.ground )
         {
-            Debug.Log("doing move2");
+            //Debug.Log("doing move2");
             this.SetPosition(destination);
             moved = true;
         }

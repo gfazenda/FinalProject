@@ -8,7 +8,7 @@ public class Overcharge : Skill {
 	void Start () {
         base.Start();
         description = "Attack in area that affects up to 2 tiles of distance from you in all directions. \nOnce used you lose 3 rounds to recharge the robot`s battery.";
-        Debug.Log("descccc");
+        cooldown = turnPenalty;
 	}
 	
 	// Update is called once per frame
@@ -18,7 +18,7 @@ public class Overcharge : Skill {
 
     public override void DoEffect(Coord position)
     {
-        Debug.Log("ooooooo");
+        //Debug.Log("ooooooo");
         BoardManager.tileType[] types = { BoardManager.tileType.enemy, BoardManager.tileType.ground };
         List<KeyValuePair<BoardManager.tileType, Coord>> neighbours = BoardManager.Instance.GetNeighbours(position, range, types, true);
         foreach (KeyValuePair<BoardManager.tileType, Coord> t in neighbours)

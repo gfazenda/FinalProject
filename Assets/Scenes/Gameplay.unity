@@ -4049,7 +4049,7 @@ Transform:
   m_Children:
   - {fileID: 1642148184}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &385065205
 GameObject:
@@ -7337,7 +7337,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4411566765990368, guid: 9ac507538bc26f44692a2eebe25cb2b1, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114317643205024278, guid: 9ac507538bc26f44692a2eebe25cb2b1,
         type: 2}
@@ -19836,7 +19836,7 @@ MonoBehaviour:
   blockPrefab: {fileID: 4542559301076674, guid: 373d6819c281c1b42961efa0e19c9c2b,
     type: 2}
   player: {fileID: 4003265995800018, guid: 90c45a9181c10a04c966083ce84b370a, type: 2}
-  exitPrefab: {fileID: 4124568801272336, guid: ac5c685cc5311e549a1125a22c5fc8f2, type: 2}
+  exitPrefab: {fileID: 4660333875130284, guid: 783236a6c3b36624b99b7bd2d7669a69, type: 2}
   venoalien: {fileID: 4764742151844584, guid: d4579ae7cfb3eb149befa6dca6d00c78, type: 2}
   rockmonster: {fileID: 4382118876429588, guid: d6ef1dd248cb058479decfa756211e54,
     type: 2}
@@ -19869,7 +19869,7 @@ Transform:
   m_Children:
   - {fileID: 1955028562}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1510416064
 MonoBehaviour:
@@ -21515,7 +21515,7 @@ RectTransform:
   - {fileID: 483258323}
   - {fileID: 312015539}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

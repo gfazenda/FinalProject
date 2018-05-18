@@ -48,7 +48,7 @@ public class BoardManager : MonoBehaviour
     public void DoInitialize()
     {
         if (boardCreated) return;
-        Debug.Log("initializing");
+        //Debug.Log("initializing");
         
         _mapGenerator = this.GetComponent<MapGenerator>();
 

@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour {
         if (!initialized)
         {
             Initialize();
-            print("do loaginddfsfdf");
+            //print("do loaginddfsfdf");
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
     }

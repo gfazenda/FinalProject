@@ -5,7 +5,7 @@ using UnityEngine;
 public class UIAnimation : MonoBehaviour {
 
     public float effectTime;
-    public bool animateAtStartup = true;
+    public bool animateAtStartup = true, animateOnEnable = false;
 
     [Space(5)]
     [Header("Position")]
@@ -38,7 +38,7 @@ public class UIAnimation : MonoBehaviour {
 
     private void OnEnable()
     {
-        if (!animateAtStartup)
+        if (!animateAtStartup && animateOnEnable)
             StartCoroutine(Animate());
     }
 

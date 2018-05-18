@@ -21,7 +21,7 @@ public class SkillInfo : MonoBehaviour, IPointerDownHandler
     {
         for (int i = 0; i < _skillList.Count; i++)
         {
-            Debug.Log(_skillList[i].name);
+           // Debug.Log(_skillList[i].name);
             _skills.Add(_skillList[i].name, _skillList[i]);
         }
         this.gameObject.SetActive(false);

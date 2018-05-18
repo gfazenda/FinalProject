@@ -140,7 +140,7 @@ public class Player : Character {
             isClcked = !isClcked;
             _extendedMove.PlayerClicked(isClcked);
         }
-            //BoardManager.Instance.DisplayMarkers(position, 1);
+        //BoardManager.Instance.DisplayMarkers(position, 1);
     }
 
     void GoToNextWaypoint()
@@ -285,7 +285,7 @@ public class Player : Character {
             {
                 //If so, set touchOrigin to the position of that touch
                 touchOrigin = myTouch.position;
-                return;
+               // return;
             }
 
             //Set touchEnd to equal the position of this touch
@@ -321,6 +321,7 @@ public class Player : Character {
                 }
                 else if (myTouch.phase == TouchPhase.Ended)
                 {
+                    touchOrigin.x = -1;
                     ConfirmPath();
                 }
 
@@ -445,12 +446,13 @@ public class Player : Character {
             UpdateMana(currentSkill.manacost);
             currentSkill.DoEffect(target);
             GameLogs.Instance.AddLog(GameLogs.logType.skillUsed, actionInfo);
+            //CallNextTurn();
         }
         
         performedAction = true;
 
-        // if (finishedMove)
-        //     CallNextTurn();
+        if (finishedMove)
+            CallNextTurn();
     }
 
     private static void DisplayNoMana()
@@ -467,6 +469,7 @@ public class Player : Character {
     private void CallNextTurn()
     {
         playerTurn = false;
+        performedAction = true;
         BoardManager.Instance.DisableMarkers();
         EventManager.TriggerEvent(Events.EnemiesTurn);
             
