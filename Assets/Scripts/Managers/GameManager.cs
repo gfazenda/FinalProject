@@ -78,6 +78,14 @@ public class GameManager : MonoBehaviour {
 
     public LevelInformation LoadLevelFile()
     {
+        if (firstLevelPlayed && PlayerPrefs.GetInt(Prefs.SeenTutorial, 0) == 0)
+        {
+            PlayerPrefs.SetInt(Prefs.SeenTutorial, 1);
+            SceneManager.LoadScene(Scenes.Tutorial);
+            
+            return null;
+        }
+
         if (loadPlayerLevel && firstLevelPlayed)
         {
             int levelFromFile = _fileReader.ReadCurrentLevel();
@@ -91,6 +99,7 @@ public class GameManager : MonoBehaviour {
     public void ResetLevelInfo()
     {
         PlayerPrefs.SetInt(Prefs.Level, 1);
+        PlayerPrefs.SetInt(Prefs.SeenTutorial, 0);
     }
 
     void NextLevel()
@@ -122,7 +131,10 @@ public class GameManager : MonoBehaviour {
         yield return new WaitForSeconds(time);
     }
 
-
+    public void LoadGameplay()
+    {
+        SceneManager.LoadScene(Scenes.Gameplay);
+    }
 
 
     private void Update()

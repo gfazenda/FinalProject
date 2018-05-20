@@ -58,11 +58,13 @@ public static class Scenes
 {
     public const string MainMenu = "MainMenu";
     public const string Gameplay = "Gameplay";
+    public const string Tutorial = "Tutorial";
 }
 
 public static class Prefs
 {
     public const string Level = "Level";
+    public const string SeenTutorial = "SeenTutorial";
 }
 
 

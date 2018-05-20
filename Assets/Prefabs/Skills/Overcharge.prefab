@@ -56,6 +56,6 @@ MonoBehaviour:
     directions. Once used you lose 3 rounds to recharge the robot`s battery.
   manacost: 40
   damage: 2
-  cooldown: 3
+  cooldown: 2
   range: 2
   turnPenalty: 2

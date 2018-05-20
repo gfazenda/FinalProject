@@ -3382,6 +3382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectTime: 0.2
   animateAtStartup: 0
+  animateOnEnable: 0
   startPosition: {x: 0, y: 0}
   positionCurve:
     serializedVersion: 2
@@ -18223,7 +18224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxFrameRate: 30
   _fileReader: {fileID: 0}
-  loadPlayerLevel: 0
+  loadPlayerLevel: 1
   currentLevel: 1
 --- !u!4 &1318059137
 Transform:
@@ -21275,7 +21276,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  damping: 1
+  offsets:
+  - {x: 0, y: 8, z: -4}
+  - {x: 2.5, y: 8, z: -3}
+  levelsWithCustomOffset: 0500000009000000
 --- !u!45 &1642148186
 Skybox:
   m_ObjectHideFlags: 0
@@ -22614,6 +22618,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectTime: 0.2
   animateAtStartup: 0
+  animateOnEnable: 0
   startPosition: {x: 0, y: 0}
   positionCurve:
     serializedVersion: 2

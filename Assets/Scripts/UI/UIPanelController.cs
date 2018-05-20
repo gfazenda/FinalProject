@@ -33,4 +33,9 @@ public class UIPanelController : MonoBehaviour {
             play.gameObject.SetActive(true);
         }
     }
+
+    public void LoadGame()
+    {
+        GameManager.Instance.LoadGameplay();
+    }
 }
