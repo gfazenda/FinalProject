@@ -109,8 +109,7 @@ public class GameManager : MonoBehaviour {
         currentLevel++;
         _fileReader.SaveLevel(currentLevel);
 
-        Scene scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.name);
+        SceneManager.LoadScene(Scenes.Gameplay);
     }
 
     public void ReloadLevel()

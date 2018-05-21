@@ -27,7 +27,7 @@ public class Player : Character {
     Coord tentativePos = new Coord();
 
     public GameObject damagePrefab;
-
+    public int missilePlantingRange = 4, minePlantingRange = 2;
     GameObject explosion = null;
 
     List<GameObject> explosions = new List<GameObject>();
@@ -64,6 +64,11 @@ public class Player : Character {
         UXManager.instance.UpdatePlayerMana(manaPool, maxMana);
         UXManager.instance.UpdatePlayerHP(_entityScript.HP, _entityScript.maxHP);
         InitializeSkills();
+        if (GameManager.Instance.currentLevel >= 10)
+        {
+            missilePlantingRange += 1;
+            minePlantingRange += 1;
+        }
     }
 
         void InitializeSkills()
@@ -485,7 +490,7 @@ public class Player : Character {
         _skills.TryGetValue("Missile", out currentSkill);
         if (CanUseSpell(currentSkill.manacost))
         {
-             BoardManager.Instance.DisplayMarkers(position, 4, true, missile:true);
+             BoardManager.Instance.DisplayMarkers(position, missilePlantingRange, true, missile:true);
         }
         else
         {
@@ -498,7 +503,7 @@ public class Player : Character {
         _skills.TryGetValue("RemoteMine", out currentSkill);
         if (CanUseSpell(currentSkill.manacost))
         {
-            BoardManager.Instance.DisplayMarkers(position, 2, true, true);
+            BoardManager.Instance.DisplayMarkers(position, minePlantingRange, true, true);
         }
         else
         {

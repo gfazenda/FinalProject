@@ -5,21 +5,21 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public GameObject target;
-    int index = 0;
-    Vector3 offset, defaultOffset;
+    int index = 0, level;
+    Vector3 offset, defaultOffset, randomLevelOffset;
 
     public List<Vector3> offsets;
     public List<int> levelsWithCustomOffset;
 
     void Start()
     {
-        defaultOffset = new Vector3(1, 8, 1); 
+        defaultOffset = new Vector3(1, 8, 1);
         //target = GameObject.FindGameObjectWithTag(Tags.Player);
         target = BoardManager.Instance._player;
-
-        if (levelsWithCustomOffset.Contains(GameManager.Instance.currentLevel))
+        level = GameManager.Instance.currentLevel;
+        if (levelsWithCustomOffset.Contains(level))
         {
-            offset = offsets[levelsWithCustomOffset.IndexOf(GameManager.Instance.currentLevel)];
+            offset = offsets[levelsWithCustomOffset.IndexOf(level)];
         }
         else
         {

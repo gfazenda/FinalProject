@@ -15,6 +15,7 @@ public class RemoteMine : SpecialTile {
     {
         EventManager.StartListening(Events.PlayerTurn, DecreaseTurn);
         turnsInfo.text = turnsAlive.ToString();
+        if (GameManager.Instance.currentLevel >= 10) damage += 1;
     }
 
     private void OnEnable()

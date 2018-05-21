@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PoisonEnemy : Enemy {
+public class PoisonEnemy : Enemy
+{
 
     //List<GameObject> poisonTiles = new List<GameObject>();
     GameObject poisonPrefab;
@@ -14,17 +15,31 @@ public class PoisonEnemy : Enemy {
         base.Start();
     }
 
+    void PlacePoisonTile(GameObject poisonTile)
+    {
+        poisonTile.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+        poisonTile.GetComponent<SpecialTile>().SetPosition(position);
+        poisonTile.SetActive(true);
+    }
+
 
     public override void PerformMove(Coord destination)
     {
         poisonPrefab = null;
         poisonPrefab = ObjectPooler.SharedInstance.GetPooledObject(Tags.Poison);
-        if(poisonPrefab != null)
+        if (poisonPrefab != null)
         {
-            poisonPrefab.transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
-            poisonPrefab.GetComponent<SpecialTile>().SetPosition(position);
-            poisonPrefab.SetActive(true);
+            PlacePoisonTile(poisonPrefab);
         }
         base.PerformMove(destination);
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+        if (_entityScript.Dead())
+        {
+            PlacePoisonTile(ObjectPooler.SharedInstance.GetPooledObject(Tags.Poison));
+        }
     }
 }

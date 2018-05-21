@@ -8,7 +8,7 @@ public class MapGenerator : MonoBehaviour
     List<Transform> enemyPrefab = new List<Transform>();
     List<Transform> trapPrefab = new List<Transform>();
     public Vector2 mapSize;
-    public int maxNumberOfObstacles = 3;
+    public int maxNumberOfTraps = 2;
     int laserTowers = 0;
     [Range(0, 1)]
     public float outlinePercent;
@@ -71,8 +71,9 @@ public class MapGenerator : MonoBehaviour
     public void GenerateMap()
     {
         InitializeVariables();
-        enemyCount = (GameManager.Instance.currentLevel)/2 + baseEnemyNumber;
-        obstacleCount = Random.Range(0,(GameManager.Instance.currentLevel+2)) + baseObstacleNumber;
+        enemyCount = (GameManager.Instance.currentLevel)/2;
+        baseObstacleNumber += GameManager.Instance.currentLevel / 3;
+        obstacleCount = Random.Range(baseObstacleNumber/2, baseObstacleNumber);// + baseObstacleNumber;
        
         exitCoord = new Coord((int)Random.Range(0, mapSize.x), (int)(mapSize.y - 1));
         obstaclesPlaced = 0;
@@ -141,7 +142,7 @@ public class MapGenerator : MonoBehaviour
             }
             currentObstacle = blockPrefab;
 
-            if (obstaclesPlaced < maxNumberOfObstacles)
+            if (obstaclesPlaced < maxNumberOfTraps)
             {
                 placeObstacle = Random.Range(0.0f, 1.0f) < 0.1f ? true : false;
                 if (placeObstacle)
@@ -307,10 +308,6 @@ public class MapGenerator : MonoBehaviour
             {
                  currentCoord = new Coord(x, y);
                  currentObj = level.objects[x, ((int)(mapSize.y - 1) - y)];
-                if(currentObj == -1)
-                {
-                    currentObj = 12;
-                }
                 if ((BoardManager.tileType)currentObj == BoardManager.tileType.outOfLimits)
                 {
                     continue;

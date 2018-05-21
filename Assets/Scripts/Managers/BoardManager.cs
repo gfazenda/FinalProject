@@ -67,6 +67,7 @@ public class BoardManager : MonoBehaviour
             gameBoard = new tileType[mapWidth, mapHeight];
             _mapGenerator.GenerateMap();
             InitializeBoard();
+            UXManager.instance.ShowLevelOverlay();
         }
 
        
