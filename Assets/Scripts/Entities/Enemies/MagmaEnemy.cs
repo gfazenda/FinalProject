@@ -50,6 +50,9 @@ public class MagmaEnemy : Enemy {
         if (CheckWaitingTurns())
             return;
 
+        if (currentDistance > minimumAggroDistance)
+            return;
+
         if (currentDistance <= atkRange)
         {
             if (AttackIsValid(position))

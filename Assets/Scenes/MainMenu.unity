@@ -248,6 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectTime: 0.8
   animateAtStartup: 1
+  animateOnEnable: 0
   startPosition: {x: 1.2, y: 0.3}
   positionCurve:
     serializedVersion: 2
@@ -391,6 +392,8 @@ MonoBehaviour:
   targetColor: {r: 1, g: 0.43448275, b: 0, a: 0.516}
   changeSize: 0
   _colorLerp: 1
+  repeat: 0
+  lerpFromStart: 0
   scale: 2
   duration: 0
   setAtRuntime: 0
@@ -409,6 +412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectTime: 0.5
   animateAtStartup: 1
+  animateOnEnable: 0
   startPosition: {x: 0, y: 1}
   positionCurve:
     serializedVersion: 2
@@ -1397,6 +1401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectTime: 0.8
   animateAtStartup: 1
+  animateOnEnable: 0
   startPosition: {x: -1, y: 0.1}
   positionCurve:
     serializedVersion: 2
@@ -1447,6 +1452,7 @@ GameObject:
   - component: {fileID: 1905152129}
   - component: {fileID: 1905152132}
   - component: {fileID: 1905152131}
+  - component: {fileID: 1905152133}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -1539,6 +1545,20 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &1905152133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1905152127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e86c266b09f9648a1f5e4fec581bd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectTime: 2
+  endScale: {x: 0, y: 0, z: 0}
+  endColor: {r: 0, g: 0.86764705, b: 0.11369159, a: 1}
 --- !u!1 &1993897075
 GameObject:
   m_ObjectHideFlags: 0

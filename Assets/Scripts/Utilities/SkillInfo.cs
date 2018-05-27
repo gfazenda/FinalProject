@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SkillInfo : MonoBehaviour, IPointerDownHandler
 {
-    public Text name, description, values;
+    public Text name, description, damage, manacost;
     public List<Skill> _skillList = new List<Skill>();
     Dictionary<string, Skill> _skills = new Dictionary<string, Skill>();
     Skill currentSkill = null;
@@ -35,7 +35,8 @@ public class SkillInfo : MonoBehaviour, IPointerDownHandler
         name.text = currentSkill.name;
         description.text = currentSkill.description;
         Debug.Log("desc "  + currentSkill.description);
-        values.text = "Damage: " + currentSkill.damage + " \nManacost: " + currentSkill.manacost;
+        damage.text = "Damage: " + currentSkill.damage;
+        manacost.text = "| \f Manacost: " + currentSkill.manacost;
     }
 
     public void OnPointerDown(PointerEventData eventData)

@@ -306,6 +306,7 @@ MonoBehaviour:
   atkRange: 0
   moveRange: 0
   currentDistance: 100
+  minimumAggroDistance: 7
   myPath: []
   diagonalAtk: 1
   moved: 0

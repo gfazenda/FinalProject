@@ -31,15 +31,7 @@ public class GameLogs : MonoBehaviour {
     }
 
     GameLog currentLog;
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 
     public void AddLog(logType type, string info = "", int value = -111)
     {

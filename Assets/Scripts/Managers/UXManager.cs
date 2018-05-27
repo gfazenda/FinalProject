@@ -16,7 +16,7 @@ public class UXManager : MonoBehaviour {
 
     public enum moveDirection { Left, Right, Up, Down };
 
-    public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj;
+    public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj, noDmgObj;
     TextMeshProUGUI middleText, topText, bottomText, dmgText;
 
     HealthBar hpScript, manaScript;
@@ -64,7 +64,9 @@ public class UXManager : MonoBehaviour {
 
     void UpdatePlayerDamage()
     {
-        dmgText.text = System.Math.Round(BoardManager.Instance._playerScript.damage, 1).ToString();
+        int currDMG = (int)System.Math.Round(BoardManager.Instance._playerScript.damage, 1);
+        dmgText.text = currDMG.ToString();
+        noDmgObj.SetActive((currDMG == 0));
     }
 
     public bool TouchOverUI(int id)

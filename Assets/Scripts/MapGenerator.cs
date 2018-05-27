@@ -356,13 +356,13 @@ public class MapGenerator : MonoBehaviour
                     case BoardManager.tileType.laser:
                         laserTowers++;
                         towerCoords.Add(currentCoord);
-                        if (laserTowers == 2)
-                        {
-                            currObs = InstantiatePrefab(currentCoord, laserPrefab, blocksHolder);
-                            currObs.GetComponent<LaserTower>().CreateTrap(towerCoords[0], towerCoords[1]);
-                            towerCoords.Clear();
-                            laserTowers = 0;
-                        }
+                        //if (laserTowers == 2)
+                        //{
+                        //    currObs = InstantiatePrefab(currentCoord, laserPrefab, blocksHolder);
+                        //    currObs.GetComponent<LaserTower>().CreateTrap(towerCoords[0], towerCoords[1]);
+                        //    towerCoords.Clear();
+                        //    laserTowers = 0;
+                        //}
                         break;
                     case BoardManager.tileType.drain:
                         currObs = InstantiatePrefab(currentCoord, drain, blocksHolder);
@@ -372,8 +372,32 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+        if (towerCoords.Count > 0)
+            GenerateLasers();
+
         return map;
 
+    }
+
+    void GenerateLasers()
+    {
+        Transform currObs = null;
+        if (towerCoords.Count == 2)
+        {
+            currObs = InstantiatePrefab(towerCoords[0], laserPrefab, blocksHolder);
+            currObs.GetComponent<LaserTower>().CreateTrap(towerCoords[0], towerCoords[1]);
+           
+        }
+
+        else
+        {
+            for (int i = 0; i < towerCoords.Count-1; i+=2)
+            {
+                currObs = InstantiatePrefab(towerCoords[i], laserPrefab, blocksHolder);
+                currObs.GetComponent<LaserTower>().CreateTrap(towerCoords[i], towerCoords[i+1]);
+            }
+            
+        }
     }
 
 

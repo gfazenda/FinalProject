@@ -6,7 +6,7 @@ using UnityEngine;
 public class Enemy : Character {
 
     public float range = 1;
-    public float atkRange, moveRange, currentDistance = 100;
+    public float atkRange, moveRange, currentDistance = 100, minimumAggroDistance = 5;
     Coord playerPosition = new Coord();
     public List<Coord> myPath = new List<Coord>();
     protected Player player = null;
@@ -96,13 +96,19 @@ public class Enemy : Character {
         if (CheckWaitingTurns())
             return;
 
+        if (currentDistance > minimumAggroDistance)
+        {
+            return;
+        }
+
+
         if (currentDistance <= atkRange && AttackIsValid(position))
         {
             // Debug.Log("close enough " + BoardManager.Distance(position, player.GetPosition()));
             //Debug.Log(atkRange);
             PerformAttack();
             return;
-        }
+        } 
 
         //if (currentDistance < 3)
         //{

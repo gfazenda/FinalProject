@@ -34,7 +34,7 @@ public class BoardManager : MonoBehaviour
     public List<GameObject> markers = new List<GameObject>();
     public List<GameObject> listOfEnemies = new List<GameObject>();
     public bool generateAtRuntime = false;
-
+    public int preMadeLevels = 10;
     Coord exitCoord;
     GameObject currentMarker, obsAttacked = null, currentEffect;
     //0 = ground
@@ -52,7 +52,7 @@ public class BoardManager : MonoBehaviour
         
         _mapGenerator = this.GetComponent<MapGenerator>();
 
-        if (GameManager.Instance.currentLevel < 10)
+        if (GameManager.Instance.currentLevel <= preMadeLevels)
         {
             LevelInformation currentBoard = GameManager.Instance.LoadLevelFile();
             mapHeight = (int)currentBoard.mapSize.y;

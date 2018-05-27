@@ -7,7 +7,7 @@ public class UIPanelController : MonoBehaviour {
 
     public List<GameObject> panels = new List<GameObject>();
     int index = 0;
-    public Button nextPanel, play;
+    public Button nextPanelButton, backPanelButton, play;
 
 	// Use this for initialization
 	void Start () {
@@ -24,15 +24,40 @@ public class UIPanelController : MonoBehaviour {
     {
         panels[index].SetActive(false);
         index++;
-        if(index < panels.Count)
+        if(!backPanelButton.isActiveAndEnabled)
+            backPanelButton.gameObject.SetActive(true);
+
+        if (index < panels.Count)
             panels[index].SetActive(true);
 
         if(index == panels.Count-1)
         {
-            nextPanel.gameObject.SetActive(false);
+            nextPanelButton.gameObject.SetActive(false);
             play.gameObject.SetActive(true);
         }
     }
+
+    public void PreviousPanel()
+    {
+        panels[index].SetActive(false);
+        index--;
+
+        if(play.isActiveAndEnabled)
+            play.gameObject.SetActive(false);
+
+        if (!nextPanelButton.isActiveAndEnabled)
+            nextPanelButton.gameObject.SetActive(true);
+
+
+        if (index >= 0)
+            panels[index].SetActive(true);
+
+        if (index == 0)
+        {
+            backPanelButton.gameObject.SetActive(false);
+        }
+    }
+
 
     public void LoadGame()
     {
