@@ -17,7 +17,7 @@ public class UXManager : MonoBehaviour {
     public enum moveDirection { Left, Right, Up, Down };
 
     public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj, noDmgObj;
-    TextMeshProUGUI middleText, topText, bottomText, dmgText;
+    Text middleText, topText, bottomText, dmgText;
 
     HealthBar hpScript, manaScript;
     bool skillsEnabled = true;
@@ -158,9 +158,9 @@ public class UXManager : MonoBehaviour {
 
     void ConfigureTexts()
     {
-        middleText = middleObj.GetComponent<TextMeshProUGUI>();
-        topText = topObj.GetComponent<TextMeshProUGUI>();
-        dmgText = dmgObj.GetComponent<TextMeshProUGUI>();
+        middleText = middleObj.GetComponent<Text>();
+        topText = topObj.GetComponent<Text>();
+        dmgText = dmgObj.GetComponent<Text>();
         middleText.text = "";
         topText.text = "";
     }
@@ -216,7 +216,7 @@ public class UXManager : MonoBehaviour {
     IEnumerator ShowMessage(string message, float delay, textOption option = textOption.middle, bool alert = false)
     {
         float timer = 0;
-        TextMeshProUGUI currentText = null;
+        Text currentText = null;
         switch (option)
         {
             case textOption.middle:

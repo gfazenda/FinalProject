@@ -25,6 +25,7 @@ public class CameraFollow : MonoBehaviour
         {
             offset = defaultOffset;
         }
+        this.GetComponent<Camera>().rect = new Rect(0f,0.1f,1f,0.9f);
     }
 
 
