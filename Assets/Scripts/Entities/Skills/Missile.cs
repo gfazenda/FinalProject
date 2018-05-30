@@ -28,6 +28,7 @@ public class Missile : Skill {
         if(!initialized)
             Initialize();
 
+        UXManager.instance.DisableMissile();
         EventManager.StartListening(Events.PlayerTurn, LaunchMissile);
         currentTurns = turnsToImpact;
         targetPosition = position;
@@ -57,22 +58,23 @@ public class Missile : Skill {
         //instantiatedMissile.transform.position = newPosition;
     }
 
+  
     void LaunchMissile()
     {
         Debug.Log("missile in the works");
 
-        if(currentTurns <= 0)
+        if (currentTurns <= 0)
         {
             Debug.Log("wowoow");
-           
-          //  BoardManager.Instance.InstantiateEffect(Tags.Explosion, targetPosition);
+            //  BoardManager.Instance.InstantiateEffect(Tags.Explosion, targetPosition);
             EventManager.StopListening(Events.PlayerTurn, LaunchMissile);
             BoardManager.Instance._playerScript.invalidPos = OutOfLimits;
             instantiatedMissile.GetComponent<MissileObject>().LookDown();
             //instantiatedMissile.GetComponent<MissileObject>().GoToTarget(impactPosition);
-             instantiatedMissile.GetComponent<MissileObject>().GoToTarget();
+            instantiatedMissile.GetComponent<MissileObject>().GoToTarget();
             //Destroy(instantiatedTarget);
             instantiatedTarget.SetActive(false);
+            UXManager.instance.EnableMissile();
         }
         currentTurns--;
     }

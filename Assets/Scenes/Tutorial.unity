@@ -1150,7 +1150,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: fbf93dc593f72594692b9c2ed98c692a, type: 3}
+    m_Font: {fileID: 12800000, guid: b5d53fd5bab9f104992ce1028458caef, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -1251,8 +1251,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "The movement is done with swipes. \r\nIf you swipe over the player, it
-    enables an extended movement of up to 5 tiles in one direction.\r"
+  m_Text: "The movement is done with swipes. \r\nIf you touch the player twice + swipe,
+    it enables an extended movement of up to 5 tiles in one direction.\r"
 --- !u!222 &573385994
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1706,9 +1706,9 @@ MonoBehaviour:
   - {fileID: 641226294}
   - {fileID: 1657742274}
   - {fileID: 246400359}
-  - {fileID: 1565689937}
   - {fileID: 448069817}
   - {fileID: 378352050}
+  - {fileID: 1565689937}
   - {fileID: 2004653752}
   nextPanelButton: {fileID: 254992084}
   backPanelButton: {fileID: 350940890}
@@ -1795,7 +1795,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'There are 2 bars on the bottom-left:
+  m_Text: 'There are 2 bars on the top:
 
     Your HP and Manapool:'
 --- !u!222 &789518719
@@ -2168,7 +2168,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: fbf93dc593f72594692b9c2ed98c692a, type: 3}
+    m_Font: {fileID: 12800000, guid: b5d53fd5bab9f104992ce1028458caef, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -2569,7 +2569,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: fbf93dc593f72594692b9c2ed98c692a, type: 3}
+    m_Font: {fileID: 12800000, guid: b5d53fd5bab9f104992ce1028458caef, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 1
@@ -2930,8 +2930,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Right next to them, you can see your attack information it shows when it''s
-    enabled and how much damage you inflict to enemies:'
+  m_Text: 'Right next to them, you can see your attack information. It shows when
+    it''s enabled and how much damage you do:'
 --- !u!222 &1941833730
 CanvasRenderer:
   m_ObjectHideFlags: 0

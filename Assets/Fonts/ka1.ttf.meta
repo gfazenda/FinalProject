@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: b5d53fd5bab9f104992ce1028458caef
+timeCreated: 1527602946
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Karmatic Arcade
+  fontNames:
+  - Karmatic Arcade
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

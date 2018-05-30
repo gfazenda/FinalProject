@@ -7,6 +7,8 @@ public class MissileObject : MonoBehaviour {
     public float moveDuration = 10f;
     Vector3 targetPos;
     bool moving = false, attacking = false;
+    [HideInInspector]
+    public bool reachedTarget = false;
     Coord whereToHit;
     Vector3 hitPosition;
     float damage;
@@ -19,6 +21,7 @@ public class MissileObject : MonoBehaviour {
 
     public void GoToTarget()
     {
+        transform.position = targetPos;
         targetPos = hitPosition;
         Move();
     }
@@ -32,6 +35,7 @@ public class MissileObject : MonoBehaviour {
         Vector3 farPosition = hitPosition;
         farPosition.y += 15;
         targetPos = farPosition;
+        reachedTarget = false;
         Move();
     }
 
@@ -54,13 +58,14 @@ public class MissileObject : MonoBehaviour {
 
         if (transform.position == targetPos && moving)
         {
+            reachedTarget = true;
             moving = false;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (attacking && collision.gameObject.tag == Tags.Ground /*|| collision.gameObject.tag == Tags.Enemy*/)
+        if (attacking && collision.gameObject.tag == Tags.Ground)
         {
             BoardManager.Instance.InstantiateEffect(Tags.Explosion, whereToHit);
             BoardManager.Instance.TileAttacked(whereToHit, damage);

@@ -5,7 +5,7 @@ public class Player : Character {
 
     public int manaPool = 100;
   //  public int overchargeManacost = 10, mineManacost = 4, overchargeTurns = 3;
-    int maxMana;
+    int maxMana, timesClicked = 0;
     float timer, minimumSwipe = 60f;
 
     private Vector2 touchOrigin = -Vector2.one;
@@ -138,9 +138,12 @@ public class Player : Character {
         }
     }
 
+
+
     private void OnMouseDown()
     {
-        if (!moving && playerTurn)
+        timesClicked++;
+        if (!moving && playerTurn && timesClicked >= 2)
         {
             isClcked = !isClcked;
             _extendedMove.PlayerClicked(isClcked);
@@ -234,7 +237,7 @@ public class Player : Character {
         {
             feedbackMessage = "Actions disabled for " + waitingTurns + " turn(s)";
         }
-        UXManager.instance.DisplayMessage(feedbackMessage,timer*2);
+        UXManager.instance.DisplayMessage(feedbackMessage,timer*4);
     }
 
 
@@ -400,6 +403,7 @@ public class Player : Character {
     {
         EventManager.TriggerEvent(Events.DisableMoveButtons);
         finishedMove = true;
+        timesClicked = 0;
         string actionInfo = "";
         switch (_action)
         {

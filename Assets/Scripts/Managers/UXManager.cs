@@ -16,7 +16,7 @@ public class UXManager : MonoBehaviour {
 
     public enum moveDirection { Left, Right, Up, Down };
 
-    public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj, noDmgObj;
+    public GameObject middleObj, topObj, bottomObj, dmgObj, hpObj, manaObj, noDmgObj, feedbackPanel;
     Text middleText, topText, bottomText, dmgText;
 
     HealthBar hpScript, manaScript;
@@ -24,6 +24,8 @@ public class UXManager : MonoBehaviour {
     public Button overcharge, mine, missile, path, cancelPath;
 
     public Button left,right,top, down;
+
+    bool missileEnabled = true;
 
     private void Awake()
     {
@@ -84,6 +86,18 @@ public class UXManager : MonoBehaviour {
         missile.interactable = false;
     }
 
+    public void DisableMissile()
+    {
+        missileEnabled = false;
+        missile.interactable = false;
+    }
+
+    public void EnableMissile()
+    {
+        missileEnabled = true;
+        missile.interactable = true;
+    }
+
     public void GamePaused(bool paused)
     {
         overcharge.interactable = !paused;
@@ -113,7 +127,7 @@ public class UXManager : MonoBehaviour {
                 mine.interactable = true;
             }else if (skills[i] == Skills.Missile)
             {
-                missile.interactable = true;
+                missile.interactable = missileEnabled;
             }
         }
     }
@@ -134,6 +148,11 @@ public class UXManager : MonoBehaviour {
         //top.onClick.AddListener(() => CallPlayerMove(moveDirection.Up));
         //down.onClick.AddListener(() => CallPlayerMove(moveDirection.Down));
 
+    }
+
+    public void ShowFeedbackCongrats()
+    {
+        feedbackPanel.SetActive(true);
     }
 
     public void ShowPathButton(bool show)

@@ -123,4 +123,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efe5c84d805454b409cebbe75938756a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 7
+  moveDuration: 3
+  reachedTarget: 0

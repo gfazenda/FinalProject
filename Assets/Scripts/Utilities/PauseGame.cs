@@ -3,18 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PauseGame : MonoBehaviour {
-  
+    private static PauseGame _instance;
 
+    public static PauseGame instance { get { return _instance; } }
+
+    private void Awake()
+    {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+
+    }
         bool gameIsPaused = false;
     public GameObject pausePanel, pauseButton;
 
-        public void Pause()
+        public void Pause(bool showPanel = true)
         {
             gameIsPaused = !gameIsPaused;
             Time.timeScale = gameIsPaused ? 0 : 1;
             UXManager.instance.GamePaused(gameIsPaused);
             EventManager.TriggerEvent(Events.GamePaused);
-            pausePanel.gameObject.SetActive(gameIsPaused);
+
+            if (showPanel)
+               pausePanel.gameObject.SetActive(gameIsPaused);
+
             pauseButton.gameObject.SetActive(!gameIsPaused);
         }
 

@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
     public TextFileReader _fileReader;
 
     public bool loadPlayerLevel = true;
-    
+    bool showedFeedback = false;
 
     public int currentLevel = 1;
 
@@ -53,6 +53,14 @@ public class GameManager : MonoBehaviour {
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if(currentLevel == BoardManager.Instance.preMadeLevels + 1 && !showedFeedback)
+        {
+            Debug.Log("showing");
+            showedFeedback = true;
+            PauseGame.instance.Pause(false);
+            UXManager.instance.ShowFeedbackCongrats();
+            
+        }
         EventManager.TriggerEvent(Events.LevelLoaded);
     }
 
@@ -106,6 +114,12 @@ public class GameManager : MonoBehaviour {
     {
         Debug.Log("load");
 
+        if (currentLevel == BoardManager.Instance.preMadeLevels)
+        {
+            Debug.Log("you made it lol");
+        }
+
+
         currentLevel++;
         _fileReader.SaveLevel(currentLevel);
 
@@ -115,6 +129,11 @@ public class GameManager : MonoBehaviour {
     public void ReloadLevel()
     {
         Debug.Log("reload");
+        if (currentLevel > BoardManager.Instance.preMadeLevels)
+        {
+            currentLevel = BoardManager.Instance.preMadeLevels+1;
+        }
+
         Scene scene = SceneManager.GetActiveScene();
         SceneManager.LoadScene(scene.name);
     }
