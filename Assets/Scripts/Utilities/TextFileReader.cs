@@ -87,7 +87,7 @@ public class TextFileReader: MonoBehaviour
         //currLevel = System.Convert.ToInt32(fileString);
         //Debug.Log("current level isssssss " + currLevel.ToString());
         //return currLevel;
-        return PlayerPrefs.GetInt(Prefs.Level, 1);
+        return PlayerPrefs.GetInt(Prefs.Level, -1);
     }
 
 

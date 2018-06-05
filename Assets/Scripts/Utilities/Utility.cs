@@ -65,6 +65,7 @@ public static class Prefs
 {
     public const string Level = "Level";
     public const string SeenTutorial = "SeenTutorial";
+    public const string SeenFeedback = "SeenFeedback";
 }
 
 

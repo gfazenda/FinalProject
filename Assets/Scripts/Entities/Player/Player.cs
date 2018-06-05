@@ -54,7 +54,7 @@ public class Player : Character {
 
     void GamePaused()
     {
-        playerTurn = !playerTurn;
+        playerTurn = !PauseGame.instance.gameIsPaused;
     }
 
     void Start()
@@ -83,9 +83,9 @@ public class Player : Character {
     {
         playerTurn = CanAct();
 
-    #if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
-           EventManager.TriggerEvent(Events.EnableMoveButtons);
-    #endif
+    //#if UNITY_IOS || UNITY_ANDROID || UNITY_WP8 || UNITY_IPHONE
+    //       EventManager.TriggerEvent(Events.EnableMoveButtons);
+    //#endif
         if (_extendedMove.PathConfigured())
             GoToNextWaypoint();
 

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public TextFileReader _fileReader;
 
-    public bool loadPlayerLevel = true;
+    public bool loadPlayerLevel = true, showTutorial = true;
     bool showedFeedback = false;
 
     public int currentLevel = 1;
@@ -24,8 +24,7 @@ public class GameManager : MonoBehaviour {
 
     private void Awake()
     {
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = maxFrameRate;
+        
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
@@ -36,6 +35,8 @@ public class GameManager : MonoBehaviour {
         }
 
         DontDestroyOnLoad(this);
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = maxFrameRate;
         _fileReader = this.GetComponent<TextFileReader>();
         //EventManager.StartListening(Events.EnemiesTurn, CallEnemyActions);
         //EventManager.StartListening(Events.EnemiesCreated, PopulateEnemies);
@@ -49,17 +50,25 @@ public class GameManager : MonoBehaviour {
             //print("do loaginddfsfdf");
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
+
+        if (loadPlayerLevel && firstLevelPlayed)
+        {
+            int levelFromFile = _fileReader.ReadCurrentLevel();
+            currentLevel = levelFromFile == -1 ? currentLevel : levelFromFile;
+            firstLevelPlayed = false;
+        }
+
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if(currentLevel == BoardManager.Instance.preMadeLevels + 1 && !showedFeedback)
+        if (currentLevel == BoardManager.Instance.preMadeLevels + 1 && PlayerPrefs.GetInt(Prefs.SeenFeedback, 0)==0)
         {
             Debug.Log("showing");
-            showedFeedback = true;
+            PlayerPrefs.SetInt(Prefs.SeenFeedback, 1);
             PauseGame.instance.Pause(false);
             UXManager.instance.ShowFeedbackCongrats();
-            
+
         }
         EventManager.TriggerEvent(Events.LevelLoaded);
     }
@@ -86,7 +95,7 @@ public class GameManager : MonoBehaviour {
 
     public LevelInformation LoadLevelFile()
     {
-        if (firstLevelPlayed && PlayerPrefs.GetInt(Prefs.SeenTutorial, 0) == 0)
+        if (PlayerPrefs.GetInt(Prefs.SeenTutorial, 0) == 0 && showTutorial)
         {
             PlayerPrefs.SetInt(Prefs.SeenTutorial, 1);
             SceneManager.LoadScene(Scenes.Tutorial);
@@ -94,12 +103,13 @@ public class GameManager : MonoBehaviour {
             return null;
         }
 
-        if (loadPlayerLevel && firstLevelPlayed)
+        
+       
+        if (currentLevel > BoardManager.Instance.preMadeLevels)
         {
-            int levelFromFile = _fileReader.ReadCurrentLevel();
-            currentLevel = levelFromFile == -1 ? currentLevel : levelFromFile;
-            firstLevelPlayed = false;
+            return null;
         }
+
         UXManager.instance.ShowLevelOverlay();
         return _fileReader.LoadFile("Level" + currentLevel + ".txt");
     }

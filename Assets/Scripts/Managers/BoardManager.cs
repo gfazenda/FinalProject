@@ -54,23 +54,14 @@ public class BoardManager : MonoBehaviour
 
         if (GameManager.Instance.currentLevel <= preMadeLevels)
         {
-            LevelInformation currentBoard = GameManager.Instance.LoadLevelFile();
-            mapHeight = (int)currentBoard.mapSize.y;
-            mapWidth = (int)currentBoard.mapSize.x;
-            gameBoard = new tileType[mapWidth, mapHeight];
-            gameBoard = _mapGenerator.CreateBoardFromFile(currentBoard);
+            GenerateLevelFromFile();
         }
         else
         {
-            mapWidth = (int)_mapGenerator.mapSize.x;
-            mapHeight = (int)_mapGenerator.mapSize.y;
-            gameBoard = new tileType[mapWidth, mapHeight];
-            _mapGenerator.GenerateMap();
-            InitializeBoard();
-            UXManager.instance.ShowLevelOverlay();
+            GenerateRandomLevel();
         }
 
-       
+
         gameGrid = new Node[mapWidth, mapHeight];
 
         _player = _mapGenerator.GetPlayer();
@@ -84,6 +75,30 @@ public class BoardManager : MonoBehaviour
         InitializeGrid();
         
         InitializeEnemies();
+    }
+
+    private void GenerateLevelFromFile()
+    {
+        LevelInformation currentBoard = GameManager.Instance.LoadLevelFile();
+        if (currentBoard == null)
+        {
+            GenerateRandomLevel();
+            return;
+        }
+        mapHeight = (int)currentBoard.mapSize.y;
+        mapWidth = (int)currentBoard.mapSize.x;
+        gameBoard = new tileType[mapWidth, mapHeight];
+        gameBoard = _mapGenerator.CreateBoardFromFile(currentBoard);
+    }
+
+    private void GenerateRandomLevel()
+    {
+        mapWidth = (int)_mapGenerator.mapSize.x;
+        mapHeight = (int)_mapGenerator.mapSize.y;
+        gameBoard = new tileType[mapWidth, mapHeight];
+        _mapGenerator.GenerateMap();
+        InitializeBoard();
+        UXManager.instance.ShowLevelOverlay();
     }
 
     void InitializeBoard()

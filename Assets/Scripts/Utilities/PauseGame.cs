@@ -17,10 +17,10 @@ public class PauseGame : MonoBehaviour {
         {
             _instance = this;
         }
-
+        gameIsPaused = false;
     }
-        bool gameIsPaused = false;
-    public GameObject pausePanel, pauseButton;
+        public bool gameIsPaused { get; private set; }
+        public GameObject pausePanel, pauseButton;
 
         public void Pause(bool showPanel = true)
         {
