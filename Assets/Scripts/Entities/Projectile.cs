@@ -42,7 +42,7 @@ public class Projectile : MonoBehaviour {
         moveTimer += Time.deltaTime;
         float step = moveTimer / moveDuration;
         //transform.position = Vector3.MoveTowards(transform.position, targetPos, step);
-		Debug.Log("im going");
+		//Debug.Log("im going");
         transform.position = Vector3.Lerp(transform.position, targetPos, step);
     }
 }

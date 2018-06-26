@@ -602,6 +602,8 @@ MonoBehaviour:
   laser: {fileID: 1115945995393196}
   originA: {fileID: 1407946945413746}
   originB: {fileID: 1830335601215246}
+  turningOn: {r: 1, g: 1, b: 0, a: 1}
+  turnedOn: {r: 1, g: 0, b: 0, a: 1}
   posA:
     x: 1
     y: 1

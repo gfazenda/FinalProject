@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class LaserTower : MonoBehaviour {
     public GameObject towerA, towerB, laser, originA, originB;
+    public Color turningOn, turnedOn;
     LineRenderer laserRenderer;
     List<Coord> positionsAffected = new List<Coord>();
     [SerializeField]
@@ -115,14 +116,14 @@ public class LaserTower : MonoBehaviour {
                 break;
             case phase.starting:
                 laser.SetActive(true);
-                ChangeLaserColor(Color.red);
+                ChangeLaserColor(turningOn);
                 currentTurns = 0;
                 currentState = phase.started;
                 break;
             case phase.started:
                 {
                     currentTurns++;
-                    ChangeLaserColor(Color.green);
+                    ChangeLaserColor(turnedOn);
                     if (currentTurns >= laserTurns)
                         currentState = phase.off;
                     CheckObjectsHit();

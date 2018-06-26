@@ -5,23 +5,30 @@ using UnityEngine.UI;
 
 public class UIPanelController : MonoBehaviour {
 
-    public List<GameObject> panels = new List<GameObject>();
+    public List<GameObject> en_panels = new List<GameObject>();
+    public List<GameObject> ptbr_panels = new List<GameObject>();
+    List<GameObject> panels = new List<GameObject>();
     int index = 0;
     public Button nextPanelButton, backPanelButton, play;
+    public bool english = true;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    bool initialized = false;
+
+
+    public void SetLanguage(bool en)
+    {
+        english = en;
+        initialized = false;
+    }
 
 
     public void NextPanel()
     {
+        if (!initialized)
+        {
+            panels = english ? en_panels : ptbr_panels;
+            initialized = true;
+        }
         panels[index].SetActive(false);
         index++;
         if(!backPanelButton.isActiveAndEnabled)
@@ -52,7 +59,7 @@ public class UIPanelController : MonoBehaviour {
         if (index >= 0)
             panels[index].SetActive(true);
 
-        if (index == 0)
+        if (index == 1)
         {
             backPanelButton.gameObject.SetActive(false);
         }

@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "key": "play",
+      "value": "Play"
+    },
+        {
+      "key": "options",
+      "value": "Options"
+    },
+        {
+      "key": "survey",
+      "value": "Answer Survey"
+    },
+        {
+      "key": "about",
+      "value": "About"
+    },
+        {
+      "key": "quit",
+      "value": "Quit"
+    }
+  ]
+}
+
+https://jsoneditoronline.org/

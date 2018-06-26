@@ -66,9 +66,9 @@ public class UXManager : MonoBehaviour {
 
     void UpdatePlayerDamage()
     {
-        int currDMG = (int)System.Math.Round(BoardManager.Instance._playerScript.damage, 1);
-        dmgText.text = currDMG.ToString();
-        noDmgObj.SetActive((currDMG == 0));
+     //   int currDMG = (int)System.Math.Round(BoardManager.Instance._playerScript.damage, 1);
+      //  dmgText.text = currDMG.ToString();
+     //   noDmgObj.SetActive((currDMG == 0));
     }
 
     public bool TouchOverUI(int id)

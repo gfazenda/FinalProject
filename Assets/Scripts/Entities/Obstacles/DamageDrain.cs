@@ -51,11 +51,19 @@
 
     void CalculateDrain()
     {
-      
+        if (instances == 0)
+        {
+            BoardManager.Instance.InstantiateEffect(Tags.AtkDrain, player.GetPosition());
+            UXManager.instance.DisplayMessage("Basic attack is blocked", 0.5f, alert: true);
+        }
+        if (instances > 0 && drainPercent==1)
+        {
+            return;
+        }
         endingDamage = player.damage * (1 - drainPercent);
         currentDrain = player.damage - endingDamage;
         damageRemoved += currentDrain;
-        player.damage -= currentDrain;
+        player.DamageChanged(player.damage - currentDrain);
         EventManager.TriggerEvent(Events.DamageUpdate);
     }
 }

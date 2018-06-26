@@ -629,19 +629,23 @@ MonoBehaviour:
     shouldExpand: 1
   - objectToPool: {fileID: 1042430178194326, guid: 32c0cf23c512faa429279f612397b3e9,
       type: 2}
-    amountToPool: 5
+    amountToPool: 4
     shouldExpand: 1
   - objectToPool: {fileID: 1000013063239222, guid: ede7307fd86908748882369955fefe12,
       type: 2}
-    amountToPool: 5
+    amountToPool: 9
     shouldExpand: 1
   - objectToPool: {fileID: 1000013285955420, guid: b430a967c15640d42965547a4980caa9,
       type: 2}
-    amountToPool: 5
+    amountToPool: 15
     shouldExpand: 1
   - objectToPool: {fileID: 1000010826686036, guid: c91ad86aadd020e4998788349a8476eb,
       type: 2}
-    amountToPool: 2
+    amountToPool: 1
+    shouldExpand: 1
+  - objectToPool: {fileID: 1000013285955420, guid: 9c2e2d3f1617c8d40942150335b9ec1e,
+      type: 2}
+    amountToPool: 1
     shouldExpand: 1
   pooledObjects: []
 --- !u!4 &267292603
@@ -1755,7 +1759,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 651368518}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
@@ -1995,7 +1999,8 @@ AudioSource:
   m_GameObject: {fileID: 673890831}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: e41d0491dbcd99e4d924124a045c711e,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 1b8b77af65720a34483dda20b932758e, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -4292,7 +4297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1448373825
 RectTransform:
   m_ObjectHideFlags: 0

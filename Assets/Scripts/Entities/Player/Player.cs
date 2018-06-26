@@ -34,7 +34,7 @@ public class Player : Character {
 
     string feedbackMessage;
     PlayerStatus _status;
-
+    lerpColor lerpScript;
     public List<Skill> _skillList = new List<Skill>();
 
     List<string> activeSkills = new List<string>();
@@ -46,6 +46,7 @@ public class Player : Character {
         _mineScript = this.GetComponent<MineController>();
         _status = this.GetComponent<PlayerStatus>();
         _extendedMove = this.GetComponent<PlayerExtendedMove>();
+        lerpScript = this.GetComponent<lerpColor>();
         invalidPos = new Coord(-1, -1);
         EventManager.StartListening(Events.PlayerTurn, PlayerTurn);
         EventManager.StartListening(Events.GamePaused, GamePaused);
@@ -183,12 +184,20 @@ public class Player : Character {
         return BoardManager.Instance.GetPositionType(pos) == BoardManager.tileType.ground;
     }
 
+    public void DamageChanged(float currDamage, bool drained = true)
+    {
+        if (drained)
+            lerpScript.Lerp();
+
+        damage = currDamage;
+    }
+
     public override void TakeDamage(float damage)
     {
         ShowDamagePrefab();
         base.TakeDamage(damage);
         UXManager.instance.UpdatePlayerHP(_entityScript.HP,_entityScript.maxHP);
-        this.GetComponent<lerpColor>().Lerp();
+        lerpScript.Lerp();
         if (_entityScript.Dead())
             EventManager.TriggerEvent(Events.LevelLost);
     }
@@ -237,7 +246,7 @@ public class Player : Character {
         {
             feedbackMessage = "Actions disabled for " + waitingTurns + " turn(s)";
         }
-        UXManager.instance.DisplayMessage(feedbackMessage,timer*4);
+        UXManager.instance.DisplayMessage(feedbackMessage, timer*5, alert:true);
     }
 
 
@@ -443,6 +452,10 @@ public class Player : Character {
                 // _mineScript.PlaceMine(target);
                 break;
             case Actions.BasicAtk:
+                if (damage <= 0)
+                {
+                    UXManager.instance.DisplayMessage("Attack is blocked", 0.5f, alert: true);
+                }
                 LookAtCoord(target);
                 BoardManager.Instance.TileAttacked(target, damage);
                 GameLogs.Instance.AddLog(GameLogs.logType.plyerDamage, actionInfo, (int)damage);

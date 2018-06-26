@@ -44,7 +44,7 @@ public static class Tags
     public const string ElectricExplosion = "ElectricExplosion";
     public const string Ground = "Ground";
     public const string PoisonExplosion = "PoisonExplosion";
-
+    public const string AtkDrain = "AtkDrain";
 }
 
 public static class Skills
