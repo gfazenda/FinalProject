@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 95561823016029210}
   - component: {fileID: 65877526180979274}
   m_Layer: 0
-  m_Name: Drain
+  m_Name: Drain 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

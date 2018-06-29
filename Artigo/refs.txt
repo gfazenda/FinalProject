@@ -1,0 +1,39 @@
+https://lh3.ggpht.com/ClTxDgenOR1LC6gjgTut4f7mii7bkSCvSQSbdZ_0j0I45MFGIVMQEzXHm5QcUyxWrQ=w1920-h898-rw
+
+https://mbg3dmind.wordpress.com/2015/08/09/o-seu-jogo-suculento-juicy-e-game-feel-parte-1/
+
+https://mbg3dmind.wordpress.com/2015/09/27/o-seu-jogo-suculento-juicy-e-game-feel-parte-2/
+
+duvidas
+
+adicionar o 'resumo' ao resumo?
+adicionar sugestoes/comentarios dos formularios
+
+http://eds.a.ebscohost.com/eds/detail/detail?vid=1&sid=ffc71b8b-2fd0-49e0-ac6d-353859479e90%40sessionmgr4007&bdata=Jmxhbmc9cHQtYnImc2l0ZT1lZHMtbGl2ZQ%3d%3d#AN=unis.404236&db=cat01698a
+
+
+Experiments with Game Tree Search in Real-Time Strategy Games
+Santiago Ontanon
+(Submitted on 9 Aug 2012)
+
+https://arxiv.org/abs/1208.1940
+
+
+Online Evolution for Multi-Action Adversarial Games
+Niels Justesen1, Tobias Mahlmann2, and Julian Togelius3
+https://ieeexplore.ieee.org/document/8007320/
+
+https://www.researchgate.net/publication/263162719
+Minimax Guided Reinforcement Learning for
+Turn-based Strategy Games
+Sulaeman Santoso e Iping Supriana
+
+https://frozenfractal.com/blog/2016/7/3/twistago-ai-part-2-normal/
+Thomas ten Cate
+
+
+https://www.gamasutra.com/blogs/JoshWhitkin/20140131/209273/Juicy_a_useful_game_design_term.php
+
+
+The art of game design: a book of lenses
+Author:	Jesse Schell	
