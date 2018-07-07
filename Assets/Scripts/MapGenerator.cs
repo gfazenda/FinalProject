@@ -273,8 +273,8 @@ public class MapGenerator : MonoBehaviour
 
     Vector3 CoordToPosition(int x, int y, bool ground = true)
     {
-        int yPos = 0;
-        if (!ground) yPos = 1;
+        float yPos = 0;
+        if (!ground) yPos = 1f;
         float xOffset = (mapSize.x % 2 == 0) ? 0.5f : -0.5f;
         float yOffset = (mapSize.y % 2 == 0) ? 0.5f : -0.5f;
         return new Vector3(-mapSize.x / 2 + xOffset + x, yPos, -mapSize.y / 2 + yOffset + y);
@@ -327,8 +327,9 @@ public class MapGenerator : MonoBehaviour
                         CreatePlayer();
                         break;
                     case BoardManager.tileType.wall:
-                        InstantiatePrefab(currentCoord, blockPrefab, blocksHolder);
+                        currObs = InstantiatePrefab(currentCoord, blockPrefab, blocksHolder);
                         wallCoords.Add(currentCoord);
+                        currObs.GetComponent<SpecialTile>().SetPosition(currentCoord);
                         break;
                     case BoardManager.tileType.obstacle:
                         currObs = InstantiatePrefab(currentCoord, trapPrefab[Random.Range(0, trapPrefab.Count - 1)], blocksHolder);

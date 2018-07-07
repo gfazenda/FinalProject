@@ -12,7 +12,7 @@ public class Enemy : Character {
     protected Player player = null;
     int failedAttempts = 0;
     public bool diagonalAtk = false, moved = false;
-
+    lerpColor lerpScript;
 
     void CreatePath()
     {        
@@ -23,6 +23,7 @@ public class Enemy : Character {
     public void Initialize()
     {
         player = BoardManager.Instance._playerScript;
+        lerpScript = this.GetComponent<lerpColor>();
         atkRange = range * Utility.distanceMultiplier;
         transform.position = BoardManager.Instance.CoordToPosition(position,false);
         moveRange = 1;
@@ -71,6 +72,7 @@ public class Enemy : Character {
     {
         base.TakeDamage(damage);
         base.UpdateHPBar();
+        lerpScript.Lerp();
     }
 
     protected bool CheckWaitingTurns()

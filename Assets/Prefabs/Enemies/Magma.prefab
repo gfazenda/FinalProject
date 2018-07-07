@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 114240599072192740}
   - component: {fileID: 114973447242484030}
   - component: {fileID: 33278756556524864}
+  - component: {fileID: 114374174374525728}
   m_Layer: 0
   m_Name: Magma
   m_TagString: Enemy
@@ -153,7 +154,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1257545214428874}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5651598, y: 4.563374, z: 17.538296}
+  m_LocalPosition: {x: 195.20161, y: 1124.0876, z: -1014.52527}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 224934858227197470}
@@ -311,6 +312,27 @@ MonoBehaviour:
   diagonalAtk: 1
   moved: 0
   projectile: {fileID: 1032663303757842}
+--- !u!114 &114374174374525728
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1257545214428874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColor: {r: 0.99264705, g: 0.45982918, b: 0.45982918, a: 0}
+  changeSize: 1
+  _colorLerp: 1
+  repeat: 0
+  lerpFromStart: 0
+  scale: 0.95
+  duration: 0.3
+  setAtRuntime: 0
+  mesh: {fileID: 23015008913739906}
+  meshType: 0
 --- !u!114 &114596921507774626
 MonoBehaviour:
   m_ObjectHideFlags: 1

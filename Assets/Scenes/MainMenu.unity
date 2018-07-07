@@ -406,7 +406,7 @@ MonoBehaviour:
   effectTime: 0.8
   animateAtStartup: 1
   animateOnEnable: 0
-  startPosition: {x: 0, y: -0.2}
+  startPosition: {x: 0.3, y: -0.2}
   positionCurve:
     serializedVersion: 2
     m_Curve:
@@ -419,8 +419,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -438,8 +438,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -908,8 +908,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -927,8 +927,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1140,10 +1140,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf4919af002e9df47a293928cce8429b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectTime: 0.5
+  effectTime: 0.6
   animateAtStartup: 1
   animateOnEnable: 0
-  startPosition: {x: 0, y: 1}
+  startPosition: {x: 0, y: 1.1}
   positionCurve:
     serializedVersion: 2
     m_Curve:
@@ -1162,21 +1162,27 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  startScale: {x: 3, y: 3, z: 0}
+  startScale: {x: 2, y: 2, z: 0}
   scaleCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 2
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 0.6061472
+      value: 1.0202556
+      inSlope: 1.0544062
+      outSlope: 1.0544062
       tangentMode: 0
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1510,8 +1516,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1529,8 +1535,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -2015,9 +2021,9 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 1b35a488c0954e94aa799a6dc9e1e1bf, type: 3}
     m_FontSize: 93
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
-    m_MaxSize: 300
+    m_MaxSize: 93
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -2528,6 +2534,7 @@ GameObject:
   - component: {fileID: 1263584276}
   - component: {fileID: 1263584275}
   - component: {fileID: 1263584274}
+  - component: {fileID: 1263584273}
   m_Layer: 5
   m_Name: SoundOn
   m_TagString: Untagged
@@ -2553,6 +2560,58 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0.000030517578}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1263584273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1263584271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4919af002e9df47a293928cce8429b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectTime: 0.8
+  animateAtStartup: 1
+  animateOnEnable: 0
+  startPosition: {x: -0.2, y: 0.02}
+  positionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  startScale: {x: 1, y: 1, z: 0}
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!114 &1263584274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3419,7 +3478,7 @@ MonoBehaviour:
   effectTime: 0.8
   animateAtStartup: 1
   animateOnEnable: 0
-  startPosition: {x: 0, y: -0.2}
+  startPosition: {x: 0.3, y: -0.2}
   positionCurve:
     serializedVersion: 2
     m_Curve:
@@ -3432,8 +3491,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -3451,8 +3510,8 @@ MonoBehaviour:
     - serializedVersion: 2
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -3517,7 +3576,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 1b35a488c0954e94aa799a6dc9e1e1bf, type: 3}
     m_FontSize: 93
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 3
     m_MaxSize: 95
     m_Alignment: 4
@@ -3696,7 +3755,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 1b35a488c0954e94aa799a6dc9e1e1bf, type: 3}
     m_FontSize: 93
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 0
     m_MaxSize: 95
     m_Alignment: 4
