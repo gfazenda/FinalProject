@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 114240599072192740}
   - component: {fileID: 114973447242484030}
   - component: {fileID: 33278756556524864}
+  - component: {fileID: 114390429100719816}
   m_Layer: 0
   m_Name: RockMan
   m_TagString: Enemy
@@ -89,14 +90,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1257545214428874}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 36.380074, y: -389.3735, z: 3.1542122}
+  m_LocalRotation: {x: 0, y: 0.96858317, z: 0, w: 0.24869}
+  m_LocalPosition: {x: 196.75395, y: 1125.1749, z: -1015.22504}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 224934858227197470}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 151.2, z: 0}
 --- !u!23 &23015008913739906
 MeshRenderer:
   m_ObjectHideFlags: 1
@@ -178,6 +179,27 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
+--- !u!114 &114390429100719816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1257545214428874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d48e0b67e63f8418e0db8a8343c08b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColor: {r: 0.99264705, g: 0.45982918, b: 0.45982918, a: 0}
+  changeSize: 1
+  _colorLerp: 1
+  repeat: 0
+  lerpFromStart: 0
+  scale: 0.95
+  duration: 0.3
+  setAtRuntime: 0
+  mesh: {fileID: 23015008913739906}
+  meshType: 0
 --- !u!114 &114596921507774626
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -273,6 +295,7 @@ MonoBehaviour:
   atkRange: 0
   moveRange: 0
   currentDistance: 100
+  minimumAggroDistance: 5
   myPath: []
   diagonalAtk: 0
   moved: 0

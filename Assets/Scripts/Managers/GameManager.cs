@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public TextFileReader _fileReader;
 
-    public bool loadPlayerLevel = true, showTutorial = true;
+    public bool loadPlayerLevel = true, showTutorial = true, screenShake = true;
     bool showedFeedback = false;
 
     public int currentLevel = 1;
@@ -89,7 +89,8 @@ public class GameManager : MonoBehaviour {
 
     public void ShakeCamera()
     {
-        CameraShaker.Instance.ShakeOnce(6f, 4f, .1f, 1f);
+        if(screenShake)
+            CameraShaker.Instance.ShakeOnce(6f, 4f, .1f, 1f);
     }
 
 
