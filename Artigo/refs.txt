@@ -20,7 +20,7 @@ https://arxiv.org/abs/1208.1940
 
 
 Online Evolution for Multi-Action Adversarial Games
-Niels Justesen1, Tobias Mahlmann2, and Julian Togelius3
+Niels Justesen, Tobias Mahlmann e Julian Togelius
 https://ieeexplore.ieee.org/document/8007320/
 
 https://www.researchgate.net/publication/263162719
@@ -29,6 +29,7 @@ Turn-based Strategy Games
 Sulaeman Santoso e Iping Supriana
 
 https://frozenfractal.com/blog/2016/7/3/twistago-ai-part-2-normal/
+Twistago AI, part 2: Normal
 Thomas ten Cate
 
 
@@ -37,3 +38,34 @@ https://www.gamasutra.com/blogs/JoshWhitkin/20140131/209273/Juicy_a_useful_game_
 
 The art of game design: a book of lenses
 Author:	Jesse Schell	
+
+http://gs.statcounter.com/os-market-share/mobile/brazil
+https://www.statista.com/statistics/262167/market-share-held-by-mobile-operating-systems-in-brazil/
+
+
+A*-based Pathfinding in Modern Computer Games
+Xiao Cui and Hao Shi 
+https://www.researchgate.net/publication/267809499_A-based_Pathfinding_in_Modern_Computer_Games
+
+C# Game Programming Cookbook for Unity 3D
+By Jeff W. Murray
+2014
+
+Game Programming Patterns 
+Robert Nystrom
+2014
+
+O fato de precisar sair da zona de conforto e trabalhar em outras áreas de conhecimento além da programação, como modelagem 3D, interface, menus, sons, efeitos especiais, etc. foi outro fator muito enriquecedor, trazendo novos desafios que aos poucos foram superados. São aspectos que deixam de ser trabalhados devido ao tempo limitado em outras cadeiras mas fazem toda a diferença para o projeto, fazendo com que se torne muito mais coeso e completo.
+
+
+Considerando o estado inicial do projeto, o progresso até o final do primeiro semestre e comparando com agora, percebe-se como o jogo amadureceu e evoluiu ao longo destes dois semestres de desenvolvimento. De pouco a pouco, item a item tudo foi se complementando para formar um produto final completo e conciso, onde todos aspectos foram adicionados com uma motivação e planejamento específico.
+
+
+GameObject é o conceito mais importante no Unity Editor.
+Cada objeto no jogo é um GameObject, de personagens e itens colecionáveis para luzes, câmeras e efeitos especiais. No entanto, um GameObject não pode fazer nada sozinho; você precisa dar a ela propriedades antes que elas se tornem um caractere, um ambiente ou um efeito especial.
+
+Estilo artístico caracterizado por gráficos que tem estilo como os provenientes
+de sistemas computacionais antigos (ou relativamente limitados), como os primeiros consoles de video games.
+
+forma de arte digital na qual as imagens são criadas ou editadas tendo como elemento básico os pixels.
+pixel é o menor ponto que forma uma imagem digital, sendo que o conjunto de pixels formam a imagem inteira.
